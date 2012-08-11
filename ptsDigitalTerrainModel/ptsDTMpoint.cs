@@ -1,0 +1,40 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using ptsCogo;
+
+namespace ptsDigitalTerrainModel
+{
+   [Serializable]
+   public class ptsDTMpoint : ptsCogo.ptsPoint
+   {
+      public UInt64 myIndex { get; private set; }
+
+      [NonSerialized]
+      private String[] parsedStrings;
+
+      public ptsDTMpoint(double newX, double newY, double newZ)
+      { x = newX; y = newY; z = newZ; myIndex = 0L; }
+
+      public ptsDTMpoint(String ptAsString, UInt64 myIndx)
+      {
+         parsedStrings = ptAsString.Split(' ');
+         Double.TryParse(parsedStrings[0], out base.x_);
+         Double.TryParse(parsedStrings[1], out base.y_);
+         Double.TryParse(parsedStrings[2], out base.z_);
+         myIndex = myIndx;
+      }
+
+      private ptsDTMpoint() { }
+
+      static public ptsDTMpoint getAveragePoint(ptsDTMpoint pt1, ptsDTMpoint pt2, ptsDTMpoint pt3)
+      {
+         ptsDTMpoint returnPoint = new ptsDTMpoint();
+         returnPoint.x_ = (pt1.x_ + pt2.x_ + pt3.x_) / 3.0;
+         returnPoint.y_ = (pt1.y_ + pt2.y_ + pt3.y_) / 3.0;
+         returnPoint.z_ = (pt1.z_ + pt2.z_ + pt3.z_) / 3.0;
+         return returnPoint;
+      }
+   }
+}
