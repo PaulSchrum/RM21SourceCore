@@ -156,6 +156,7 @@ namespace ptsCogo
          }
       }
 
+
       //This function should be adjusted to use a delegate plus wrapper functions
       public void getElevation(CogoStation station, ref tupleNullableDoubles theElevation)
       {
