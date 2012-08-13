@@ -21,6 +21,7 @@ namespace Test_CogoStation
          //setupSomeStations();
          //testStationArithmetic();
          testCogoProfile();
+         Console.WriteLine("Testing Concluded.");
          Console.Read();
       }
 
@@ -98,6 +99,26 @@ namespace Test_CogoStation
          conditionString = "Verify ahead elevation is 2178.23";
          expectedDbl = 2178.23;
          actualDbl = Math.Round((double)result.ahead, 4);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         ///////////////////
+         System.Console.Write("Test the end of the profile, station 13+65");
+         conditionString = "Verify tupleNullableDoubles isSingleValue is false";
+         result.back = result.ahead = 0.0;
+         result.isSingleValue = false;
+         aProfile.getElevation((CogoStation)1365.0, out result);
+         expectedBl = false;
+         actualBl = result.isSingleValue;
+         TestingFramework.assertEquals<bool>(expectedBl, actualBl, conditionString);
+
+         conditionString = "Verify back elevation is 2167.8765";
+         expectedDbl = 2167.8765;
+         actualDbl = Math.Round((double)result.back, 4);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify ahead elevation is null";
+         expectedDbl = null;
+         actualDbl = result.ahead;
          TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
          
 

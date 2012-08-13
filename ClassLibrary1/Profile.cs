@@ -105,7 +105,7 @@ namespace ptsCogo
                      // End: add a VC for the current vertical curve if VClen > 0
 
                      // if this is the final VPI, add a final tangent if necessary
-                     if (count == allVCs.Count)
+                     if (count == rawVPIlist.Count)
                      {
                         double outgoingTangentLength = vpi3.getBeginStation() - vpi2.getEndStation();
                         if (outgoingTangentLength > 0.0)
