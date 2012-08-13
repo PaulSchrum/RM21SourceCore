@@ -17,22 +17,91 @@ namespace Test_CogoStation
 
       static void Main(string[] args)
       {
-         testBuildAgenericAlignment();
-         setupSomeStations();
-         testStationArithmetic();
+         //testBuildAgenericAlignment();
+         //setupSomeStations();
+         //testStationArithmetic();
          testCogoProfile();
          Console.Read();
       }
 
       private static void testCogoProfile()
       {
-         throw new NotImplementedException();
-      }
+         vpiList aVpiList = new vpiList();
+         aVpiList.add(1062.50, 2178.23);
+         aVpiList.add(1120.00, 2173.973, 115.0);
+         aVpiList.add(1220.00, 2173.140,  85.0);
+         aVpiList.add(1315.00, 2168.2265, 90.0);
+         aVpiList.add(1365.00, 2167.8765);
 
-      //private static void testCogoProfile()
-      //{
-        // ptsCogo.CogoProfile aProfile = new ptsCogo.CogoProfile();
-      //}
+         Profile aProfile = new Profile(aVpiList);
+
+         string conditionString;
+         bool expectedBl; bool actualBl;
+         double? expectedDbl; double? actualDbl;
+         tupleNullableDoubles result;
+
+         ///////////////////
+         System.Console.Write("Test on a vertical curve, station 11+20");
+         conditionString = "Verify tupleNullableDoubles isSingleValue is true";
+         result.back = result.ahead = 0.0;
+         result.isSingleValue = false;
+         aProfile.getElevation((CogoStation)1120.00, out result);
+         expectedBl = true;
+         actualBl = result.isSingleValue;
+         TestingFramework.assertEquals<bool>(expectedBl, actualBl, conditionString);
+
+         conditionString = "Verify back elevation is 2174.9175";
+         expectedDbl = 2174.9175;
+         actualDbl = Math.Round((double)result.back, 4);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify ahead elevation is 2174.9175";
+         expectedDbl = 2174.9175;
+         actualDbl = Math.Round((double)result.ahead, 4);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         ///////////////////
+         System.Console.Write("Test on a vertical tangent, station 12+65");
+         conditionString = "Verify tupleNullableDoubles isSingleValue is true";
+         result.back = result.ahead = 0.0;
+         result.isSingleValue = false;
+         aProfile.getElevation((CogoStation)1265.00, out result);
+         expectedBl = true;
+         actualBl = result.isSingleValue;
+         TestingFramework.assertEquals<bool>(expectedBl, actualBl, conditionString);
+
+         conditionString = "Verify back elevation is 2170.8126";
+         expectedDbl = 2170.8126;
+         actualDbl = Math.Round((double)result.back, 4);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify ahead elevation is 2170.8126";
+         expectedDbl = 2170.8126;
+         actualDbl = Math.Round((double)result.ahead, 4);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         ///////////////////
+         System.Console.Write("Test the beginning of the profile, station 10+62.50");
+         conditionString = "Verify tupleNullableDoubles isSingleValue is false";
+         result.back = result.ahead = 0.0;
+         result.isSingleValue = false;
+         aProfile.getElevation((CogoStation)1062.50, out result);
+         expectedBl = false;
+         actualBl = result.isSingleValue;
+         TestingFramework.assertEquals<bool>(expectedBl, actualBl, conditionString);
+
+         conditionString = "Verify back elevation is null";
+         expectedDbl = null;
+         actualDbl = result.back;
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify ahead elevation is 2178.23";
+         expectedDbl = 2178.23;
+         actualDbl = Math.Round((double)result.ahead, 4);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+         
+
+      }
 
       private static void testBuildAgenericAlignment()
       {

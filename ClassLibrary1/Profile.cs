@@ -134,12 +134,12 @@ namespace ptsCogo
          return distance * grade;
       }
 
-      private void setIndexToTheRightVC(CogoStation aStation)
+      private void setIndexToTheCorrectVC(CogoStation aStation)
       {
          while (aStation.trueStation > allVCs[vcIndex].endStation.trueStation)
          {
             vcIndex++;
-            if (vcIndex == allVCs.Count)
+            if (vcIndex > allVCs.Count-1)
             {
                vcIndex = allVCs.Count;
                throw new IndexOutOfRangeException();
@@ -148,7 +148,7 @@ namespace ptsCogo
          while (aStation.trueStation < allVCs[vcIndex].beginStation.trueStation)
          {
             vcIndex--;
-            if (vcIndex == 0)
+            if (vcIndex < 0)
             {
                vcIndex = 0;
                throw new IndexOutOfRangeException();
@@ -158,7 +158,7 @@ namespace ptsCogo
 
 
       //This function should be adjusted to use a delegate plus wrapper functions
-      public void getElevation(CogoStation station, ref tupleNullableDoubles theElevation)
+      public void getElevation(CogoStation station, out tupleNullableDoubles theElevation)
       {
          if ((station.trueStation < beginProfTrueStation - stationEqualityTolerance) ||
              (station.trueStation > endProfTrueStation + stationEqualityTolerance))
@@ -168,7 +168,7 @@ namespace ptsCogo
             theElevation.isSingleValue = true;
          }
 
-         setIndexToTheRightVC(station);
+         setIndexToTheCorrectVC(station);
          verticalCurve aVC = allVCs[vcIndex];
 
          // if we are at the begin station, check to see how we relate to the previous vc
@@ -325,6 +325,21 @@ namespace ptsCogo
       public void add(CogoStation aStation, double anElevation, double aVClength)
       {
          theVPIs.Add(new rawVPI(aStation, anElevation, aVClength));
+      }
+
+      public void add(CogoStation aStation, double anElevation)
+      {
+         theVPIs.Add(new rawVPI(aStation, anElevation, 0.0));
+      }
+
+      public void add(double aStation, double anElevation, double aVClength)
+      {
+         theVPIs.Add(new rawVPI((CogoStation) aStation, anElevation, aVClength));
+      }
+
+      public void add(double aStation, double anElevation)
+      {
+         theVPIs.Add(new rawVPI((CogoStation)aStation, anElevation, 0.0));
       }
 
       public void add(rawVPI newVPI)
