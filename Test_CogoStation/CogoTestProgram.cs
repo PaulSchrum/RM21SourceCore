@@ -42,8 +42,8 @@ namespace Test_CogoStation
          tupleNullableDoubles result;
 
          ///////////////////
-         System.Console.Write("Test on a vertical curve, station 11+20");
-         conditionString = "Verify tupleNullableDoubles isSingleValue is true";
+         System.Console.WriteLine("Test on a vertical curve, station 11+20");
+         conditionString = "Verify tupleNullableDoubles isSingleValue is true when getting elevation";
          result.back = result.ahead = 0.0;
          result.isSingleValue = false;
          aProfile.getElevation((CogoStation)1120.00, out result);
@@ -61,8 +61,40 @@ namespace Test_CogoStation
          actualDbl = Math.Round((double)result.ahead, 4);
          TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
 
+         conditionString = "Verify tupleNullableDoubles isSingleValue is true when getting slope";
+         aProfile.getSlope((CogoStation)1120.00, out result);
+         expectedBl = true;
+         actualBl = result.isSingleValue;
+         TestingFramework.assertEquals<bool>(expectedBl, actualBl, conditionString);
+
+         conditionString = "Verify back slope is -4.1182%";
+         expectedDbl = -0.041182;
+         actualDbl = Math.Round((double)result.back, 6);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify ahead slope is -4.1182%";
+         expectedDbl = -0.041182;
+         actualDbl = Math.Round((double)result.ahead, 6);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify tupleNullableDoubles isSingleValue is true when getting K Value";
+         aProfile.getKvalue((CogoStation)1120.00, out result);
+         expectedBl = true;
+         actualBl = result.isSingleValue;
+         TestingFramework.assertEquals<bool>(expectedBl, actualBl, conditionString);
+
+         conditionString = "Verify back K value is +17.5";
+         expectedDbl = 17.5;
+         actualDbl = Math.Round((double)result.back, 1);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify ahead K value is +17.5";
+         expectedDbl = 17.5;
+         actualDbl = Math.Round((double)result.ahead, 1);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
          ///////////////////
-         System.Console.Write("Test on a vertical tangent, station 12+65");
+         System.Console.WriteLine("Test on a vertical tangent, station 12+65");
          conditionString = "Verify tupleNullableDoubles isSingleValue is true";
          result.back = result.ahead = 0.0;
          result.isSingleValue = false;
@@ -80,6 +112,30 @@ namespace Test_CogoStation
          expectedDbl = 2170.8126;
          actualDbl = Math.Round((double)result.ahead, 4);
          TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         aProfile.getSlope((CogoStation)1265.00, out result);
+         conditionString = "Verify back slope is -5.1721%";
+         expectedDbl = -0.051721;
+         actualDbl = Math.Round((double)result.back, 6);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify ahead slope is -5.1721%";
+         expectedDbl = -0.051721;
+         actualDbl = Math.Round((double)result.ahead, 6);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         System.Console.WriteLine("Test K value a vertical tangent, station 12+65");
+         aProfile.getKvalue((CogoStation)1265.00, out result);
+         conditionString = "Verify back K Value is infintiy";
+         expectedDbl = double.PositiveInfinity;
+         actualDbl = result.back;
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify ahead slope is infintiy";
+         expectedDbl = double.PositiveInfinity;
+         actualDbl = result.ahead;
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
 
          ///////////////////
          System.Console.Write("Test the beginning of the profile, station 10+62.50");
@@ -101,6 +157,21 @@ namespace Test_CogoStation
          actualDbl = Math.Round((double)result.ahead, 4);
          TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
 
+         aProfile.getSlope((CogoStation)1062.50, out result);
+         expectedBl = false;
+         actualBl = result.isSingleValue;
+         TestingFramework.assertEquals<bool>(expectedBl, actualBl, conditionString);
+
+         conditionString = "Verify back slope is null";
+         expectedDbl = null;
+         actualDbl = result.back;
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify ahead slope is -7.4035%";
+         expectedDbl = -0.074035;
+         actualDbl = Math.Round((double)result.ahead, 6);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
          ///////////////////
          System.Console.Write("Test the end of the profile, station 13+65");
          conditionString = "Verify tupleNullableDoubles isSingleValue is false";
@@ -120,7 +191,104 @@ namespace Test_CogoStation
          expectedDbl = null;
          actualDbl = result.ahead;
          TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
-         
+
+         ///////////////////
+         System.Console.Write("Test the vertical PRC station 11+75.50");
+         conditionString = "Verify tupleNullableDoubles isSingleValue is true for slopes";
+         result.back = result.ahead = 0.0;
+         result.isSingleValue = true;
+         aProfile.getSlope((CogoStation)1177.5, out result);
+         expectedBl = true;
+         actualBl = result.isSingleValue;
+         TestingFramework.assertEquals<bool>(expectedBl, actualBl, conditionString);
+
+         conditionString = "Verify back slope is -0.8330%";
+         expectedDbl = -0.00833;
+         actualDbl = Math.Round((double)result.back, 6);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify ahead slope is -0.8330%";
+         expectedDbl = -0.00833;
+         actualDbl = Math.Round((double)result.ahead, 6);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify tupleNullableDoubles isSingleValue is false for K Values";
+         result.back = result.ahead = 0.0;
+         result.isSingleValue = false;
+         aProfile.getKvalue((CogoStation)1177.5, out result);
+         expectedBl = false;
+         actualBl = result.isSingleValue;
+         TestingFramework.assertEquals<bool>(expectedBl, actualBl, conditionString);
+
+         conditionString = "Verify back K value is 17.5";
+         expectedDbl = 17.5;
+         actualDbl = Math.Round((double)result.back, 1);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify ahead K value is -19.6";
+         expectedDbl = -19.6;
+         actualDbl = Math.Round((double)result.ahead, 1);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         aVpiList = new vpiList();
+         aVpiList.add(1000.00, 100.0);
+         aVpiList.add(1100.00, 110.0);
+         aVpiList.add(1200.00, 102.0);
+
+         aProfile = new Profile(aVpiList);
+
+         ///////////////////
+         System.Console.WriteLine("Test the elevation, slope, and K values at a VPI with no VC.");
+         conditionString = "Verify tupleNullableDoubles isSingleValue is true for elevation";
+         result.back = result.ahead = 0.0;
+         result.isSingleValue = true;
+         aProfile.getElevation((CogoStation)1100.0, out result);
+         expectedBl = true;
+         actualBl = result.isSingleValue;
+         TestingFramework.assertEquals<bool>(expectedBl, actualBl, conditionString);
+
+         conditionString = "Verify back elevation is 110.0";
+         expectedDbl = 110.0;
+         actualDbl = Math.Round((double)result.back, 6);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify ahead elevation is 110.0";
+         expectedDbl = 110.0;
+         actualDbl = Math.Round((double)result.ahead, 6);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify tupleNullableDoubles isSingleValue is false for slope";
+         aProfile.getSlope((CogoStation)1100.0, out result);
+         expectedBl = false;
+         actualBl = result.isSingleValue;
+         TestingFramework.assertEquals<bool>(expectedBl, actualBl, conditionString);
+
+         conditionString = "Verify back slope is +10.0%";
+         expectedDbl = 0.10;
+         actualDbl = Math.Round((double)result.back, 6);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify ahead slope is -8.0%";
+         expectedDbl = -0.080;
+         actualDbl = Math.Round((double)result.ahead, 6);
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify tupleNullableDoubles isSingleValue is true for K value";
+         aProfile.getKvalue((CogoStation)1100.0, out result);
+         expectedBl = true;
+         actualBl = result.isSingleValue;
+         TestingFramework.assertEquals<bool>(expectedBl, actualBl, conditionString);
+
+         conditionString = "Verify back K value is 0.0";
+         expectedDbl = 0.0;
+         actualDbl = result.back;
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify ahead K value is 0.0";
+         expectedDbl = 0.0;
+         actualDbl = result.ahead;
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
 
       }
 

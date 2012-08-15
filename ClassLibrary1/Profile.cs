@@ -157,15 +157,32 @@ namespace ptsCogo
       }
 
 
-      //This function should be adjusted to use a delegate plus wrapper functions
       public void getElevation(CogoStation station, out tupleNullableDoubles theElevation)
+      {
+         verticalCurve.getSwitchForProfiles callFunction = new verticalCurve.getSwitchForProfiles(verticalCurve.getElevation);
+         getValueByDelegate(station, out theElevation, callFunction);
+      }
+
+      public void getSlope(CogoStation station, out tupleNullableDoubles theSlope)
+      {
+         verticalCurve.getSwitchForProfiles callFunction = new verticalCurve.getSwitchForProfiles(verticalCurve.getSlope);
+         getValueByDelegate(station, out theSlope, callFunction);
+      }
+
+      public void getKvalue(CogoStation station, out tupleNullableDoubles theSlope)
+      {
+         verticalCurve.getSwitchForProfiles callFunction = new verticalCurve.getSwitchForProfiles(verticalCurve.getKvalue);
+         getValueByDelegate(station, out theSlope, callFunction);
+      }
+
+      private void getValueByDelegate(CogoStation station, out tupleNullableDoubles theOutValue, verticalCurve.getSwitchForProfiles getFunction)
       {
          if ((station.trueStation < beginProfTrueStation - stationEqualityTolerance) ||
              (station.trueStation > endProfTrueStation + stationEqualityTolerance))
          {
-            theElevation.back = null;
-            theElevation.ahead = null;
-            theElevation.isSingleValue = true;
+            theOutValue.back = null;
+            theOutValue.ahead = null;
+            theOutValue.isSingleValue = true;
          }
 
          setIndexToTheCorrectVC(station);
@@ -177,19 +194,19 @@ namespace ptsCogo
             // if we are at the beginning of the profile, split theElevation
             if (vcIndex == 0)
             {
-               theElevation.back = null;
-               theElevation.ahead = aVC.getElevation(station);
-               theElevation.isSingleValue = false;
+               theOutValue.back = null;
+               theOutValue.ahead = getFunction(aVC, station);
+               theOutValue.isSingleValue = false;
             }
             else  // if station is on the boundary between two verticalCurves,
             {     // then see if we need to split theElevation
-               theElevation.ahead = aVC.getElevation(station);
-               theElevation.back = allVCs[vcIndex - 1].getElevation(station);
-               if (utilFunctions.tolerantCompare(theElevation.back, theElevation.ahead, 0.00005) == 0)
+               theOutValue.ahead = getFunction(aVC, station);
+               theOutValue.back = getFunction(allVCs[vcIndex - 1], station);
+               if (utilFunctions.tolerantCompare(theOutValue.back, theOutValue.ahead, 0.00005) == 0)
                {
-                  theElevation.isSingleValue = true;
+                  theOutValue.isSingleValue = true;
                }
-               else theElevation.isSingleValue = false;
+               else theOutValue.isSingleValue = false;
             }
          }
          // End: if we are at the begin station, check to see how we relate to the previous vc
@@ -199,48 +216,34 @@ namespace ptsCogo
             // if we are at the end of the profile, split theElevation
             if (vcIndex == allVCs.Count - 1)
             {
-               theElevation.back = aVC.getElevation(station);
-               theElevation.ahead = null;
-               theElevation.isSingleValue = false;
+               theOutValue.back = getFunction(aVC, station);
+               theOutValue.ahead = null;
+               theOutValue.isSingleValue = false;
             }
             else  // if station is on the boundary between two verticalCurves,
             {     // then see if we need to split theElevation
-               theElevation.back = aVC.getElevation(station);
-               theElevation.ahead = allVCs[vcIndex + 1].getElevation(station);
-               if (utilFunctions.tolerantCompare(theElevation.back, theElevation.ahead, 0.00005) == 0)
+               theOutValue.back = getFunction(aVC, station);
+               theOutValue.ahead = getFunction(allVCs[vcIndex + 1], station);
+               if (utilFunctions.tolerantCompare(theOutValue.back, theOutValue.ahead, 0.00005) == 0)
                {
-                  theElevation.isSingleValue = true;
+                  theOutValue.isSingleValue = true;
                }
-               else theElevation.isSingleValue = false;
+               else theOutValue.isSingleValue = false;
             }
          }
          // End: if we are at the end station, check to see how we relate to the next vc
          else
          {
-            theElevation.back = aVC.getElevation(station);
-            theElevation.ahead = theElevation.back;
-            theElevation.isSingleValue = true;
+            theOutValue.back = getFunction(aVC, station);
+            theOutValue.ahead = theOutValue.back;
+            theOutValue.isSingleValue = true;
          }
-      }
-
-      public void getSlope(CogoStation station, ref tupleNullableDoubles theSlope)
-      {
-         theSlope.back = 1.22;
-         theSlope.ahead = theSlope.back;
-         theSlope.isSingleValue = false;
-      }
-
-      public void getKvalue(CogoStation station, ref tupleNullableDoubles theKvalue)
-      {
-         theKvalue.back = 1.22;
-         theKvalue.ahead = theKvalue.back;
-         theKvalue.isSingleValue = false;
       }
 
       private class verticalCurve
       {
          private double length_;
-         private double kValue_;
+         private double deltaSlopeRate_;
          private CogoStation endStation_;
          private bool isTangent_;
 
@@ -252,7 +255,7 @@ namespace ptsCogo
                isTangent_ = value;
                if (isTangent_ == true)
                {
-                  kValue_ = Double.MaxValue;
+                  deltaSlopeRate_ = 0.0;
                }
             } 
          }
@@ -262,7 +265,9 @@ namespace ptsCogo
          public double beginElevation { get; set; }
          public double beginSlope { get; set; }
          public double endSlope { get; set; }
-         public double kValue { get { return kValue_; } private set { } }
+         private bool beginIsPINC { get; set; }  // PINC = PI, No Curve.
+         private bool endIsPINC { get; set; }    //  used to detect undefined K values at PINC stations
+         public double kValue { get { return (1.0 / deltaSlopeRate_); } private set { } }
          public double length 
          { get { return length_; } 
             set
@@ -273,11 +278,11 @@ namespace ptsCogo
                   endStation_ = beginStation + length_;
                   if (isTangent_ == false)
                   {
-                     kValue_ = (endSlope - beginSlope) / length_;
+                     deltaSlopeRate_ = length_ / (endSlope - beginSlope);
                   }
                   else
                   {
-                     kValue_ = Double.MaxValue;
+                     deltaSlopeRate_ = 0.0;
                   }
                }
                else
@@ -287,24 +292,43 @@ namespace ptsCogo
             } 
          }
 
-         public double getElevation(CogoStation station)
+         internal delegate double getSwitchForProfiles(verticalCurve aVC, CogoStation station);
+
+         static public double getElevation(verticalCurve aVC, CogoStation station)
          {
             double theElevation;
             double lenSquared; double lenIntoVC;
 
-            lenIntoVC = station - beginStation;
+            lenIntoVC = station - aVC.beginStation;
             lenSquared = lenIntoVC * lenIntoVC;
 
-            theElevation = beginElevation +
-               (lenIntoVC * beginSlope);
+            theElevation = aVC.beginElevation +
+               (lenIntoVC * aVC.beginSlope);
 
-            if (isTangent == false)
-               theElevation += (kValue * lenSquared / 2.0);
+            if (aVC.isTangent == false)
+               theElevation += (aVC.kValue * lenSquared / 2.0);
 
             return theElevation;
-
          }
-         
+
+         static public double getSlope(verticalCurve aVC, CogoStation station)
+         {
+            double theSlope;
+            double lenSquared; double lenIntoVC;
+
+            lenIntoVC = station - aVC.beginStation;
+            lenSquared = lenIntoVC * lenIntoVC;
+
+            theSlope = aVC.beginSlope +
+               (lenIntoVC * aVC.kValue);
+
+            return theSlope;
+         }
+
+         static public double getKvalue(verticalCurve aVC, CogoStation station)
+         {
+            return aVC.isTangent_ ? double.PositiveInfinity : aVC.deltaSlopeRate_/100.0;
+         }
       }
    }
 
