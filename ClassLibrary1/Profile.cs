@@ -38,6 +38,8 @@ namespace ptsCogo
             aNewVerticalCurve.beginSlope = (vpi2.elevation - vpi1.elevation) /
                                              aNewVerticalCurve.length;
             aNewVerticalCurve.isTangent = true;
+            aNewVerticalCurve.beginIsPINC = false;
+            aNewVerticalCurve.endIsPINC = false;
 
             allVCs = new List<verticalCurve>();
             allVCs.Add(aNewVerticalCurve);
@@ -86,6 +88,19 @@ namespace ptsCogo
                         newVC.length = incomingTanLen;
                         newVC.beginElevation = vpi2.elevation + getELchangeAlongSlope(g1, 
                            (vpi1.getEndStation() - vpi2.station));
+                        
+                        newVC.beginIsPINC = false;
+                        if (allVCs.Count > 0)
+                        {
+                           newVC.beginIsPINC = allVCs.Last<verticalCurve>().endIsPINC;
+                        }
+
+                        newVC.endIsPINC = false;
+                        if (utilFunctions.tolerantCompare(vpi2.length, 0.0, stationEqualityTolerance) == 0)
+                        {
+                           newVC.endIsPINC = true;
+                        }
+                        
                         allVCs.Add(newVC);
                      }
                      // End: add a VC for the incoming tangent when necessary
@@ -116,6 +131,15 @@ namespace ptsCogo
                            newVC.endSlope = g2;
                            newVC.length = outgoingTangentLength;
                            newVC.beginElevation = vpi2.elevation + getELchangeAlongSlope(g2, vpi2.length / 2.0);
+                           
+                           newVC.beginIsPINC = false;
+                           if (allVCs.Count > 0)
+                           {
+                              newVC.beginIsPINC = allVCs.Last<verticalCurve>().endIsPINC;
+                           }
+
+                           newVC.endIsPINC = false;
+
                            allVCs.Add(newVC);
                            endProfTrueStation = newVC.beginStation.trueStation + newVC.length;
                         }
@@ -191,7 +215,7 @@ namespace ptsCogo
          // if we are at the begin station, check to see how we relate to the previous vc
          if (utilFunctions.tolerantCompare(station.trueStation, aVC.beginStation.trueStation, stationEqualityTolerance) == 0)
          {
-            // if we are at the beginning of the profile, split theElevation
+            // if we are at the beginning of the profile, split theOutValue
             if (vcIndex == 0)
             {
                theOutValue.back = null;
@@ -199,21 +223,30 @@ namespace ptsCogo
                theOutValue.isSingleValue = false;
             }
             else  // if station is on the boundary between two verticalCurves,
-            {     // then see if we need to split theElevation
-               theOutValue.ahead = getFunction(aVC, station);
-               theOutValue.back = getFunction(allVCs[vcIndex - 1], station);
-               if (utilFunctions.tolerantCompare(theOutValue.back, theOutValue.ahead, 0.00005) == 0)
+            {     // then see if we need to split theOutValue
+               if (getFunction == verticalCurve.getKvalue &&
+                   aVC.beginIsPINC)
                {
+                  theOutValue.back = theOutValue.ahead = 0.0;
                   theOutValue.isSingleValue = true;
                }
-               else theOutValue.isSingleValue = false;
+               else
+               {
+                  theOutValue.ahead = getFunction(aVC, station);
+                  theOutValue.back = getFunction(allVCs[vcIndex - 1], station);
+                  if (utilFunctions.tolerantCompare(theOutValue.back, theOutValue.ahead, 0.00005) == 0)
+                  {
+                     theOutValue.isSingleValue = true;
+                  }
+                  else theOutValue.isSingleValue = false;
+               }
             }
          }
          // End: if we are at the begin station, check to see how we relate to the previous vc
          // if we are at the end station, check to see how we relate to the next vc
          else if (utilFunctions.tolerantCompare(station.trueStation, aVC.endStation.trueStation, stationEqualityTolerance) == 0)
          {
-            // if we are at the end of the profile, split theElevation
+            // if we are at the end of the profile, split theOutValue
             if (vcIndex == allVCs.Count - 1)
             {
                theOutValue.back = getFunction(aVC, station);
@@ -221,14 +254,23 @@ namespace ptsCogo
                theOutValue.isSingleValue = false;
             }
             else  // if station is on the boundary between two verticalCurves,
-            {     // then see if we need to split theElevation
-               theOutValue.back = getFunction(aVC, station);
-               theOutValue.ahead = getFunction(allVCs[vcIndex + 1], station);
-               if (utilFunctions.tolerantCompare(theOutValue.back, theOutValue.ahead, 0.00005) == 0)
+            {     // then see if we need to split theOutValue
+               if (getFunction == verticalCurve.getKvalue &&
+                   aVC.endIsPINC)
                {
+                  theOutValue.back = theOutValue.ahead = 0.0;
                   theOutValue.isSingleValue = true;
                }
-               else theOutValue.isSingleValue = false;
+               else
+               {
+                  theOutValue.back = getFunction(aVC, station);
+                  theOutValue.ahead = getFunction(allVCs[vcIndex + 1], station);
+                  if (utilFunctions.tolerantCompare(theOutValue.back, theOutValue.ahead, 0.00005) == 0)
+                  {
+                     theOutValue.isSingleValue = true;
+                  }
+                  else theOutValue.isSingleValue = false;
+               }
             }
          }
          // End: if we are at the end station, check to see how we relate to the next vc
@@ -238,6 +280,15 @@ namespace ptsCogo
             theOutValue.ahead = theOutValue.back;
             theOutValue.isSingleValue = true;
          }
+      }
+
+      public bool isOnPINC(CogoStation aStation)
+      {
+         var aVC = allVCs.FirstOrDefault(vc => utilFunctions.tolerantCompare(vc.beginStation.trueStation, aStation.trueStation, stationEqualityTolerance) == 0);
+         if (aVC == null)
+            return false;
+         else
+            return aVC.beginIsPINC;
       }
 
       private class verticalCurve
@@ -265,8 +316,8 @@ namespace ptsCogo
          public double beginElevation { get; set; }
          public double beginSlope { get; set; }
          public double endSlope { get; set; }
-         private bool beginIsPINC { get; set; }  // PINC = PI, No Curve.
-         private bool endIsPINC { get; set; }    //  used to detect undefined K values at PINC stations
+         public bool beginIsPINC { get; set; }  // PINC = PI, No Curve.
+         public bool endIsPINC { get; set; }    //  used to detect undefined K values at PINC stations
          public double kValue { get { return (1.0 / deltaSlopeRate_); } private set { } }
          public double length 
          { get { return length_; } 

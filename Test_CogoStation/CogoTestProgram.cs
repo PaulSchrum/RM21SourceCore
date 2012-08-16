@@ -230,6 +230,11 @@ namespace Test_CogoStation
          actualDbl = Math.Round((double)result.ahead, 1);
          TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
 
+         conditionString = "Verify we know we are not on a PINC at station 11+77.50";
+         expectedBl = false;
+         actualBl = aProfile.isOnPINC((CogoStation)1177.50);
+         TestingFramework.assertEquals<bool>(expectedBl, actualBl, conditionString);
+
          aVpiList = new vpiList();
          aVpiList.add(1000.00, 100.0);
          aVpiList.add(1100.00, 110.0);
@@ -245,6 +250,16 @@ namespace Test_CogoStation
          aProfile.getElevation((CogoStation)1100.0, out result);
          expectedBl = true;
          actualBl = result.isSingleValue;
+         TestingFramework.assertEquals<bool>(expectedBl, actualBl, conditionString);
+
+         conditionString = "Verify we know we are on a PINC at station 11+00";
+         expectedBl = true;
+         actualBl = aProfile.isOnPINC((CogoStation)1100.0);
+         TestingFramework.assertEquals<bool>(expectedBl, actualBl, conditionString);
+
+         conditionString = "Verify we know we are not on a PINC at station 11+50";
+         expectedBl = false;
+         actualBl = aProfile.isOnPINC((CogoStation)1150.0);
          TestingFramework.assertEquals<bool>(expectedBl, actualBl, conditionString);
 
          conditionString = "Verify back elevation is 110.0";
