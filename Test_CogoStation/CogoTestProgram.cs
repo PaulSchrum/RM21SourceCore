@@ -56,8 +56,8 @@ namespace Test_CogoStation
          actualDbl = Math.Round((double)result.back, 4);
          TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
 
-         conditionString = "Verify ahead elevation is 2174.9175";
          expectedDbl = 2174.9175;
+         conditionString = "Verify ahead elevation is " + expectedDbl.ToString();
          actualDbl = Math.Round((double)result.ahead, 4);
          TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
 

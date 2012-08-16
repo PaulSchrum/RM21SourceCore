@@ -294,9 +294,9 @@ namespace ptsCogo
       private class verticalCurve
       {
          private double length_;
-         private double deltaSlopeRate_;
          private CogoStation endStation_;
          private bool isTangent_;
+         private double kValue_;
 
          public bool isTangent 
          { 
@@ -306,7 +306,7 @@ namespace ptsCogo
                isTangent_ = value;
                if (isTangent_ == true)
                {
-                  deltaSlopeRate_ = 0.0;
+                  kValue = double.PositiveInfinity;
                }
             } 
          }
@@ -318,7 +318,7 @@ namespace ptsCogo
          public double endSlope { get; set; }
          public bool beginIsPINC { get; set; }  // PINC = PI, No Curve.
          public bool endIsPINC { get; set; }    //  used to detect undefined K values at PINC stations
-         public double kValue { get { return (1.0 / deltaSlopeRate_); } private set { } }
+         public double kValue { get { return 0.01 / kValue_; } private set { kValue_ = value; } }
          public double length 
          { get { return length_; } 
             set
@@ -329,11 +329,11 @@ namespace ptsCogo
                   endStation_ = beginStation + length_;
                   if (isTangent_ == false)
                   {
-                     deltaSlopeRate_ = length_ / (endSlope - beginSlope);
+                     kValue =  (endSlope - beginSlope) / length_;
                   }
                   else
                   {
-                     deltaSlopeRate_ = 0.0;
+                     kValue = double.PositiveInfinity ;
                   }
                }
                else
@@ -357,7 +357,7 @@ namespace ptsCogo
                (lenIntoVC * aVC.beginSlope);
 
             if (aVC.isTangent == false)
-               theElevation += (aVC.kValue * lenSquared / 2.0);
+               theElevation += (lenSquared / (200.0 * aVC.kValue));
 
             return theElevation;
          }
@@ -371,14 +371,14 @@ namespace ptsCogo
             lenSquared = lenIntoVC * lenIntoVC;
 
             theSlope = aVC.beginSlope +
-               (lenIntoVC * aVC.kValue);
+               (lenIntoVC / (100.0 * aVC.kValue));
 
             return theSlope;
          }
 
          static public double getKvalue(verticalCurve aVC, CogoStation station)
          {
-            return aVC.isTangent_ ? double.PositiveInfinity : aVC.deltaSlopeRate_/100.0;
+            return aVC.kValue;
          }
       }
    }
