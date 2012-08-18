@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ptsCogo.coordinates.CurvilinearCoordinates
 {
-   class StationOffsetElevation
+   public class StationOffsetElevation
    {
       public double station{get; set;}
       public Offset offset { get; set; }

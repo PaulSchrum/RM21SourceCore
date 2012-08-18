@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ptsCogo.coordinates.CurvilinearCoordinates
 {
-   class Elevation
+   public class Elevation
    {
       public Elevation(double newVal) { EL = newVal; }
 

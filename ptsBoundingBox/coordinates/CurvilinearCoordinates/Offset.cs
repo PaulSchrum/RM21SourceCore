@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ptsCogo.coordinates.CurvilinearCoordinates
 {
-   class Offset
+   public class Offset
    {
       public Offset(double newVal) { OFST = newVal; }
 

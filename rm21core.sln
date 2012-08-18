@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_ptsCadFoundations01", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_Cogo", "Test_CogoStation\Test_Cogo.csproj", "{60F16EDC-A229-416B-B136-160C8A345A15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rm21CoreComponents", "rm21Core\rm21CoreComponents.csproj", "{B0A390F8-61B4-4155-8819-4D7BB65E2F9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,6 +88,16 @@ Global
 		{60F16EDC-A229-416B-B136-160C8A345A15}.Release|Mixed Platforms.Build.0 = Release|x86
 		{60F16EDC-A229-416B-B136-160C8A345A15}.Release|x86.ActiveCfg = Release|x86
 		{60F16EDC-A229-416B-B136-160C8A345A15}.Release|x86.Build.0 = Release|x86
+		{B0A390F8-61B4-4155-8819-4D7BB65E2F9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0A390F8-61B4-4155-8819-4D7BB65E2F9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0A390F8-61B4-4155-8819-4D7BB65E2F9B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B0A390F8-61B4-4155-8819-4D7BB65E2F9B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B0A390F8-61B4-4155-8819-4D7BB65E2F9B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B0A390F8-61B4-4155-8819-4D7BB65E2F9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0A390F8-61B4-4155-8819-4D7BB65E2F9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0A390F8-61B4-4155-8819-4D7BB65E2F9B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B0A390F8-61B4-4155-8819-4D7BB65E2F9B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B0A390F8-61B4-4155-8819-4D7BB65E2F9B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
