@@ -83,6 +83,11 @@ namespace ptsCogo
          return new CogoStation(adbl);
       }
 
+      //public static implicit operator CogoStation(double adbl)
+      //{
+        // return new CogoStation(adbl);
+      //}
+
       public override string ToString()
       {
          int leftOfPlus = (int) station / (int) (Math.Pow(10.0, plusOffset));

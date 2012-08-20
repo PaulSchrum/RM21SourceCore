@@ -16,7 +16,26 @@ namespace ptsCogo
       public double endProfTrueStation { get; private set; }
 
       private Profile() { }
+
+      //public Profile(CogoStation beginStation, CogoStation endStation, int singleElevation)
+      //   : this(beginStation, endStation, (double)singleElevation)
+      //{ }
+
+      public Profile(CogoStation beginStation, CogoStation endStation, double singleElevation)
+      {
+         vpiList aVpiList = new vpiList();
+         aVpiList.add(beginStation, singleElevation);
+         aVpiList.add(endStation, singleElevation);
+
+         buildThisFromRawVPIlist(aVpiList);
+      }
+
       public Profile(vpiList rawVPIlist)
+      {
+         buildThisFromRawVPIlist(rawVPIlist);
+      }
+
+      private void buildThisFromRawVPIlist(vpiList rawVPIlist)
       {
          if (rawVPIlist.Count < 2)
          {
