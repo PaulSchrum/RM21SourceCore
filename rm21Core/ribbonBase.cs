@@ -29,14 +29,43 @@ namespace rm21Core
 
       public void accumulateRibbonTraversal(ref StationOffsetElevation aSOE)
       {
-         aSOE.station = 1.2;
-         aSOE.elevation = (Elevation) 2.2;
-         aSOE.offset = (Offset) 55.5;
+         double traversedWidth;
+         tupleNullableDoubles result;
+         double? availableWidth = getActualWidth((CogoStation) aSOE.station, out result);
+         if (result.isSingleValue == false)
+         { throw new NotImplementedException("Width discontinuity is not allowed. This happens at station = " + aSOE.station);}
+
+         double? crossSlope = getCrossSlope((CogoStation)aSOE.station, out result);
+         if (result.isSingleValue == false)
+         { throw new NotImplementedException("Cross slope discontinuity is not allowed. This happens at station = " + aSOE.station); }
+
+         if ((double)availableWidth > aSOE.offset)
+         {
+            traversedWidth = aSOE.offset;
+            aSOE.offset = 0.0;
+         }
+         else
+         {
+            traversedWidth = (double) availableWidth;
+            aSOE.offset -= traversedWidth;
+         }
+
+         aSOE.elevation += traversedWidth * (double)crossSlope;
       }
 
       public double? getActualWidth(CogoStation aStation, out tupleNullableDoubles result)
       {
          Widths.getElevation(aStation, out result);
+         if (result.back != null && result.isSingleValue == false)
+         {
+            return result.ahead;
+         }
+         return result.back;
+      }
+
+      public double? getCrossSlope(CogoStation aStation, out tupleNullableDoubles result)
+      {
+         CrossSlopes.getElevation(aStation, out result);
          if (result.back != null && result.isSingleValue == false)
          {
             return result.ahead;

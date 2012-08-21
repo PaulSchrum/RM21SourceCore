@@ -11,9 +11,14 @@ namespace ptsCogo.coordinates.CurvilinearCoordinates
 
       public double EL { get; set; }
 
+      public override string ToString()
+      {
+         return EL.ToString();
+      }
+
       public static Elevation operator +(Elevation anEL, Double other){return new Elevation(anEL.EL + other);}
       public static double operator -(Elevation leftOfOperand, Elevation rightOfOperand) { return leftOfOperand.EL - rightOfOperand.EL; }
-      public static explicit operator Elevation(double aDouble){return new Elevation(aDouble);}
+      public static implicit operator Elevation(double aDouble){return new Elevation(aDouble);}
       public static implicit operator double(Elevation anEL) {return anEL.EL;}
    }
 }

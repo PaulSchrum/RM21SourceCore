@@ -30,8 +30,13 @@ namespace ptsCogo.coordinates.CurvilinearCoordinates
       }
 
       public static Offset operator +(Offset anEL, Double other) { return new Offset(anEL.OFST + other); }
+      public static Offset operator -(Offset anEL, Double other) { return new Offset(anEL.OFST - other); }
+      public static bool operator <(Offset anOffset, Double other) { return anOffset.OFST < other; }
+      public static bool operator <(Double other, Offset anOffset ) { return anOffset.OFST > other; }
+      public static bool operator >(Offset anOffset, Double other) { return anOffset.OFST > other; }
+      public static bool operator >(Double other, Offset anOffset) { return anOffset.OFST < other; }
       public static double operator -(Offset leftOfOperand, Offset rightOfOperand) { return leftOfOperand.OFST - rightOfOperand.OFST; }
-      public static explicit operator Offset(double aDouble) { return new Offset(aDouble); }
+      public static implicit operator Offset(double aDouble) { return new Offset(aDouble); }
       public static implicit operator double(Offset anEL) { return anEL.OFST; }
    }
 }
