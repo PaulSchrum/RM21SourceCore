@@ -78,6 +78,16 @@ namespace ptsCogo
          return sta1.trueStation - sta2.trueStation;
       }
 
+      public static bool operator >(CogoStation station, double aDouble)
+      {
+         return station.trueStation > aDouble;
+      }
+
+      public static bool operator <(CogoStation station, double aDouble)
+      {
+         return station.trueStation < aDouble;
+      }
+
       public static explicit operator CogoStation(double adbl)
       {
          return new CogoStation(adbl);

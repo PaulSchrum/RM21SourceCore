@@ -305,6 +305,48 @@ namespace Test_CogoStation
          TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
 
 
+         aVpiList = new vpiList();
+         aVpiList.add(1000.00, 12.0);
+         aVpiList.add(1100.00, 12.0);
+
+         aProfile = new Profile(aVpiList);
+
+         System.Console.WriteLine("Test adding a VPINC to a profile past the end.");
+         aProfile.addStationAndElevation((CogoStation)1200.00, 14.0);
+         conditionString = "Verify elevation == 13.0";
+         aProfile.getElevation((CogoStation)1150.0, out result);
+         expectedDbl = 13.0;
+         actualDbl = result.ahead;
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         System.Console.WriteLine("Test adding a VPINC to a profile before the beginning.");
+         aProfile.addStationAndElevation((CogoStation)900.00, 14.0);
+         conditionString = "Verify elevation == 13.0";
+         aProfile.getElevation((CogoStation)950.0, out result);
+         expectedDbl = 13.0;
+         actualDbl = result.ahead;
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         System.Console.WriteLine("Test adding a VPINC to the interior of a profile.");
+         aProfile.addStationAndElevation((CogoStation)1050.00, -8.0);
+         conditionString = "Verify elevation == -8.0 at 10+50";
+         aProfile.getElevation((CogoStation)1050.0, out result);
+         expectedDbl = -8.0;
+         actualDbl = result.ahead;
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify elevation == +2.0 at 10+25";
+         aProfile.getElevation((CogoStation)1025.0, out result);
+         expectedDbl = 2.0;
+         actualDbl = result.ahead;
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         conditionString = "Verify elevation == +2.0 at 10+75";
+         aProfile.getElevation((CogoStation)1075.0, out result);
+         expectedDbl = 2.0;
+         actualDbl = result.ahead;
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
       }
 
       private static void testBuildAgenericAlignment()

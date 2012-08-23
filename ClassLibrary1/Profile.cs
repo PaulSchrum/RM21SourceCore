@@ -11,6 +11,7 @@ namespace ptsCogo
       private List<verticalCurve> allVCs;
       private int vcIndex=0;
       private double stationEqualityTolerance = 0.00005;
+      private bool iHaveOneOrMoreVerticalCurves { get; set; }
 
       public double beginProfTrueStation {get; private set;}
       public double endProfTrueStation { get; private set; }
@@ -37,6 +38,7 @@ namespace ptsCogo
 
       private void buildThisFromRawVPIlist(vpiList rawVPIlist)
       {
+         iHaveOneOrMoreVerticalCurves = false;
          if (rawVPIlist.Count < 2)
          {
             throw new NotImplementedException("Profile can not have less than 2 VPIs");
@@ -127,6 +129,7 @@ namespace ptsCogo
                      // add a VC for the current vertical curve if VClen > 0
                      if (vpi2.length > 0.0)
                      {
+                        iHaveOneOrMoreVerticalCurves = true;
                         newVC = new verticalCurve();
                         newVC.beginSlope = g1;
                         newVC.beginStation = vpi2.getBeginStation();
@@ -170,6 +173,123 @@ namespace ptsCogo
                vpi2 = vpi3;
             }
          }
+      }
+
+      public void addStationAndElevation(CogoStation newStation, double newElevation)
+      {
+         verticalCurve newVC, otherVC;
+         if (iHaveOneOrMoreVerticalCurves == true)
+         {
+            throw new NotImplementedException("Currently unable to add VPI to a profile with a vertical curve.");
+         }
+         newVC = new verticalCurve();
+         // To Do's
+         //Insert new pi after last station
+         if (newStation > endProfTrueStation)
+         {
+            vcIndex = allVCs.Count - 1;
+            otherVC = allVCs[vcIndex];
+            newVC.beginStation = otherVC.endStation;
+            endProfTrueStation = newStation.trueStation;
+            otherVC.endIsPINC = true;
+            newVC.beginElevation = verticalCurve.getElevation(otherVC, (CogoStation)otherVC.endStation);
+            newVC.beginIsPINC = true;
+            newVC.endIsPINC = false;
+            newVC.isTangent = true;
+            newVC.beginSlope = (newElevation - newVC.beginElevation) /
+                  (newStation - newVC.beginStation);
+            newVC.endSlope = newVC.beginSlope;
+            newVC.length = newStation - newVC.beginStation;
+            allVCs.Add(newVC);
+         }
+         else if (newStation < beginProfTrueStation)  //Insert new pi before first station
+         {
+            vcIndex = 0;
+            otherVC = allVCs[vcIndex];
+            newVC.beginStation = newStation;
+            beginProfTrueStation = newStation.trueStation;
+            otherVC.beginIsPINC = true;
+            newVC.beginElevation = newElevation;
+            newVC.beginIsPINC = false;
+            newVC.endIsPINC = true;
+            newVC.isTangent = true;
+            newVC.beginSlope = (otherVC.beginElevation - newElevation) /
+                  (otherVC.beginStation - newStation);
+            newVC.endSlope = newVC.beginSlope;
+            newVC.length = otherVC.beginStation - newStation;
+            allVCs.Insert(0, newVC);
+         }
+         //insert new pi interior to the profile, but one that has no vertical curves
+         else
+         {  //(CogoStation newStation, double newElevation)
+            setIndexToTheCorrectVC(newStation);
+            otherVC = allVCs[vcIndex];
+            
+            // see if new station is already in the profile as a vpi
+            if(newStation == otherVC.beginStation)
+            {
+               if (vcIndex == 0)  // currently at the first vc
+               {
+                  throw new NotImplementedException();
+               }
+               else
+               {
+                  throw new NotImplementedException();
+               }
+            }
+            else if(newStation == otherVC.endStation)
+            {
+               if (vcIndex == allVCs.Count - 1)  // currently at the last vc
+               {
+                  throw new NotImplementedException();
+               }
+               else
+               {
+                  throw new NotImplementedException();
+               }
+            }  // End: see if new station is already in the profile as a vpi
+            else // new station is interior to an existing VC
+            {
+               CogoStation station1, station2, station3;
+               double elevation1, elevation2, elevation3;
+               station1 = otherVC.beginStation; station2 = newStation; station3 = otherVC.endStation;
+               elevation1 = otherVC.beginElevation; elevation2 = newElevation;
+               elevation3 = verticalCurve.getElevation(otherVC, station3);
+
+               otherVC.setVerticalTangent(station1, elevation1, station2, elevation2);
+               newVC = new verticalCurve();
+               newVC.setVerticalTangent(station2, elevation2, station3, elevation3);
+
+               verticalCurve otherOtherVC;
+               if (vcIndex > 0)
+               {
+                  int VCindex0 = vcIndex - 1;
+                  otherOtherVC = allVCs[VCindex0];
+                  if (otherOtherVC.endSlope == otherVC.beginSlope)
+                     otherOtherVC.endIsPINC = otherVC.beginIsPINC = false;
+                  else
+                     otherOtherVC.endIsPINC = otherVC.beginIsPINC = true;
+               }
+
+               if (vcIndex < allVCs.Count)
+               {
+                  int VCindex3 = vcIndex + 1;
+                  otherOtherVC = allVCs[VCindex3];
+                  if (otherOtherVC.beginSlope == otherVC.endSlope)
+                     otherOtherVC.beginIsPINC = otherVC.endIsPINC = false;
+                  else
+                     otherOtherVC.beginIsPINC = otherVC.endIsPINC = true;
+               }
+
+               allVCs.Insert(vcIndex+1, newVC);
+            } // End: new station is interior to an existing VC
+         }
+         // To Do: dissolve two vc's into one when they are really the same slope/elevation
+      }
+
+      public static double getSlopeFromDoubles(double y1, double y2, double x1, double x2)
+      {
+         return (y2 - y1) / (x2 - x1);
       }
 
       static public double getELchangeAlongSlope(double grade, double distance)
@@ -360,6 +480,16 @@ namespace ptsCogo
                   throw new NotSupportedException("Length of vertical curve not allowed to be less than 0.");
                }
             } 
+         }
+
+         internal void setVerticalTangent(CogoStation sta1, double EL1, CogoStation sta2, double EL2)
+         {
+            beginStation = sta1;
+            beginElevation = EL1;
+            beginSlope = getSlopeFromDoubles(EL1, EL2, sta1.trueStation, sta2.trueStation);
+            isTangent = true;
+            endSlope = beginSlope;
+            length = sta2 - sta1;
          }
 
          internal delegate double getSwitchForProfiles(verticalCurve aVC, CogoStation station);
