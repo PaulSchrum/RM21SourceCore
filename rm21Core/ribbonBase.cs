@@ -17,6 +17,8 @@ namespace rm21Core
       public Profile CrossSlopes { get; private set; }
       internal Profile interpretCrossSlopes { get; set; }
 
+      private tupleNullableDoubles resultScratchpad;
+
       public ribbonBase() { }
 
       public ribbonBase(CogoStation beginStation, CogoStation endStation, double initialWidth, Slope initialSlope)
@@ -27,7 +29,39 @@ namespace rm21Core
          CrossSlopes = new Profile(beginStation, endStation, initialSlope);
       }
 
-      public void accumulateRibbonTraversal(ref StationOffsetElevation aSOE)
+      public virtual void addWidenedSegment(CogoStation beginOpenTaperStation, CogoStation endOpenTaperStation, double newTotalWidth,
+                                    CogoStation beginCloseTaperStation, CogoStation endCloseTaperStation)
+      {
+         double startWidth, endWidth;
+         Widths.getElevation(beginOpenTaperStation, out resultScratchpad);
+         startWidth = (double)resultScratchpad.back;
+         Widths.getElevation(endCloseTaperStation, out resultScratchpad);
+         endWidth = (double)resultScratchpad.back;
+
+         Widths.addStationAndElevation(beginOpenTaperStation, startWidth);
+         Widths.addStationAndElevation(endOpenTaperStation, newTotalWidth);
+         Widths.addStationAndElevation(beginCloseTaperStation, newTotalWidth);
+         Widths.addStationAndElevation(endCloseTaperStation, endWidth);
+
+      }
+
+      public virtual void addCrossSlopeChangedSegment(CogoStation beginOpenTaperStation, CogoStation endOpenTaperStation, double crossSlope,
+                                    CogoStation beginCloseTaperStation, CogoStation endCloseTaperStation)
+      {
+         double startCrossSlope, endCrossSlope;
+         CrossSlopes.getElevation(beginOpenTaperStation, out resultScratchpad);
+         startCrossSlope = (double)resultScratchpad.back;
+         CrossSlopes.getElevation(endCloseTaperStation, out resultScratchpad);
+         endCrossSlope = (double)resultScratchpad.back;
+
+         CrossSlopes.addStationAndElevation(beginOpenTaperStation, startCrossSlope);
+         CrossSlopes.addStationAndElevation(endOpenTaperStation, crossSlope);
+         CrossSlopes.addStationAndElevation(beginCloseTaperStation, crossSlope);
+         CrossSlopes.addStationAndElevation(endCloseTaperStation, endCrossSlope);
+
+      }
+
+      public virtual void accumulateRibbonTraversal(ref StationOffsetElevation aSOE)
       {
          double traversedWidth;
          tupleNullableDoubles result;
@@ -53,7 +87,7 @@ namespace rm21Core
          aSOE.elevation += traversedWidth * (double)crossSlope;
       }
 
-      public double? getActualWidth(CogoStation aStation, out tupleNullableDoubles result)
+      public virtual double? getActualWidth(CogoStation aStation, out tupleNullableDoubles result)
       {
          Widths.getElevation(aStation, out result);
          if (result.back != null && result.isSingleValue == false)
@@ -63,7 +97,7 @@ namespace rm21Core
          return result.back;
       }
 
-      public double? getCrossSlope(CogoStation aStation, out tupleNullableDoubles result)
+      public virtual double? getCrossSlope(CogoStation aStation, out tupleNullableDoubles result)
       {
          CrossSlopes.getElevation(aStation, out result);
          if (result.back != null && result.isSingleValue == false)

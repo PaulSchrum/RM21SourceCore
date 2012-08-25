@@ -271,7 +271,7 @@ namespace ptsCogo
                      otherOtherVC.endIsPINC = otherVC.beginIsPINC = true;
                }
 
-               if (vcIndex < allVCs.Count)
+               if (vcIndex < allVCs.Count-1)
                {
                   int VCindex3 = vcIndex + 1;
                   otherOtherVC = allVCs[VCindex3];
