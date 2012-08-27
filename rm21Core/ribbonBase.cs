@@ -10,7 +10,7 @@ using ptsCogo.Angle;
 
 namespace rm21Core
 {
-   public abstract class ribbonBase
+   public abstract class ribbonBase : IRibbonLike
    {
       public Profile Widths { get; private set; }
       internal Profile interpretWidths { get; set; }
@@ -105,6 +105,16 @@ namespace rm21Core
             return result.ahead;
          }
          return result.back;
+      }
+
+      public virtual int getRibbonCount()
+      {
+         return 1;
+      }
+
+      public IRibbonLike getRibbonByIndex(int index)
+      {
+         return this;
       }
 
    }
