@@ -11,61 +11,23 @@ namespace rm21Core
 {
    public class PGLGrouping
    {
-      // Note: allRibbons always contains allRibbons[0], which is the PGL Offset
-      // ribbon, even if it has width 0 for the entire length of the chain
-      private ribbonCollection allRibbons;
+      private IRibbonLike PGLoffsetRibbon;  
+      // offset from 3d space curve to the Profile Grade Line
+      
+      private LinkedList<IRibbonLike> outsideRibbons;  
+      // All elements from the PGL toward the outside.  This is to the right
+      // for the right PGLGrouping (myIndex > 0)
+      // and to the left for the left PGLGrouping (myIndex < 0
+      
+      private LinkedList<IRibbonLike> insideRibbons;
+      // All element from the PGL toward the inside.  This is to the left
+      // for the right PGLGrouping and to the right for the left PGLGrouping.
 
+      public int myIndex { get; set; }  // Should never be left as 0
       public Profile pglProfile { get; set; }
+      // public HorizontalAlignment horizAlignment { get; set; }
 
 
-      // public HorizontalAlignment theHorizontalAlignment { get; set; }
-      /// <summary>
-      /// Collection of all ribbons in the PGL Grouping
-      /// </summary>
-      /// <remarks>
-      /// All Ribbon Collections are required to have a ribbon[0], which
-      /// is the "phantom ribbon" that represents the offset from the 
-      /// Space Curve to the profile grade line.  If one is not provided,
-      /// then one is created by default which has its width == 0.0 
-      /// throughout it length.
-      /// </remarks>
-      private class ribbonCollection : Dictionary<int, IRibbonLike>
-      {
-         public int getMaxIndex()
-         {
-            int returnValue = 0;
-            while (base.ContainsKey(returnValue++) == true) { }
-
-            return returnValue - 1;
-         }
-
-         public int getMinIndex()
-         {
-            int returnValue = 0;
-            while (base.ContainsKey(returnValue--) == true) { }
-
-            return returnValue + 1;
-         }
-
-         public int getNextIndexBySide(int side)
-         {
-            int direction = (Math.Sign(side) > 0) ? 1 : -1;
-            int returnValue = 0;
-            while (base.ContainsKey(returnValue) == true) { returnValue += direction; }
-
-            return returnValue;
-         }
-
-         public void Add(int side, IRibbonLike newRibbonLike)
-         {
-            base.Add(this.getNextIndexBySide(side), newRibbonLike);
-         }
-
-         public void Insert(int indexInsertBefore, IRibbonLike newRibbonLike)
-         {
-            throw new NotImplementedException();  // to do: implement this next
-         }
-      }
    }
 
 }
