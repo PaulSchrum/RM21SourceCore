@@ -12,6 +12,7 @@ namespace rm21Core
 {
    public abstract class ribbonBase : IRibbonLike
    {
+      private int myIndex_ { get; set; }
       public Profile Widths { get; private set; }
       internal Profile interpretWidths { get; set; }
       public Profile CrossSlopes { get; private set; }
@@ -87,6 +88,12 @@ namespace rm21Core
          aSOE.elevation += traversedWidth * (double)crossSlope;
       }
 
+      public virtual double? getActualWidth(CogoStation aStation)
+      {
+         tupleNullableDoubles rslt = new tupleNullableDoubles();
+         return getActualWidth(aStation, out rslt);
+      }
+
       public virtual double? getActualWidth(CogoStation aStation, out tupleNullableDoubles result)
       {
          Widths.getElevation(aStation, out result);
@@ -107,14 +114,24 @@ namespace rm21Core
          return result.back;
       }
 
-      public virtual int getRibbonCount()
+      public virtual int getChildRibbonCount()
       {
          return 1;
       }
 
-      public IRibbonLike getRibbonByIndex(int index)
+      public IRibbonLike getChildRibbonByIndex(int index)
       {
          return this;
+      }
+
+      public int getMyIndex() { return myIndex_; }
+      public void setMyIndex(int index) { myIndex_ = index; }
+      public void incrementMyIndex()
+      {
+         if (myIndex_ < 0)
+            myIndex_--;
+         else
+            myIndex_++;
       }
 
    }

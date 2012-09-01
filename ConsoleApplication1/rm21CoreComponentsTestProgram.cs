@@ -18,11 +18,68 @@ namespace ConsoleApplication1
 
       static void Main(string[] args)
       {
-         validateSimpleSingleRibbon();
-         validateSingleRibbonWithVaryingWidthsAndCrossSlopes();
+         //validateSimpleSingleRibbon();
+         //validateSingleRibbonWithVaryingWidthsAndCrossSlopes();
+
+         validateSimplePGLgrouping();
          
          Console.WriteLine();
          Console.ReadLine();
+      }
+
+      private static void validateSimplePGLgrouping()
+      {
+         PGLGrouping aPGLgrouping;
+         aPGLgrouping = buildNewPGLgrouping(1);
+
+         rm21Corridor aRoad = new rm21Corridor();
+         aRoad.addPGLgrouping(aPGLgrouping);
+
+         aPGLgrouping = buildNewPGLgrouping(-1);
+         aRoad.addPGLgrouping(aPGLgrouping);
+
+         // at this point we now have the lanes and shoulders of a
+         // two-lane road.  Let's test it.
+
+         expectedDbl = 0.0;
+         StationOffsetElevation soe1 = new StationOffsetElevation(2020.0, 0.0, 0.0);
+         aRoad.getElevation(ref soe1);
+         actualDbl = soe1.elevation;
+         conditionString = "Verify elevation is 0.0 at station 20+20, offset 0.0";
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+
+         expectedDbl = -0.76;
+         soe1 = new StationOffsetElevation(2020.0, 18.5, 0.0);
+         aRoad.getElevation(ref soe1);
+         actualDbl = Math.Round(soe1.elevation, 6);
+         conditionString = "Verify elevation is -0.76 at station 20+20, offset 18.5 feet right";
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+         expectedDbl = -0.68;
+         soe1 = new StationOffsetElevation(2020.0, -17.5, 0.0);
+         aRoad.getElevation(ref soe1);
+         actualDbl = soe1.elevation;
+         conditionString = "Verify elevation is -0.68 at station 20+20, offset 17.5 feet left";
+         TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+
+
+      }
+
+      private static PGLGrouping buildNewPGLgrouping(int whichSide)
+      {
+         PGLGrouping returnableGrouping = new PGLGrouping(whichSide);
+
+         IRibbonLike newRibbon;
+         newRibbon = new RoadwayLane((CogoStation)1000.0, (CogoStation)9000.0, 12.0, -0.02);
+         //newRibbon.setMyIndex(whichSide);
+         returnableGrouping.addOutsideRibbon(newRibbon);
+
+         newRibbon = new RoadwayLane((CogoStation)1000.0, (CogoStation)9000.0, 8.0, -0.08);
+         returnableGrouping.addOutsideRibbon(newRibbon);
+
+         return returnableGrouping;
       }
 
       private static void validateSingleRibbonWithVaryingWidthsAndCrossSlopes()

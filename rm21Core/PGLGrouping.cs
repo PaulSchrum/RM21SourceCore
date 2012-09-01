@@ -11,7 +11,7 @@ namespace rm21Core
 {
    public class PGLGrouping
    {
-      private IRibbonLike PGLoffsetRibbon;  
+      private ribbonBase PGLoffsetRibbon;  
       // offset from 3d space curve to the Profile Grade Line
       
       private LinkedList<IRibbonLike> outsideRibbons;  
@@ -20,6 +20,12 @@ namespace rm21Core
       // and to the left for the left PGLGrouping (myIndex < 0
       
       private LinkedList<IRibbonLike> insideRibbons;
+      private int whichSide;
+
+      public PGLGrouping(int whichSide)
+      {
+         myIndex = whichSide;
+      }
       // All element from the PGL toward the inside.  This is to the left
       // for the right PGLGrouping and to the right for the left PGLGrouping.
 
@@ -27,7 +33,86 @@ namespace rm21Core
       public Profile pglProfile { get; set; }
       // public HorizontalAlignment horizAlignment { get; set; }
 
+      public void addOutsideRibbon(IRibbonLike newOutsideRibbon)
+      {
+         if (outsideRibbons == null)
+            outsideRibbons = new LinkedList<IRibbonLike>();
 
+         newOutsideRibbon.setMyIndex(outsideRibbons.Count);
+         outsideRibbons.AddLast(newOutsideRibbon);
+      }
+
+      public void addInsideRibbon(IRibbonLike newInsideRibbon)
+      {
+         if (insideRibbons == null)
+            insideRibbons = new LinkedList<IRibbonLike>();
+
+         newInsideRibbon.setMyIndex(-1*insideRibbons.Count);
+         insideRibbons.AddLast(newInsideRibbon);
+      }
+
+      public void setPGLoffsetRibbon(ribbonBase newPGLoffsetRibbon)
+      {
+         PGLoffsetRibbon = newPGLoffsetRibbon;
+      }
+
+      //public void accumulateRibbonTraversal(ref StationOffsetElevation aSOE);
+
+      /// <summary>
+      /// Gets the elevation of a point on the PGLgrouping
+      /// if the point is on the grouping.  If the point is off the grouping to 
+      /// the left, return -1.  If it is off the grouping to the right, 
+      /// retrun +1.
+      /// </summary>
+      /// <param name="soePoint">Reads station and offset.
+      /// Sets elevation.</param>
+      /// <returns>0 if the point is on the PGLgrouping
+      /// -1 if the point is left of the grouping
+      /// +1 if the point is right of the grouping</returns>
+      public int getElevationFromSOE(ref StationOffsetElevation soePoint)
+      {
+         StationOffsetElevation workingSOE = new StationOffsetElevation(soePoint);
+         workingSOE.offset *= myIndex;
+
+         // seek the correct ribbon
+         if (PGLoffsetRibbon != null)
+         {
+            double? pglOffset = PGLoffsetRibbon.getActualWidth((CogoStation)workingSOE.station);
+            if (pglOffset != null)
+               workingSOE.offset -= pglOffset;
+         }
+         if (workingSOE.offset > 0.0)
+         {
+            if (outsideRibbons == null) return 1;
+
+            foreach (var aRibbon in outsideRibbons)
+            {
+               aRibbon.accumulateRibbonTraversal(ref workingSOE);
+               if (workingSOE.offset <= 0.0) break;
+            }
+            if (workingSOE.offset > 0.0)
+               return 1;
+         }
+         else if (workingSOE.offset < 0.0)
+         {
+            if (insideRibbons == null) return -1;
+
+            workingSOE.offset *= -1.0;
+            foreach (var aRibbon in insideRibbons)
+            {
+               aRibbon.accumulateRibbonTraversal(ref workingSOE);
+               if (workingSOE.offset <= 0.0) break;
+            }
+            if (workingSOE.offset > 0.0)
+               return -1;
+         }
+         else
+            workingSOE.elevation = 0.0;
+
+         soePoint.elevation = workingSOE.elevation;
+
+         return 0;
+      }
    }
 
 }

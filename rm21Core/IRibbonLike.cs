@@ -8,8 +8,12 @@ namespace rm21Core
 {
    public interface IRibbonLike
    {
-      int getRibbonCount();
-      IRibbonLike getRibbonByIndex(int index);
+      int getChildRibbonCount();
+      IRibbonLike getChildRibbonByIndex(int index);
       void accumulateRibbonTraversal(ref StationOffsetElevation aSOE);
+
+      int getMyIndex();
+      void setMyIndex(int index);
+      void incrementMyIndex();
    }
 }
