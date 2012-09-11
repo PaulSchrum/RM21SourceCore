@@ -17,9 +17,9 @@ namespace Test_CogoStation
 
       static void Main(string[] args)
       {
-         //testBuildAgenericAlignment();
-         //setupSomeStations();
-         //testStationArithmetic();
+         testBuildAgenericAlignment();
+         setupSomeStations();
+         testStationArithmetic();
          testCogoProfile();
          Console.WriteLine("Testing Concluded.");
          Console.Read();

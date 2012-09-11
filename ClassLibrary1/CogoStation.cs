@@ -2,18 +2,39 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.ComponentModel;
 
 namespace ptsCogo
 {
    [Serializable]
-   public class CogoStation
+   public class CogoStation : INotifyPropertyChanged
    {
       public GenericAlignment myAlignment { get; internal set; }
       public bool isOnMyAlignemnt { get; internal set; }
-      public double station { get; internal set; }
-      public int region {get; internal set;}
+      internal double station { get; set; }
+      internal int region {get; set;}
       public double extended { get; internal set; }
-      public double trueStation { get; internal set; }
+
+      private double _trueStation;
+      public double trueStation { get { return _trueStation; }
+         set
+         {
+            if (_trueStation == value)
+               return;
+
+            _trueStation = value;
+
+            if (null == myAlignment)
+            {
+               trueStation = _trueStation;
+            }
+            else
+            {
+               myAlignment.setStation(this, _trueStation);
+            }
+            NotifyPropertyChanged("trueStation");
+         }
+      }
 
       private static int plusOffset_ = 2;
       public static int plusOffset { get { return plusOffset_; } set { plusOffset = value > 0 ? value : 2; } }
@@ -40,16 +61,12 @@ namespace ptsCogo
          
       }
 
-      internal void setFromTrueStation(double newTrueStationValue)
+      public event PropertyChangedEventHandler PropertyChanged;
+      private void NotifyPropertyChanged(String info)
       {
-         if (null == myAlignment)
+         if (PropertyChanged != null)
          {
-            station = newTrueStationValue;
-            trueStation = newTrueStationValue;
-         }
-         else
-         {
-            myAlignment.setStation(this, newTrueStationValue);
+            PropertyChanged(this, new PropertyChangedEventArgs(info));
          }
       }
 
@@ -62,7 +79,7 @@ namespace ptsCogo
          else
          {
             CogoStation newStation = sta.myAlignment.newStation();
-            newStation.setFromTrueStation(sta.trueStation + addend);
+            newStation.trueStation = sta.trueStation + addend;
             return newStation;
          }
       }
@@ -106,6 +123,27 @@ namespace ptsCogo
          StringBuilder retString = new StringBuilder();
          retString.AppendFormat("{0}+{1:00.00} R {2} ext. {3:f2}", leftOfPlus, rightOfPlusDbl, region, extended);
          return retString.ToString();
+      }
+
+      /// <summary>
+      /// Warning: Rapid Prototype version of this function only.  Is fragile.
+      /// Specifically it does not check for 'R' in the case of a region
+      /// To Do: Correct this shortcoming
+      /// </summary>
+      /// <param name="strValue"></param>
+      /// <returns></returns>
+      public static CogoStation convertStringToStation(string strValue)
+      {
+         string newStr = strValue;
+         int pos = newStr.IndexOf('+');
+         if (pos > -1)
+            newStr = newStr.Remove(pos, 1);
+         
+         double dblValue;
+         Double.TryParse(newStr, out dblValue);
+
+         return new CogoStation(dblValue);
+
       }
 
       /// Desired features not yet implemented

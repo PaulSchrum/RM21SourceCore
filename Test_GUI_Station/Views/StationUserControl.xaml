@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="Test_GUI_Station.Views.StationUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Test_GUI_Station="clr-namespace:Test_GUI_Station"
+             xmlns:model="clr-namespace:Test_GUI_Station.theStationModel"
+             xmlns:stationViewModel="clr-namespace:Test_GUI_Station.theStationViewModel"
+             mc:Ignorable="d" 
+             d:DesignHeight="42" d:DesignWidth="192">
+    <UserControl.Resources>
+        <stationViewModel:StationConverter x:Key="StationConverter" />
+        <stationViewModel:theStationViewModel x:Key="theVM" />
+        <!--<DataTemplate DataType="{x:Type model:ModelOfCogoStation}">
+            <TextBox Text="{Binding Path=aStation}" />
+         </DataTemplate>-->
+    </UserControl.Resources>
+    <TextBox Text="{Binding Path=aStation, Converter={StaticResource StationConverter}, Mode=TwoWay}"
+        Height="30" HorizontalAlignment="Left" Margin="6,6,0,0" Name="txt_station" VerticalAlignment="Top" Width="180" FontSize="16"
+             DataContext="{Binding}" />
+</UserControl>
+    
+    
