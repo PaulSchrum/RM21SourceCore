@@ -8,7 +8,15 @@ namespace rm21Core
 {
    public class rm21Model
    {
-      public ObservableDictionary<string, rm21Corridor> allCorridors { get; private set; }
+      public rm21Model()
+      {
+         //allCorridors = new ObservableDictionary<string, rm21Corridor>();
+         allCorridors = new ObservableCollection<rm21Corridor>();
+      }
+
+      //public ObservableDictionary<string, rm21Corridor> allCorridors { get; private set; }
+      public ObservableCollection<rm21Corridor> allCorridors { get; private set; }
       public string currentValue { get; set; }
+
    }
 }

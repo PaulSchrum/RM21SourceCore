@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="CorridorTypes\rm21RoadwayClass.cs" />
     <Compile Include="ExternalClasses\ObservableDictionary.cs" />
+    <Compile Include="ExternalClasses\ViewModelBase.cs" />
     <Compile Include="Ribbons\IRibbonLike.cs" />
     <Compile Include="PGLGrouping.cs" />
     <Compile Include="Ribbons\ribbonBase.cs" />

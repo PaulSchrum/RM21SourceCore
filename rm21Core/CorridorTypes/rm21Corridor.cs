@@ -11,12 +11,21 @@ namespace rm21Core
    /// <summary>
    /// This class represents all surfaces controlled by the same chain, 
    ///   including medians.  Eventually this class will be made abstract
-   ///   and roadways will be implements by a subclass, just as riparian
+   ///   and roadways will be implemented by a subclass, just as riparian
    ///   ways and railways will be.
    /// </summary>
    public class rm21Corridor
    {
       private List<PGLGrouping> allPGLgroupings_;
+
+      public rm21Corridor() { }
+
+      public rm21Corridor(string name_)
+      {
+         Name = name_;
+      }
+
+      public string Name { get; set; }
 
       public void addPGLgrouping(PGLGrouping aPGLgrouping)
       {
