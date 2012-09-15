@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Collections.ObjectModel;
+
+namespace rm21Core
+{
+   public class rm21Model
+   {
+      public ObservableDictionary<string, rm21Corridor> allCorridors { get; private set; }
+      public string currentValue { get; set; }
+   }
+}

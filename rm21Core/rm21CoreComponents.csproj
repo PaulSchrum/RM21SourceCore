@@ -41,12 +41,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CorridorTypes\rm21RoadwayClass.cs" />
+    <Compile Include="ExternalClasses\ObservableDictionary.cs" />
     <Compile Include="Ribbons\IRibbonLike.cs" />
     <Compile Include="PGLGrouping.cs" />
     <Compile Include="Ribbons\ribbonBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CorridorTypes\rm21Corridor.cs" />
     <Compile Include="Ribbons\RoadwayLane.cs" />
+    <Compile Include="rm21Model.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClassLibrary1\ptsCogo.csproj">
