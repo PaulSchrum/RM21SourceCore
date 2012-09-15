@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using rm21Core.ExternalClasses;
 using rm21Core;
+using rm21Core.Ribbons;
+using System.Windows.Input;
+using ptsCogo;
 
 namespace MainRM21WPFapp.ViewModels
 {
@@ -12,9 +15,38 @@ namespace MainRM21WPFapp.ViewModels
       public MainWindowVM()
       {
          theRM21model = new rm21Model();
-         theRM21model.allCorridors.Add(new rm21Corridor("-L-"));
-         theRM21model.allCorridors.Add(new rm21Corridor("-Y1-"));
-         theRM21model.allCorridors.Add(new rm21Corridor("-C1-"));
+         theRM21model.allCorridors.Add(new rm21Corridor("C1"));
+         theRM21model.allCorridors.Add(new rm21Corridor("L"));
+         theRM21model.allCorridors.Add(new rm21Corridor("Y1"));
+
+         LoadDataCmd = new RelayCommand(loadData, () => canLoadData);
+         canLoadData = true;
+
+         loadData();
+      }
+      
+
+
+      private void setupCorridorL()
+      {
+         rm21Corridor aCorridor = 
+            theRM21model.allCorridors.FirstOrDefault
+                  (aCorr => aCorr.Name.Equals("L"));
+
+         PGLGrouping pglGrLT = new PGLGrouping(-1);
+         PGLGrouping pglGrRT = new PGLGrouping(1);
+
+         pglGrLT.addOutsideRibbon(new RoadwayLane((CogoStation)1000, (CogoStation)10000, 12.0, -0.02));
+         pglGrLT.addOutsideRibbon(new Shoulder((CogoStation)1000, (CogoStation)10000, 10.0, -0.08));
+         pglGrLT.addOutsideRibbon(new FrontSlopeCutDitch((CogoStation)1000, (CogoStation)10000, 15.0, -1 / 6));
+
+         pglGrRT.addOutsideRibbon(new RoadwayLane((CogoStation)1000, (CogoStation)10000, 12.0, -0.02));
+         pglGrRT.addOutsideRibbon(new Shoulder((CogoStation)1000, (CogoStation)10000, 10.0, -0.08));
+         pglGrRT.addOutsideRibbon(new FrontSlopeCutDitch((CogoStation)1000, (CogoStation)10000, 15.0, -1 / 6));
+
+         aCorridor.addPGLgrouping(pglGrLT);
+         aCorridor.addPGLgrouping(pglGrRT);
+
       }
 
       private rm21Model theRM21model_;
@@ -45,34 +77,13 @@ namespace MainRM21WPFapp.ViewModels
          }
       }
 
-   }
-
-   public class CorridorNameConverter : System.Windows.Data.IValueConverter
-   {
-      /// <summary>
-      /// Convert from rm21Corridor to String
-      /// </summary>
-      /// <param name="value"></param>
-      /// <param name="targetType"></param>
-      /// <param name="parameter"></param>
-      /// <param name="culture"></param>
-      /// <returns></returns>
-      public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+      private bool canLoadData;
+      public ICommand LoadDataCmd { get; private set; }
+      private void loadData()
       {
-         return (value as rm21Corridor).Name;
+         setupCorridorL();
       }
 
-      /// <summary>
-      /// Convert from String to rm21Corridor 
-      /// </summary>
-      /// <param name="value"></param>
-      /// <param name="targetType"></param>
-      /// <param name="parameter"></param>
-      /// <param name="culture"></param>
-      /// <returns></returns>
-      public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-      {
-         return null;
-      }
    }
+
 }

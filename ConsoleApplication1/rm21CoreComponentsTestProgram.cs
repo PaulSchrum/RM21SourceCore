@@ -18,8 +18,8 @@ namespace ConsoleApplication1
 
       static void Main(string[] args)
       {
-         //validateSimpleSingleRibbon();
-         //validateSingleRibbonWithVaryingWidthsAndCrossSlopes();
+         validateSimpleSingleRibbon();
+         validateSingleRibbonWithVaryingWidthsAndCrossSlopes();
 
          validateSimplePGLgrouping();
          

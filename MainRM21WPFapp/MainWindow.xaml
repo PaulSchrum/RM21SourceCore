@@ -17,7 +17,13 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="8">Corridor</TextBlock>
-        <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="4" ItemsSource="{Binding Path=theRM21model.allCorridors}" SelectedItem="{Binding Path=CurrentCorridor}" />
+        <ComboBox Grid.Column="1" 
+                  HorizontalAlignment="Stretch" 
+                  VerticalAlignment="Center" Margin="4" 
+                  ItemsSource="{Binding Path=theRM21model.allCorridors}" 
+                  SelectedItem="{Binding Path=CurrentCorridor}" 
+                  SelectedIndex="0" 
+                  />
         <TabControl Grid.Row="1" Grid.ColumnSpan="3" Margin="6">
             <TabItem Header="Roadway Model" BorderBrush="Black" BorderThickness="4">
                 <Grid ShowGridLines="True">

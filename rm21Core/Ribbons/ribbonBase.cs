@@ -124,8 +124,9 @@ namespace rm21Core
          return this;
       }
 
-      public int getMyIndex() { return myIndex_; }
-      public void setMyIndex(int index) { myIndex_ = index; }
+      public int getMyIndex() { return MyIndex; }
+      public void setMyIndex(int index) { MyIndex = index; }
+      public int MyIndex { get { return myIndex_; } set { myIndex_ = value; } }
       public void incrementMyIndex()
       {
          if (myIndex_ < 0)

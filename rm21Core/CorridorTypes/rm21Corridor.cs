@@ -50,6 +50,11 @@ namespace rm21Core
          return false;
       }
 
+      public override string ToString()
+      {
+         return Name;
+      }
+
    }
 
 }
