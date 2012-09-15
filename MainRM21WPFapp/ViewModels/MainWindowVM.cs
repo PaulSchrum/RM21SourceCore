@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using rm21Core.ExternalClasses;
 using rm21Core;
+using rm21Core.CorridorTypes;
 using rm21Core.Ribbons;
 using System.Windows.Input;
 using ptsCogo;
@@ -16,11 +17,13 @@ namespace MainRM21WPFapp.ViewModels
       {
          theRM21model = new rm21Model();
          theRM21model.allCorridors.Add(new rm21Corridor("C1"));
-         theRM21model.allCorridors.Add(new rm21Corridor("L"));
-         theRM21model.allCorridors.Add(new rm21Corridor("Y1"));
+         theRM21model.allCorridors.Add(new rm21RoadwayCorridor("L"));
+         theRM21model.allCorridors.Add(new rm21RoadwayCorridor("Y1"));
 
          LoadDataCmd = new RelayCommand(loadData, () => canLoadData);
          canLoadData = true;
+
+         roadwayModelTabVM_ = new RoadwayModel_TabVM(this);
 
          loadData();
       }
@@ -47,6 +50,20 @@ namespace MainRM21WPFapp.ViewModels
          aCorridor.addPGLgrouping(pglGrLT);
          aCorridor.addPGLgrouping(pglGrRT);
 
+      }
+
+      private RoadwayModel_TabVM roadwayModelTabVM_;
+      public RoadwayModel_TabVM RoadwayModelTabMV
+      {
+         get { return roadwayModelTabVM_; }
+         set
+         {
+            if (roadwayModelTabVM_ != value)
+            {
+               roadwayModelTabVM_ = value;
+               RaisePropertyChanged("RoadwayModelTabMV");
+            }
+         }
       }
 
       private rm21Model theRM21model_;
