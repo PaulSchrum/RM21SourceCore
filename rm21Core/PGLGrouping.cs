@@ -11,8 +11,9 @@ namespace rm21Core
 {
    public class PGLGrouping
    {
-      private ribbonBase PGLoffsetRibbon;  
       // offset from 3d space curve to the Profile Grade Line
+      private ribbonBase PGLoffsetRibbon_;
+      public ribbonBase PGLoffsetRibbon { get; set; }
       
       private LinkedList<IRibbonLike> outsideRibbons;  
       // All elements from the PGL toward the outside.  This is to the right
@@ -20,7 +21,7 @@ namespace rm21Core
       // and to the left for the left PGLGrouping (myIndex < 0
       
       private LinkedList<IRibbonLike> insideRibbons;
-      private int whichSide;
+      //private int whichSide;
 
       public PGLGrouping(int whichSide)
       {
@@ -53,7 +54,7 @@ namespace rm21Core
 
       public void setPGLoffsetRibbon(ribbonBase newPGLoffsetRibbon)
       {
-         PGLoffsetRibbon = newPGLoffsetRibbon;
+         PGLoffsetRibbon_ = newPGLoffsetRibbon;
       }
 
       //public void accumulateRibbonTraversal(ref StationOffsetElevation aSOE);
@@ -75,9 +76,9 @@ namespace rm21Core
          workingSOE.offset *= myIndex;
 
          // seek the correct ribbon
-         if (PGLoffsetRibbon != null)
+         if (PGLoffsetRibbon_ != null)
          {
-            double? pglOffset = PGLoffsetRibbon.getActualWidth((CogoStation)workingSOE.station);
+            double? pglOffset = PGLoffsetRibbon_.getActualWidth((CogoStation)workingSOE.station);
             if (pglOffset != null)
                workingSOE.offset -= pglOffset;
          }
@@ -113,6 +114,12 @@ namespace rm21Core
 
          return 0;
       }
+
+      public override string ToString()
+      {
+         return "Success";
+      }
+
    }
 
 }

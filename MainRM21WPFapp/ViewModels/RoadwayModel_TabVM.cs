@@ -24,5 +24,19 @@ namespace MainRM21WPFapp.ViewModels
       private MainWindowVM parentVM_;
 
       private rm21Corridor currentCorridor_;
+      public rm21Corridor CurrentCorridor
+      {
+         get { return currentCorridor_; }
+         set
+         {
+            if (currentCorridor_ != value)
+            {
+               currentCorridor_ = value;
+               RaisePropertyChanged("CurrentCorridor");
+            }
+         }
+      }
+
+      
    }
 }

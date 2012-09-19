@@ -5,6 +5,7 @@ using System.Text;
 using ptsCogo.coordinates.CurvilinearCoordinates;
 using ptsCogo;
 using ptsCogo.Angle;
+using System.Collections.ObjectModel;
 
 namespace rm21Core
 {
@@ -16,7 +17,7 @@ namespace rm21Core
    /// </summary>
    public class rm21Corridor
    {
-      private List<PGLGrouping> allPGLgroupings_;
+      public ObservableCollection<PGLGrouping> allPGLgroupings { get; private set; }
 
       public rm21Corridor() { }
 
@@ -32,15 +33,15 @@ namespace rm21Core
          if (aPGLgrouping == null)
             throw new ArgumentNullException();
 
-         if (allPGLgroupings_ == null)
-            allPGLgroupings_ = new List<PGLGrouping>();
+         if (allPGLgroupings == null)
+            allPGLgroupings = new ObservableCollection<PGLGrouping>();
 
-         allPGLgroupings_.Add(aPGLgrouping);
+         allPGLgroupings.Add(aPGLgrouping);
       }
 
       public bool getElevation(ref StationOffsetElevation soePoint)
       {
-         foreach (var pglGr in allPGLgroupings_)
+         foreach (var pglGr in allPGLgroupings)
          {
             int isOnThisPGLgrp = pglGr.getElevationFromSOE(ref soePoint);
             if (isOnThisPGLgrp == 0)

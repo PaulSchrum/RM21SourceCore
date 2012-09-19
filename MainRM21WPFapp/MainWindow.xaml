@@ -28,13 +28,20 @@
             <TabItem Header="Roadway Model" BorderBrush="Black" BorderThickness="4" DataContext="{Binding}">
                 <Grid ShowGridLines="True">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="20" />
                         <RowDefinition Height="2*" />
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Grid.Column="1" VerticalAlignment="Bottom">Corridor Tree</TextBlock>
+                    <!--  CorridorTreeViewUC user control will go here -->
+                    
+                    
                 </Grid>
             </TabItem>
             <TabItem Header="Chains" BorderBrush="Black" BorderThickness="4" IsEnabled="False">
