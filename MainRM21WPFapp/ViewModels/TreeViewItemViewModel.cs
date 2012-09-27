@@ -91,7 +91,7 @@ namespace MainRM21WPFapp.ViewModels
                _parent.IsExpanded = true;
 
 
-            this.LoadChildren();
+            //this.LoadChildren();
          }
       }
 
@@ -139,9 +139,9 @@ namespace MainRM21WPFapp.ViewModels
       /// Invoked when the child items need to be loaded on demand.
       /// Subclasses can override this to populate the Children collection.
       /// </summary>
-      protected virtual void LoadChildren()
-      {
-      }
+      //protected virtual void LoadChildren()
+      //{
+      //}
 
       #endregion // LoadChildren
 

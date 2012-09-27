@@ -43,6 +43,7 @@
     <Compile Include="CorridorTypes\rm21RoadwayCorridor.cs" />
     <Compile Include="ExternalClasses\ObservableDictionary.cs" />
     <Compile Include="ExternalClasses\ViewModelBase.cs" />
+    <Compile Include="Irm21TreeViewItemable.cs" />
     <Compile Include="Ribbons\FrontSlopeCutDitch.cs" />
     <Compile Include="Ribbons\IRibbonLike.cs" />
     <Compile Include="PGLGrouping.cs" />

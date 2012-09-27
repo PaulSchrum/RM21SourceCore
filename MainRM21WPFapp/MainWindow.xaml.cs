@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MainRM21WPFapp.ViewModels;
 
 namespace MainRM21WPFapp
 {
@@ -22,6 +23,7 @@ namespace MainRM21WPFapp
       public MainWindow()
       {
          InitializeComponent();
+         //(this.DataContext as MainWindowVM).myViewReference = this;  // eliminate later
       }
    }
 }

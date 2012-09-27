@@ -23,9 +23,11 @@ namespace MainRM21WPFapp.ViewModels
          LoadDataCmd = new RelayCommand(loadData, () => canLoadData);
          canLoadData = true;
 
-         roadwayModelTabVM_ = new RoadwayModel_TabVM(this);
+         RoadwayModelTabVM = new RoadwayModel_TabVM(this);
 
          loadData();
+
+         CurrentCorridor = theRM21model.allCorridors[0];
       }
       
 
@@ -52,8 +54,15 @@ namespace MainRM21WPFapp.ViewModels
 
       }
 
+      private System.Windows.Window myViewReference_;
+      public System.Windows.Window myViewReference
+      {
+         get { return myViewReference_; }
+         set { myViewReference_ = value; } 
+      }
+
       private RoadwayModel_TabVM roadwayModelTabVM_;
-      public RoadwayModel_TabVM RoadwayModelTabMV
+      public RoadwayModel_TabVM RoadwayModelTabVM
       {
          get { return roadwayModelTabVM_; }
          set
@@ -61,7 +70,7 @@ namespace MainRM21WPFapp.ViewModels
             if (roadwayModelTabVM_ != value)
             {
                roadwayModelTabVM_ = value;
-               RaisePropertyChanged("RoadwayModelTabMV");
+               RaisePropertyChanged("RoadwayModelTabVM");
             }
          }
       }
@@ -89,7 +98,24 @@ namespace MainRM21WPFapp.ViewModels
             if (currentCorridor_ != value)
             {
                currentCorridor_ = value;
+               //RoadwayModelTabVM.CurrentCorridor = currentCorridor_;
+               //myViewReference.getv
+               TestText3_9_26 = "Top level test, " + currentCorridor_.Name;
                RaisePropertyChanged("CurrentCorridor");
+            }
+         }
+      }
+
+      private String testText3_9_26_;
+      public String TestText3_9_26
+      {
+         get { return testText3_9_26_; }
+         set
+         {
+            if (testText3_9_26_ != value)
+            {
+               testText3_9_26_ = value;
+               RaisePropertyChanged("TestText3_9_26");
             }
          }
       }

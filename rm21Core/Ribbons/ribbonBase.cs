@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.ObjectModel;
 using ptsCogo.coordinates.CurvilinearCoordinates;
 using ptsCogo;
 using ptsCogo.Angle;
@@ -134,6 +135,9 @@ namespace rm21Core
          else
             myIndex_++;
       }
+
+      public string getHashName(){return "not implemented: Class = ribbonBase";}
+      public ObservableCollection<Irm21TreeViewItemable> getChildren() { return null; }
 
    }
 

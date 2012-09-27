@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mainVM="clr-namespace:MainRM21WPFapp.ViewModels"
+        xmlns:corridorTreeView="clr-namespace:MainRM21WPFapp.Views"
         Title="RM21 Demonstration Application" Height="500" Width="700">
     <Window.DataContext>
         <mainVM:MainWindowVM />
@@ -16,16 +17,21 @@
             <ColumnDefinition Width="125" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="8">Corridor</TextBlock>
+        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" 
+                   Margin="8">Corridor</TextBlock>
         <ComboBox Grid.Column="1" 
                   HorizontalAlignment="Stretch" 
                   VerticalAlignment="Center" Margin="4" 
                   ItemsSource="{Binding Path=theRM21model.allCorridors}" 
                   SelectedItem="{Binding Path=CurrentCorridor}" 
-                  SelectedIndex="0" 
-                  />
-        <TabControl Grid.Row="1" Grid.ColumnSpan="3" Margin="6" DataContext="{Binding Path=RoadwayModelTabMV}">
-            <TabItem Header="Roadway Model" BorderBrush="Black" BorderThickness="4" DataContext="{Binding}">
+                  SelectedIndex="0" DataContext="{Binding}" />
+        <TextBox Grid.Column="2" Grid.Row="0"
+            DataContext="{Binding Path=TestText3_9_26, Mode=OneWay, BindsDirectlyToSource=True}" Margin="4,0" IsReadOnly="True"></TextBox>
+        <TabControl Grid.Row="1" Grid.ColumnSpan="3" Margin="6" 
+                    DataContext="{Binding}" 
+                    ItemsSource="{Binding Path=RoadwayModelTabVM.TestText9_26}">
+            
+            <TabItem Header="Roadway Model" BorderBrush="Black" BorderThickness="4" >
                 <Grid ShowGridLines="True">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20" />
@@ -37,13 +43,17 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    
+                    <TextBlock Grid.Column="0" Grid.Row="0"></TextBlock>
                     <TextBlock Grid.Column="1" VerticalAlignment="Bottom">Corridor Tree</TextBlock>
                     <!--  CorridorTreeViewUC user control will go here -->
+                    <corridorTreeView:CorridorTreeView 
+                        x:Name="uc_CorridorTree"
+                        Grid.Column="1" Grid.Row="1" DataContext="{Binding Path=allPGLgroupings/}" />
                     
                     
                 </Grid>
             </TabItem>
+            
             <TabItem Header="Chains" BorderBrush="Black" BorderThickness="4" IsEnabled="False">
 
             </TabItem>

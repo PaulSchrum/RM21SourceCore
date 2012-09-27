@@ -6,7 +6,7 @@ using ptsCogo.coordinates.CurvilinearCoordinates;
 
 namespace rm21Core
 {
-   public interface IRibbonLike
+   public interface IRibbonLike : Irm21TreeViewItemable
    {
       int getChildRibbonCount();
       IRibbonLike getChildRibbonByIndex(int index);

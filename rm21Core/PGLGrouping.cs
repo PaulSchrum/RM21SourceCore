@@ -5,11 +5,13 @@ using System.Text;
 using ptsCogo.coordinates.CurvilinearCoordinates;
 using ptsCogo;
 using ptsCogo.Angle;
+using System.Collections.ObjectModel;
+
 
 
 namespace rm21Core
 {
-   public class PGLGrouping
+   public class PGLGrouping : Irm21TreeViewItemable
    {
       // offset from 3d space curve to the Profile Grade Line
       private ribbonBase PGLoffsetRibbon_;
@@ -117,9 +119,25 @@ namespace rm21Core
 
       public override string ToString()
       {
-         return "Success";
+         if (myIndex > 0)
+            return "PGL Grouping: +" + myIndex;
+
+         return "PGL Grouping: " + myIndex;
       }
 
+      public string getHashName()
+      {
+         return this.ToString();
+      }
+
+      public ObservableCollection<Irm21TreeViewItemable> getChildren()
+      {
+         ObservableCollection<Irm21TreeViewItemable> children = new ObservableCollection<Irm21TreeViewItemable>();
+         children.Add(PGLoffsetRibbon);
+         foreach (var child in insideRibbons) {children.Add(child);}
+         foreach (var child in outsideRibbons) { children.Add(child); }
+         return children;
+      }
    }
 
 }
