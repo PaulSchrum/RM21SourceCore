@@ -23,7 +23,7 @@ namespace rm21Core
       // for the right PGLGrouping (myIndex > 0)
       // and to the left for the left PGLGrouping (myIndex < 0)
       
-      private LinkedList<IRibbonLike> insideRibbons;
+      public LinkedList<IRibbonLike> insideRibbons;
       //private int whichSide;
 
       public PGLGrouping(int whichSide)

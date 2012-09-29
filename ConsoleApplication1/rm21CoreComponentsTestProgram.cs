@@ -51,6 +51,7 @@ namespace ConsoleApplication1
 
          expectedDbl = -0.76;
          soe1 = new StationOffsetElevation(2020.0, 18.5, 0.0);
+         
          aRoad.getElevation(ref soe1);
          actualDbl = Math.Round(soe1.elevation, 6);
          conditionString = "Verify elevation is -0.76 at station 20+20, offset 18.5 feet right";
