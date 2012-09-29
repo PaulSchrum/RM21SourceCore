@@ -19,8 +19,7 @@ namespace MainRM21WPFapp.ViewModels
       { 
          parentVM_ = parent;
          CurrentCorridor = parentVM_.CurrentCorridor;
-         //this.testText9_26_ = "Not set.";
-         
+         this.testText9_26_ = "Not set.";
       }
 
       private MainWindowVM parentVM_;
@@ -48,7 +47,7 @@ namespace MainRM21WPFapp.ViewModels
             if (testText9_26_ != value)
             {
                testText9_26_ = value;
-               theCorridorAsTreeViewModel = new CorridorTreeViewModel(currentCorridor_);
+               //theCorridorAsTreeViewModel = new CorridorTreeViewModel(currentCorridor_);
                RaisePropertyChanged("TestText9_26");
             }
          }
@@ -73,6 +72,5 @@ namespace MainRM21WPFapp.ViewModels
          }
       }
 
-      
    }
 }

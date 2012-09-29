@@ -98,7 +98,7 @@ namespace MainRM21WPFapp.ViewModels
             if (currentCorridor_ != value)
             {
                currentCorridor_ = value;
-               //RoadwayModelTabVM.CurrentCorridor = currentCorridor_;
+               RoadwayModelTabVM.CurrentCorridor = currentCorridor_;
                //myViewReference.getv
                TestText3_9_26 = "Top level test, " + currentCorridor_.Name;
                RaisePropertyChanged("CurrentCorridor");
