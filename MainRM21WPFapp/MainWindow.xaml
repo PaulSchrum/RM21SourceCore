@@ -26,14 +26,17 @@
                   ItemsSource="{Binding Path=theRM21model.allCorridors}" 
                   SelectedItem="{Binding Path=CurrentCorridor}" 
                   SelectedIndex="0" DataContext="{Binding}" />
+        <!--
         <TextBox Grid.Column="2" Grid.Row="0"
                 Text="{Binding Path=TestText3_9_26}"
                 Margin="4,0" IsReadOnly="True" ></TextBox>
+        -->
+        
         <TabControl Grid.Row="1" Grid.ColumnSpan="3" Margin="6" 
                     DataContext="{Binding Path=RoadwayModelTabVM}">
             
             <TabItem Header="Roadway Model" BorderBrush="Black" BorderThickness="4" >
-                <Grid ShowGridLines="True">
+                <Grid ShowGridLines="False">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20" />
                         <RowDefinition Height="2*" />
@@ -44,64 +47,53 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="{Binding Path=TestText9_26}" Margin="4,0">
-                    </TextBlock>
+                    <!-- <TextBlock Text="{Binding Path=TestText9_26}" Margin="4,0">
+                    </TextBlock>  -->
                     <TextBlock Grid.Column="1" VerticalAlignment="Bottom">Corridor Tree</TextBlock>
-                    <!--  CorridorTreeViewUC user control will go here -->
 
-                    <StackPanel Grid.Row="1" Grid.Column="1"
+                    <TreeView Grid.Row="1" Grid.Column="1"
                         DataContext="{Binding Path=theCorridorAsTreeViewModel}"
-                        >
-                        <TextBox Background="LightSteelBlue" DataContext="{Binding}" 
-                                Text="{Binding TestString}" 
-                                Padding="1" Margin="4" BorderBrush="Blue"
-                                BorderThickness="3"
-                                
-                                 ></TextBox>
+                        ItemsSource="{Binding Path=Level1Items}" 
+                        MinWidth="60" MinHeight="100" 
+                        Margin="10" Background="FloralWhite" >
 
-                        <TreeView 
-                            ItemsSource="{Binding Path=Level1Items}" 
-                            MinWidth="60" MinHeight="100" 
-                            Margin="10" Background="#FFDCBB94" >
+                        <TreeView.ItemContainerStyle>
+                            <Style TargetType="{x:Type TreeViewItem}">
+                                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                                <Setter Property="FontWeight" Value="Normal" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="FontWeight" Value="Bold" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TreeView.ItemContainerStyle>
 
-                            <TreeView.ItemContainerStyle>
-                                <Style TargetType="{x:Type TreeViewItem}">
-                                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                                    <Setter Property="FontWeight" Value="Normal" />
-                                    <Style.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="FontWeight" Value="Bold" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TreeView.ItemContainerStyle>
+                        <TreeView.Resources>
+                            <HierarchicalDataTemplate 
+                                DataType="{x:Type corTreeVM:PglGroupingViewModel}" 
+                                ItemsSource="{Binding Children}" >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding HashName}" />
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
 
-                            <TreeView.Resources>
-                                <HierarchicalDataTemplate 
-                                    DataType="{x:Type corTreeVM:PglGroupingViewModel}" 
-                                    ItemsSource="{Binding Children}" >
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding HashName}" />
-                                    </StackPanel>
-                                </HierarchicalDataTemplate>
+                            <HierarchicalDataTemplate 
+                                DataType="{x:Type corTreeVM:RibbonViewModel}" 
+                                ItemsSource="{Binding Children}" >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding HashName}" />
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
 
-                                <HierarchicalDataTemplate 
-                                    DataType="{x:Type corTreeVM:RibbonViewModel}" 
-                                    ItemsSource="{Binding Children}" >
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding HashName}" />
-                                    </StackPanel>
-                                </HierarchicalDataTemplate>
-
-                            </TreeView.Resources>
-
-
-
-
-                        </TreeView>
-
-                    </StackPanel>
+                        </TreeView.Resources>
+                    </TreeView>
+                    
+                    <TabControl Grid.Row="1" Grid.Column="2">
+                        <TabItem Header="Widths"></TabItem>
+                        <TabItem Header="Cross Slopes"></TabItem>
+                    </TabControl>
                     
                 </Grid>
             </TabItem>

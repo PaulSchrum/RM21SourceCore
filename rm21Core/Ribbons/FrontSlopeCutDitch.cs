@@ -12,5 +12,8 @@ namespace rm21Core.Ribbons
    {
       public FrontSlopeCutDitch(CogoStation beginStation, CogoStation endStation, double initialWidth, Slope initialSlope)
          : base(beginStation, endStation, initialWidth, initialSlope) { }
+
+      public override string getHashName() { return "Cut Ditch FS"; }
+
    }
 }

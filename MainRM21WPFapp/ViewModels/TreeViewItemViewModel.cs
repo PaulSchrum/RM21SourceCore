@@ -31,7 +31,7 @@ namespace MainRM21WPFapp.ViewModels
          _parent = parent;
 
          _children = new ObservableCollection<TreeViewItemViewModel>();
-
+         IsExpanded = true;
       }
 
       // This is used to create the DummyChild instance.

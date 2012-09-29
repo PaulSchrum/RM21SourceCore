@@ -13,5 +13,8 @@ namespace rm21Core
    {
       public RoadwayLane(CogoStation beginStation, CogoStation endStation, double initialWidth, Slope initialSlope)
          : base(beginStation, endStation, initialWidth, initialSlope) { }
+
+      public override string getHashName() { return "Roadway Lane"; }
+
    }
 }

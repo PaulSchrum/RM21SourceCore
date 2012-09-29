@@ -136,7 +136,7 @@ namespace rm21Core
             myIndex_++;
       }
 
-      public string getHashName(){return "not implemented: Class = ribbonBase";}
+      public virtual string getHashName(){return "not implemented: Class = ribbonBase";}
       public ObservableCollection<Irm21TreeViewItemable> getChildren() { return null; }
 
    }

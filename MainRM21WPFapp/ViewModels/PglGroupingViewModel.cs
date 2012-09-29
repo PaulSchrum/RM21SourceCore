@@ -24,6 +24,13 @@ namespace MainRM21WPFapp.ViewModels
          }
          
          //this.Children
+         if (null != thePglGrouping_.outsideRibbons)
+         {
+            foreach (var ribbon in thePglGrouping_.outsideRibbons)
+            {
+               this.Children.Add(new RibbonViewModel(ribbon as ribbonBase));
+            }
+         }
       }
 
       private PGLGrouping thePglGrouping_;

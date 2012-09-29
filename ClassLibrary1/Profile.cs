@@ -53,6 +53,7 @@ namespace ptsCogo
 
             aNewVerticalCurve.beginStation = vpi1.station;
             beginProfTrueStation = vpi1.station.trueStation;
+            
             aNewVerticalCurve.length = vpi2.station - vpi1.station;
             endProfTrueStation = vpi2.station.trueStation;
 
@@ -304,7 +305,7 @@ namespace ptsCogo
             vcIndex++;
             if (vcIndex > allVCs.Count-1)
             {
-               vcIndex = allVCs.Count;
+               vcIndex = allVCs.Count-1;
                throw new IndexOutOfRangeException();
             }
          }
@@ -342,13 +343,15 @@ namespace ptsCogo
       {
          if ((station.trueStation < beginProfTrueStation - stationEqualityTolerance) ||
              (station.trueStation > endProfTrueStation + stationEqualityTolerance))
-         {
+         {  // it means we are off the profile
             theOutValue.back = null;
             theOutValue.ahead = null;
             theOutValue.isSingleValue = true;
+            return;
          }
 
-         setIndexToTheCorrectVC(station);
+         try { setIndexToTheCorrectVC(station); }
+         catch (IndexOutOfRangeException) { }
          verticalCurve aVC = allVCs[vcIndex];
 
          // if we are at the begin station, check to see how we relate to the previous vc
@@ -468,17 +471,19 @@ namespace ptsCogo
                   endStation_ = beginStation + length_;
                   if (isTangent_ == false)
                   {
-                     kValue =  (endSlope - beginSlope) / length_;
+                     kValue = (endSlope - beginSlope) / length_;
                   }
                   else
                   {
-                     kValue = double.PositiveInfinity ;
+                     kValue = double.PositiveInfinity;
                   }
                }
-               else if(length_ < 0.0)
+               else if (length_ < 0.0)
                {
                   throw new NotSupportedException("Length of vertical curve not allowed to be less than 0.");
                }
+               else
+                  endStation_ = beginStation;
             } 
          }
 

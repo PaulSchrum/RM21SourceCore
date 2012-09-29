@@ -17,8 +17,8 @@ namespace rm21Core
       // offset from 3d space curve to the Profile Grade Line
       //private ribbonBase PGLoffsetRibbon_;
       public ribbonBase thePGLoffsetRibbon { get; set; }
-      
-      private LinkedList<IRibbonLike> outsideRibbons;  
+
+      public LinkedList<IRibbonLike> outsideRibbons { get; set; }
       // All elements from the PGL toward the outside.  This is to the right
       // for the right PGLGrouping (myIndex > 0)
       // and to the left for the left PGLGrouping (myIndex < 0)
