@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mainVM="clr-namespace:MainRM21WPFapp.ViewModels"
         xmlns:corridorTreeView="clr-namespace:MainRM21WPFapp.Views"
+        xmlns:corTreeVM="clr-namespace:MainRM21WPFapp.ViewModels"
         Title="RM21 Demonstration Application" Height="500" Width="700">
     <Window.DataContext>
         <mainVM:MainWindowVM />
@@ -47,10 +48,50 @@
                     </TextBlock>
                     <TextBlock Grid.Column="1" VerticalAlignment="Bottom">Corridor Tree</TextBlock>
                     <!--  CorridorTreeViewUC user control will go here -->
-                    <corridorTreeView:CorridorTreeView 
-                        x:Name="uc_CorridorTree"
-                        Grid.Column="1" Grid.Row="1" DataContext="{Binding Path=allPGLgroupings/}" />
-                    
+
+                    <StackPanel Grid.Row="1" Grid.Column="1"
+                        DataContext="{Binding Path=theCorridorAsTreeViewModel}"
+                        >
+                        <TextBox Background="LightSteelBlue" DataContext="{Binding}" 
+                                Text="{Binding TestString}" 
+                                Padding="1" Margin="4" BorderBrush="Blue"
+                                BorderThickness="3"
+                                
+                                 ></TextBox>
+
+                        <TreeView ItemsSource="{Binding Path=AllpglgVMS}" MinWidth="60" MinHeight="100" Margin="10" 
+              DataContext="{Binding}" Background="#FFDCBB94" >
+
+                            <TreeView.ItemContainerStyle>
+                                <Style TargetType="{x:Type TreeViewItem}">
+                                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                                    <Setter Property="FontWeight" Value="Normal" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="FontWeight" Value="Bold" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TreeView.ItemContainerStyle>
+
+                            <TreeView.Resources>
+                                <HierarchicalDataTemplate 
+                    DataType="{x:Type corTreeVM:PglGroupingViewModel}" 
+                    ItemsSource="{Binding Children}" >
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding RegionName}" />
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+
+                            </TreeView.Resources>
+
+
+
+
+                        </TreeView>
+
+                    </StackPanel>
                     
                 </Grid>
             </TabItem>

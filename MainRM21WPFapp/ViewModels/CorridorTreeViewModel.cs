@@ -12,6 +12,7 @@ namespace MainRM21WPFapp.ViewModels
       
       public CorridorTreeViewModel(rm21Core.rm21Corridor aCorridor) : base(null)
       {
+         theCorridor_ = aCorridor;
          if (null != aCorridor.allPGLgroupings)
          {
             allpglgVMs_ = new ObservableCollection<PglGroupingViewModel>(
@@ -24,6 +25,21 @@ namespace MainRM21WPFapp.ViewModels
          else
             TestString = "There is no data.";
       }
+
+      private rm21Core.rm21Corridor theCorridor_;
+      public rm21Corridor TheCorridor
+      {
+         get { return theCorridor_; }
+         set
+         {
+            if (value != theCorridor_)
+            {
+               theCorridor_ = value;
+               this.OnPropertyChanged("TheCorridor");
+            }
+         }
+      }
+
 
       private String testString_;
       public String TestString
@@ -39,8 +55,22 @@ namespace MainRM21WPFapp.ViewModels
          }
       }
 
+      private ObservableCollection<PglGroupingViewModel> level_1_items_;
+      public ObservableCollection<PglGroupingViewModel> Level1Items
+      {
+         get { return level_1_items_; }
+         set
+         {
+            if (value != level_1_items_)
+            {
+               level_1_items_ = value;
+               this.OnPropertyChanged("Level1Items");
+            }
+         }
+      }
+
       private ObservableCollection<PglGroupingViewModel> allpglgVMs_;
-      public ObservableCollection<PglGroupingViewModel> AllpglgVMS
+      private ObservableCollection<PglGroupingViewModel> AllpglgVMS
       { 
          get { return allpglgVMs_; }
          set
@@ -48,7 +78,8 @@ namespace MainRM21WPFapp.ViewModels
             if (value != allpglgVMs_)
             {
                allpglgVMs_ = value;
-               this.OnPropertyChanged("AllpglgVMS");
+               Level1Items = allpglgVMs_;
+               //this.OnPropertyChanged("AllpglgVMS");
             }
          }
       }
