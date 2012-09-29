@@ -22,8 +22,6 @@ namespace MainRM21WPFapp.ViewModels
       bool _isExpanded;
       bool _isSelected;
 
-      private String hashName_;
-
       #endregion // Data
 
       #region Constructors
@@ -119,6 +117,7 @@ namespace MainRM21WPFapp.ViewModels
       #endregion // IsSelected
 
       #region HashName
+      private String hashName_;
       public String HashName
       {
          get { return hashName_; }

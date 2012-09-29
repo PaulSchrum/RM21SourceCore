@@ -6,6 +6,7 @@ using ptsCogo.coordinates.CurvilinearCoordinates;
 using ptsCogo;
 using ptsCogo.Angle;
 using System.Collections.ObjectModel;
+using rm21Core.Ribbons;
 
 
 
@@ -14,13 +15,13 @@ namespace rm21Core
    public class PGLGrouping : Irm21TreeViewItemable
    {
       // offset from 3d space curve to the Profile Grade Line
-      private ribbonBase PGLoffsetRibbon_;
-      public ribbonBase PGLoffsetRibbon { get; set; }
+      //private ribbonBase PGLoffsetRibbon_;
+      public ribbonBase thePGLoffsetRibbon { get; set; }
       
       private LinkedList<IRibbonLike> outsideRibbons;  
       // All elements from the PGL toward the outside.  This is to the right
       // for the right PGLGrouping (myIndex > 0)
-      // and to the left for the left PGLGrouping (myIndex < 0
+      // and to the left for the left PGLGrouping (myIndex < 0)
       
       private LinkedList<IRibbonLike> insideRibbons;
       //private int whichSide;
@@ -28,6 +29,7 @@ namespace rm21Core
       public PGLGrouping(int whichSide)
       {
          myIndex = whichSide;
+         thePGLoffsetRibbon = new PGLoffset((CogoStation) 0, (CogoStation) 0, 0, 0);
       }
       // All element from the PGL toward the inside.  This is to the left
       // for the right PGLGrouping and to the right for the left PGLGrouping.
@@ -56,7 +58,7 @@ namespace rm21Core
 
       public void setPGLoffsetRibbon(ribbonBase newPGLoffsetRibbon)
       {
-         PGLoffsetRibbon_ = newPGLoffsetRibbon;
+         thePGLoffsetRibbon = newPGLoffsetRibbon;
       }
 
       //public void accumulateRibbonTraversal(ref StationOffsetElevation aSOE);
@@ -78,9 +80,9 @@ namespace rm21Core
          workingSOE.offset *= myIndex;
 
          // seek the correct ribbon
-         if (PGLoffsetRibbon_ != null)
+         if (thePGLoffsetRibbon != null)
          {
-            double? pglOffset = PGLoffsetRibbon_.getActualWidth((CogoStation)workingSOE.station);
+            double? pglOffset = thePGLoffsetRibbon.getActualWidth((CogoStation)workingSOE.station);
             if (pglOffset != null)
                workingSOE.offset -= pglOffset;
          }
@@ -133,7 +135,7 @@ namespace rm21Core
       public ObservableCollection<Irm21TreeViewItemable> getChildren()
       {
          ObservableCollection<Irm21TreeViewItemable> children = new ObservableCollection<Irm21TreeViewItemable>();
-         children.Add(PGLoffsetRibbon);
+         children.Add(thePGLoffsetRibbon);
          foreach (var child in insideRibbons) {children.Add(child);}
          foreach (var child in outsideRibbons) { children.Add(child); }
          return children;

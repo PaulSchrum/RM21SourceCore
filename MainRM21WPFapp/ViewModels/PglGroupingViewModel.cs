@@ -15,8 +15,22 @@ namespace MainRM21WPFapp.ViewModels
          : base(null)
       {
          thePglGrouping_ = theNewPglGrouping;
+         
+         //if (null != thePglGrouping_.
+
+         if (null != thePglGrouping_.thePGLoffsetRibbon)
+         {
+            this.Children.Add(new RibbonViewModel(thePglGrouping_.thePGLoffsetRibbon));
+         }
+         
+         //this.Children
       }
 
       private PGLGrouping thePglGrouping_;
+
+      public new String HashName
+      {
+         get { return thePglGrouping_.getHashName(); }
+      }
    }
 }

@@ -44,6 +44,7 @@ namespace MainRM21WPFapp.ViewModels
          pglGrLT.addOutsideRibbon(new RoadwayLane((CogoStation)1000, (CogoStation)10000, 12.0, -0.02));
          pglGrLT.addOutsideRibbon(new Shoulder((CogoStation)1000, (CogoStation)10000, 10.0, -0.08));
          pglGrLT.addOutsideRibbon(new FrontSlopeCutDitch((CogoStation)1000, (CogoStation)10000, 15.0, -1 / 6));
+         
 
          pglGrRT.addOutsideRibbon(new RoadwayLane((CogoStation)1000, (CogoStation)10000, 12.0, -0.02));
          pglGrRT.addOutsideRibbon(new Shoulder((CogoStation)1000, (CogoStation)10000, 10.0, -0.08));

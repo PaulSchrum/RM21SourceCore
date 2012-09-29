@@ -475,7 +475,7 @@ namespace ptsCogo
                      kValue = double.PositiveInfinity ;
                   }
                }
-               else
+               else if(length_ < 0.0)
                {
                   throw new NotSupportedException("Length of vertical curve not allowed to be less than 0.");
                }

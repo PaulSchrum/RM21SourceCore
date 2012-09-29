@@ -10,20 +10,9 @@ namespace MainRM21WPFapp.ViewModels
    public class CorridorTreeViewModel : TreeViewItemViewModel
    {
       
-      public CorridorTreeViewModel(rm21Core.rm21Corridor aCorridor) : base(null)
+      public CorridorTreeViewModel() : base(null)
       {
-         theCorridor_ = aCorridor;
-         if (null != aCorridor.allPGLgroupings)
-         {
-            allpglgVMs_ = new ObservableCollection<PglGroupingViewModel>(
-               (from pglGr in aCorridor.allPGLgroupings
-                select new PglGroupingViewModel(pglGr))
-                .ToList<PglGroupingViewModel>()
-               );
-            TestString = "There is data available.";
-         }
-         else
-            TestString = "There is no data.";
+         Level1Items = new ObservableCollection<PglGroupingViewModel>();
       }
 
       private rm21Core.rm21Corridor theCorridor_;
@@ -35,6 +24,19 @@ namespace MainRM21WPFapp.ViewModels
             if (value != theCorridor_)
             {
                theCorridor_ = value;
+
+               Level1Items.Clear();
+               if (null == theCorridor_.allPGLgroupings)
+                  TestString = "There is no data.";
+               else
+               {
+                  TestString = "Data is available.";
+                  foreach (var pglGrouping in theCorridor_.allPGLgroupings)
+                  {
+                     Level1Items.Add(new PglGroupingViewModel(pglGrouping));
+                  }
+               }
+
                this.OnPropertyChanged("TheCorridor");
             }
          }

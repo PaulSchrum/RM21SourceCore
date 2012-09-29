@@ -59,6 +59,7 @@
     <Compile Include="ViewModels\CorridorTreeViewModel.cs" />
     <Compile Include="ViewModels\MainWindowVM.cs" />
     <Compile Include="ViewModels\PglGroupingViewModel.cs" />
+    <Compile Include="ViewModels\RibbonViewModel.cs" />
     <Compile Include="ViewModels\RoadwayModel_TabVM.cs" />
     <Compile Include="ViewModels\TreeViewItemViewModel.cs" />
     <Compile Include="Views\CorridorTreeView.xaml.cs">

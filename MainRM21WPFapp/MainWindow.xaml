@@ -59,8 +59,10 @@
                                 
                                  ></TextBox>
 
-                        <TreeView ItemsSource="{Binding Path=AllpglgVMS}" MinWidth="60" MinHeight="100" Margin="10" 
-              DataContext="{Binding}" Background="#FFDCBB94" >
+                        <TreeView 
+                            ItemsSource="{Binding Path=Level1Items}" 
+                            MinWidth="60" MinHeight="100" 
+                            Margin="10" Background="#FFDCBB94" >
 
                             <TreeView.ItemContainerStyle>
                                 <Style TargetType="{x:Type TreeViewItem}">
@@ -77,10 +79,18 @@
 
                             <TreeView.Resources>
                                 <HierarchicalDataTemplate 
-                    DataType="{x:Type corTreeVM:PglGroupingViewModel}" 
-                    ItemsSource="{Binding Children}" >
+                                    DataType="{x:Type corTreeVM:PglGroupingViewModel}" 
+                                    ItemsSource="{Binding Children}" >
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding RegionName}" />
+                                        <TextBlock Text="{Binding HashName}" />
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+
+                                <HierarchicalDataTemplate 
+                                    DataType="{x:Type corTreeVM:RibbonViewModel}" 
+                                    ItemsSource="{Binding Children}" >
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding HashName}" />
                                     </StackPanel>
                                 </HierarchicalDataTemplate>
 
