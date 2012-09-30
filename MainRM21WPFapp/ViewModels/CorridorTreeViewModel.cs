@@ -33,7 +33,9 @@ namespace MainRM21WPFapp.ViewModels
                   TestString = "Data is available.";
                   foreach (var pglGrouping in theCorridor_.allPGLgroupings)
                   {
-                     Level1Items.Add(new PglGroupingViewModel(pglGrouping));
+                     PglGroupingViewModel pgVM = new PglGroupingViewModel(pglGrouping);
+                     pgVM.Parent = this;
+                     Level1Items.Add(pgVM);
                   }
                }
 
@@ -70,6 +72,8 @@ namespace MainRM21WPFapp.ViewModels
             }
          }
       }
+
+      public RoadwayModel_TabVM ownerRoadwayVM { get; set; }
 
       private ObservableCollection<PglGroupingViewModel> allpglgVMs_;
       private ObservableCollection<PglGroupingViewModel> AllpglgVMS

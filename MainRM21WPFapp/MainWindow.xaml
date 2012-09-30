@@ -49,13 +49,14 @@
                     </Grid.ColumnDefinitions>
                     <!-- <TextBlock Text="{Binding Path=TestText9_26}" Margin="4,0">
                     </TextBlock>  -->
-                    <TextBlock Grid.Column="1" VerticalAlignment="Bottom">Corridor Tree</TextBlock>
+                    <TextBlock Grid.Column="1" VerticalAlignment="Bottom" Margin="6,0">Corridor Tree</TextBlock>
+                    <TextBlock Grid.Column="2" VerticalAlignment="Bottom" Margin="6,0">Ribbon Design</TextBlock>
 
                     <TreeView Grid.Row="1" Grid.Column="1"
                         DataContext="{Binding Path=theCorridorAsTreeViewModel}"
                         ItemsSource="{Binding Path=Level1Items}" 
                         MinWidth="60" MinHeight="100" 
-                        Margin="10" Background="FloralWhite" >
+                        Margin="6,4" Background="FloralWhite" >
 
                         <TreeView.ItemContainerStyle>
                             <Style TargetType="{x:Type TreeViewItem}">
@@ -90,7 +91,7 @@
                         </TreeView.Resources>
                     </TreeView>
                     
-                    <TabControl Grid.Row="1" Grid.Column="2">
+                    <TabControl Grid.Row="1" Grid.Column="2" DataContext="{Binding Path=SelectedRibbon}" Margin="6,4">
                         <TabItem Header="Widths"></TabItem>
                         <TabItem Header="Cross Slopes"></TabItem>
                     </TabControl>
@@ -101,12 +102,23 @@
             <TabItem Header="Chains" BorderBrush="Black" BorderThickness="4" IsEnabled="False">
 
             </TabItem>
+            
+            
             <TabItem Header="Intersections" BorderBrush="Black" BorderThickness="4" IsEnabled="False">
 
             </TabItem>
-            <TabItem Header="Traffic" BorderBrush="Black" BorderThickness="4" IsEnabled="False">
+
+
+            <TabItem Header="Traffic Volumes" BorderBrush="Black" BorderThickness="4" IsEnabled="False">
 
             </TabItem>
+
+
+            <TabItem Header="Capacity Analysis" BorderBrush="Black" BorderThickness="4" IsEnabled="False">
+
+            </TabItem>
+
+
             <TabItem Header="MOT" BorderBrush="Black" BorderThickness="4" IsEnabled="False">
 
             </TabItem>

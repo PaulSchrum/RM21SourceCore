@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.ObjectModel;
 using ptsCogo;
+using System.ComponentModel;
 
 namespace ptsCogo
 {
@@ -174,6 +176,41 @@ namespace ptsCogo
                vpi2 = vpi3;
             }
          }
+      }
+
+      public void setFromVPIlist(vpiList newVPIlist)
+      {
+         buildThisFromRawVPIlist(newVPIlist);
+      }
+
+      /// <summary>
+      /// Warning: currently does not handle profiles with vertical curves
+      /// we must implement that feature some day, but not today (9-29-2012)
+      /// </summary>
+      /// <returns></returns>
+      public vpiList to_vpiList()
+      {
+         if (true == iHaveOneOrMoreVerticalCurves)
+            throw new NotImplementedException("Profiles with vertical curves not supported yet.  Only profiles with VPI-NCs.");
+
+         if (allVCs.Count < 1)
+            return null;
+
+         int count=allVCs.Count-1;
+         vpiList returnList = new vpiList();
+         foreach (var profSeg in allVCs)
+         {
+            count--;
+            if (profSeg.length > 0.0)
+            {
+               returnList.add(new rawVPI(profSeg.beginStation, profSeg.beginElevation));
+               if (count == 0)
+               {
+                  returnList.add(new rawVPI(profSeg.endStation, profSeg.endElevation));
+               }
+            }
+         }
+         return returnList;
       }
 
       public void addStationAndElevation(CogoStation newStation, double newElevation)
@@ -458,6 +495,7 @@ namespace ptsCogo
          public double beginElevation { get; set; }
          public double beginSlope { get; set; }
          public double endSlope { get; set; }
+         public double endElevation { get { return getElevation(this, endStation); } }
          public bool beginIsPINC { get; set; }  // PINC = PI, No Curve.
          public bool endIsPINC { get; set; }    //  used to detect undefined K values at PINC stations
          public double kValue { get { return 0.01 / kValue_; } private set { kValue_ = value; } }
@@ -539,11 +577,11 @@ namespace ptsCogo
 
    public class vpiList
    {
-      private List<rawVPI> theVPIs;
-      public vpiList() { theVPIs = new List<rawVPI>(); }
+      public ObservableCollection<rawVPI> theVPIs { get; set; }
+      public vpiList() { theVPIs = new ObservableCollection<rawVPI>(); }
       public vpiList(CogoStation aStation, double anElevation, double aVClength)
       {
-         theVPIs = new List<rawVPI>();
+         theVPIs = new ObservableCollection<rawVPI>();
 
       }
 
@@ -581,13 +619,13 @@ namespace ptsCogo
          return theVPIs[indx];
       }
 
-      internal List<rawVPI> getVPIlist()
+      internal ObservableCollection<rawVPI> getVPIlist()
       {
          return theVPIs;
       }
    }
 
-   public class rawVPI
+   public class rawVPI: INotifyPropertyChanged
    {
       public rawVPI (CogoStation aStation, double anElevation, double aVClength)
       {
@@ -616,6 +654,15 @@ namespace ptsCogo
       {
          return station - (length / 2.0);
       }
+
+      public event PropertyChangedEventHandler PropertyChanged;
+
+      private void OnPropertyChanged(string propertyName)
+      {
+         if (this.PropertyChanged != null)
+            this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+      }
+
    }
 
 }

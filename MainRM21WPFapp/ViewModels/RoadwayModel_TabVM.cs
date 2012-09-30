@@ -35,6 +35,7 @@ namespace MainRM21WPFapp.ViewModels
             {
                theCorridorAsTreeViewModel_ = value;
                theCorridorAsTreeViewModel_.TheCorridor = CurrentCorridor;
+               theCorridorAsTreeViewModel_.ownerRoadwayVM = this;
                RaisePropertyChanged("theCorridorAsTreeViewModel");
             }
          }
@@ -74,6 +75,21 @@ namespace MainRM21WPFapp.ViewModels
                {
                   TestText9_26 = "Corridor is " + parentVM_.CurrentCorridor.Name;
                }
+            }
+         }
+      }
+
+      private RibbonViewModel selectedRibbon_;
+      public RibbonViewModel SelectedRibbon
+      {
+         get { return selectedRibbon_; }
+         set
+         {
+            if (selectedRibbon_ != value)
+            {
+               selectedRibbon_ = value;
+
+               RaisePropertyChanged("SelectedRibbon");
             }
          }
       }

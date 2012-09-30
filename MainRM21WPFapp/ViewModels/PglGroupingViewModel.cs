@@ -20,7 +20,9 @@ namespace MainRM21WPFapp.ViewModels
          {
             foreach (var ribbon in thePglGrouping_.insideRibbons)
             {
-               this.Children.Add(new RibbonViewModel(ribbon as ribbonBase));
+               RibbonViewModel ribbonVM = new RibbonViewModel(ribbon as ribbonBase);
+               ribbonVM.Parent = this;
+               this.Children.Add(ribbonVM);
             }
          }
 

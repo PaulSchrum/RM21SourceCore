@@ -6,7 +6,7 @@ using rm21Core;
 
 namespace MainRM21WPFapp.ViewModels
 {
-   class RibbonViewModel : TreeViewItemViewModel
+   public class RibbonViewModel : TreeViewItemViewModel
    {
       public RibbonViewModel(TreeViewItemViewModel parent) : base(parent)
       { }
@@ -18,10 +18,17 @@ namespace MainRM21WPFapp.ViewModels
       }
 
       private ribbonBase theRibbon_;
+      internal ribbonBase TheRibbon
+      { get { return theRibbon_; } }
 
       public new String HashName
       {
          get { return theRibbon_.getHashName(); }
+      }
+
+      internal void OnIsSelected()
+      {
+         getRoadwayModelVM().SelectedRibbon = this;
       }
    }
 }

@@ -10,14 +10,13 @@ namespace MainRM21WPFapp.ViewModels
    /// Copied from Josh Smith:
    /// http://www.codeproject.com/Articles/26288/Simplifying-the-WPF-TreeView-by-Using-the-ViewMode?fid=1342639&select=2941318&fr=1#xx0xx
    /// </summary>
-   public class TreeViewItemViewModel : INotifyPropertyChanged
+   public class TreeViewItemViewModel : NotifyPropertyChangedVMbase
    {
       #region Data
 
       static readonly TreeViewItemViewModel DummyChild = new TreeViewItemViewModel();
 
       readonly ObservableCollection<TreeViewItemViewModel> _children;
-      readonly TreeViewItemViewModel _parent;
 
       bool _isExpanded;
       bool _isSelected;
@@ -28,7 +27,7 @@ namespace MainRM21WPFapp.ViewModels
 
       protected TreeViewItemViewModel(TreeViewItemViewModel parent)
       {
-         _parent = parent;
+         Parent = parent;
 
          _children = new ObservableCollection<TreeViewItemViewModel>();
          IsExpanded = true;
@@ -42,7 +41,6 @@ namespace MainRM21WPFapp.ViewModels
       #endregion // Constructors
 
       #region Presentation Members
-
       #region Children
 
       /// <summary>
@@ -110,6 +108,10 @@ namespace MainRM21WPFapp.ViewModels
             {
                _isSelected = value;
                this.OnPropertyChanged("IsSelected");
+               if (this is RibbonViewModel)
+               {
+                  (this as RibbonViewModel).OnIsSelected();
+               }
             }
          }
       }
@@ -145,26 +147,37 @@ namespace MainRM21WPFapp.ViewModels
       #endregion // LoadChildren
 
       #region Parent
-
+      private TreeViewItemViewModel _parent;
       public TreeViewItemViewModel Parent
       {
          get { return _parent; }
+         internal set 
+         { 
+            _parent = value;
+            if (null != this.Children)
+               foreach (var child in Children)
+                  child.Parent = this;
+         }
       }
-
       #endregion // Parent
 
       #endregion // Presentation Members
 
-      #region INotifyPropertyChanged Members
-
-      public event PropertyChangedEventHandler PropertyChanged;
-
-      protected virtual void OnPropertyChanged(string propertyName)
+      public RoadwayModel_TabVM getRoadwayModelVM()
       {
-         if (this.PropertyChanged != null)
-            this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+
+         TreeViewItemViewModel topParent = this;
+         while (topParent.Parent != null)
+         {
+            topParent = topParent.Parent;
+         }
+
+         if (!(topParent is CorridorTreeViewModel))
+            return null;  // this represents a logic failure
+
+         CorridorTreeViewModel corridorTVM = topParent as CorridorTreeViewModel;
+         return corridorTVM.ownerRoadwayVM;
       }
 
-      #endregion // INotifyPropertyChanged Members
    }
 }
