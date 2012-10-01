@@ -50,7 +50,12 @@
                     <!-- <TextBlock Text="{Binding Path=TestText9_26}" Margin="4,0">
                     </TextBlock>  -->
                     <TextBlock Grid.Column="1" VerticalAlignment="Bottom" Margin="6,0">Corridor Tree</TextBlock>
-                    <TextBlock Grid.Column="2" VerticalAlignment="Bottom" Margin="6,0">Ribbon Design</TextBlock>
+                    <TextBlock Grid.Column="2" 
+                               VerticalAlignment="Bottom" 
+                               Margin="6,0" 
+                               DataContext="{Binding Path=SelectedRibbon}" Text="{Binding Path=HashName}">
+                        
+                    </TextBlock>
 
                     <TreeView Grid.Row="1" Grid.Column="1"
                         DataContext="{Binding Path=theCorridorAsTreeViewModel}"
@@ -91,9 +96,36 @@
                         </TreeView.Resources>
                     </TreeView>
                     
-                    <TabControl Grid.Row="1" Grid.Column="2" DataContext="{Binding Path=SelectedRibbon}" Margin="6,4">
-                        <TabItem Header="Widths"></TabItem>
-                        <TabItem Header="Cross Slopes"></TabItem>
+                    <TabControl Grid.Row="1" Grid.Column="2" 
+                                DataContext="{Binding Path=SelectedRibbon}" 
+                                Margin="6,4">
+                        <TabItem Header="Widths" >
+                            <ListView 
+                                ItemsSource="{Binding Path=TheRibbon.Widths}">
+                                <StackPanel Orientation="Horizontal" 
+                                            DataContext="{Binding Path=TheRibbon.Widths.VpiList.theVPIs}">
+                                    <TextBox Width="110" 
+                                             BorderBrush="#F7141414" Text="{Binding Path=Station.trueStation}">
+                                    </TextBox>
+                                    <TextBox Width="80" 
+                                             BorderBrush="#F7141414" 
+                                             Text="{Binding Path=Elevation}">
+                                    </TextBox>
+                                </StackPanel>
+                            </ListView>
+                        </TabItem>
+                        
+                        <TabItem Header="Cross Slopes" >
+                            <ListView 
+                                ItemsSource="{Binding Path=TheRibbon.CrossSlopes}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox Width="110" 
+                                             BorderBrush="#F7141414">Test Station</TextBox>
+                                    <TextBox Width="80" 
+                                             BorderBrush="#F7141414">Test Cross Slope</TextBox>
+                                </StackPanel>
+                            </ListView>
+                        </TabItem>
                     </TabControl>
                     
                 </Grid>

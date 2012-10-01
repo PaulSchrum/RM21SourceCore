@@ -18,6 +18,14 @@ namespace ptsCogo
       public double beginProfTrueStation {get; private set;}
       public double endProfTrueStation { get; private set; }
 
+      private vpiList thisAsVpiList_;  // To Do: Make sure all modifications to the data
+      // get reflected in thisAsVpiList.
+      public vpiList VpiList
+      {
+         get { return to_vpiList(); }
+         set { buildThisFromRawVPIlist(value); }
+      }
+
       private Profile() { }
 
       //public Profile(CogoStation beginStation, CogoStation endStation, int singleElevation)
@@ -47,19 +55,21 @@ namespace ptsCogo
          }
          else if (rawVPIlist.Count == 2)
          {
+            thisAsVpiList_ = rawVPIlist;
+
             rawVPI vpi1 = rawVPIlist.getVPIbyIndex(0);
             rawVPI vpi2 = rawVPIlist.getVPIbyIndex(1);
 
             verticalCurve aNewVerticalCurve = new verticalCurve();
-            aNewVerticalCurve.beginElevation = vpi1.elevation;
+            aNewVerticalCurve.beginElevation = vpi1.Elevation;
 
-            aNewVerticalCurve.beginStation = vpi1.station;
-            beginProfTrueStation = vpi1.station.trueStation;
+            aNewVerticalCurve.beginStation = vpi1.Station;
+            beginProfTrueStation = vpi1.Station.trueStation;
             
-            aNewVerticalCurve.length = vpi2.station - vpi1.station;
-            endProfTrueStation = vpi2.station.trueStation;
+            aNewVerticalCurve.length = vpi2.Station - vpi1.Station;
+            endProfTrueStation = vpi2.Station.trueStation;
 
-            aNewVerticalCurve.beginSlope = (vpi2.elevation - vpi1.elevation) /
+            aNewVerticalCurve.beginSlope = (vpi2.Elevation - vpi1.Elevation) /
                                              aNewVerticalCurve.length;
             aNewVerticalCurve.isTangent = true;
             aNewVerticalCurve.beginIsPINC = false;
@@ -70,6 +80,8 @@ namespace ptsCogo
          }
          else
          {
+            thisAsVpiList_ = rawVPIlist;
+
             double g1; double g2;
             Int64 count=0;
             rawVPI vpi1; rawVPI vpi2;
@@ -90,14 +102,14 @@ namespace ptsCogo
                      if (count == 3)
                      {
                         allVCs = new List<verticalCurve>();
-                        beginProfTrueStation = vpi1.station.trueStation;
+                        beginProfTrueStation = vpi1.Station.trueStation;
                      }
 
-                     g1 = (vpi2.elevation - vpi1.elevation) /
-                          (vpi2.station.trueStation - vpi1.station.trueStation);
+                     g1 = (vpi2.Elevation - vpi1.Elevation) /
+                          (vpi2.Station.trueStation - vpi1.Station.trueStation);
 
-                     g2 = (vpi3.elevation - vpi2.elevation) /
-                          (vpi3.station.trueStation - vpi2.station.trueStation);
+                     g2 = (vpi3.Elevation - vpi2.Elevation) /
+                          (vpi3.Station.trueStation - vpi2.Station.trueStation);
 
                      double incomingTanLen;
                      incomingTanLen = vpi2.getBeginStation() - vpi1.getEndStation();
@@ -110,8 +122,8 @@ namespace ptsCogo
                         newVC.beginStation = vpi1.getEndStation();
                         newVC.endSlope = g1;
                         newVC.length = incomingTanLen;
-                        newVC.beginElevation = vpi2.elevation + getELchangeAlongSlope(g1, 
-                           (vpi1.getEndStation() - vpi2.station));
+                        newVC.beginElevation = vpi2.Elevation + getELchangeAlongSlope(g1, 
+                           (vpi1.getEndStation() - vpi2.Station));
                         
                         newVC.beginIsPINC = false;
                         if (allVCs.Count > 0)
@@ -120,7 +132,7 @@ namespace ptsCogo
                         }
 
                         newVC.endIsPINC = false;
-                        if (utilFunctions.tolerantCompare(vpi2.length, 0.0, stationEqualityTolerance) == 0)
+                        if (utilFunctions.tolerantCompare(vpi2.Length, 0.0, stationEqualityTolerance) == 0)
                         {
                            newVC.endIsPINC = true;
                         }
@@ -130,15 +142,15 @@ namespace ptsCogo
                      // End: add a VC for the incoming tangent when necessary
 
                      // add a VC for the current vertical curve if VClen > 0
-                     if (vpi2.length > 0.0)
+                     if (vpi2.Length > 0.0)
                      {
                         iHaveOneOrMoreVerticalCurves = true;
                         newVC = new verticalCurve();
                         newVC.beginSlope = g1;
                         newVC.beginStation = vpi2.getBeginStation();
                         newVC.endSlope = g2;
-                        newVC.length = vpi2.length;
-                        newVC.beginElevation = vpi2.elevation - getELchangeAlongSlope(g1, newVC.length / 2.0);
+                        newVC.length = vpi2.Length;
+                        newVC.beginElevation = vpi2.Elevation - getELchangeAlongSlope(g1, newVC.length / 2.0);
                         allVCs.Add(newVC);
                         endProfTrueStation = newVC.beginStation.trueStation + newVC.length;
                      }
@@ -155,7 +167,7 @@ namespace ptsCogo
                            newVC.beginStation = vpi2.getEndStation();
                            newVC.endSlope = g2;
                            newVC.length = outgoingTangentLength;
-                           newVC.beginElevation = vpi2.elevation + getELchangeAlongSlope(g2, vpi2.length / 2.0);
+                           newVC.beginElevation = vpi2.Elevation + getELchangeAlongSlope(g2, vpi2.Length / 2.0);
                            
                            newVC.beginIsPINC = false;
                            if (allVCs.Count > 0)
@@ -210,6 +222,9 @@ namespace ptsCogo
                }
             }
          }
+
+         thisAsVpiList_ = returnList;
+
          return returnList;
       }
 
@@ -575,9 +590,24 @@ namespace ptsCogo
       }
    }
 
-   public class vpiList
+   public class vpiList : INotifyPropertyChanged
    {
-      public ObservableCollection<rawVPI> theVPIs { get; set; }
+      private ObservableCollection<rawVPI> theVPIs_;
+      public ObservableCollection<rawVPI> theVPIs
+      {
+         get { return theVPIs_; }
+         set
+         {
+            if (theVPIs_ != value)
+            {
+               theVPIs_ = value;
+               RaisePropertyChanged("theVPIs");
+            }
+         }
+      }
+
+
+
       public vpiList() { theVPIs = new ObservableCollection<rawVPI>(); }
       public vpiList(CogoStation aStation, double anElevation, double aVClength)
       {
@@ -623,45 +653,110 @@ namespace ptsCogo
       {
          return theVPIs;
       }
+
+      /// <summary>
+      /// Raises the property changed event.
+      /// </summary>
+      /// <param name="propertyName">Name of the property.</param>
+      protected void RaisePropertyChanged(string propertyName)
+      {
+         var handler = this.PropertyChanged;
+         if (handler != null)
+         {
+            handler(this, new PropertyChangedEventArgs(propertyName));
+         }
+      }
+
+      /// <summary>
+      /// Occurs when a property value changes.
+      /// </summary>
+      public event PropertyChangedEventHandler PropertyChanged;
+
    }
 
-   public class rawVPI: INotifyPropertyChanged
+   public class rawVPI : INotifyPropertyChanged
    {
       public rawVPI (CogoStation aStation, double anElevation, double aVClength)
       {
-         station = aStation;
-         elevation = anElevation;
-         length = aVClength;
+         Station = aStation;
+         Elevation = anElevation;
+         Length = aVClength;
       }
 
       public rawVPI (CogoStation aStation, double anElevation)
       {
-         station = aStation;
-         elevation = anElevation;
-         length = 0.0;
+         Station = aStation;
+         Elevation = anElevation;
+         Length = 0.0;
       }
 
-      public CogoStation station { get; set; }
-      public double elevation { get; set; }
-      public double length { get; set; }
+      private CogoStation station_;
+      public CogoStation Station
+      {  get { return station_; }
+         set
+         {  if (station_ != value)
+            {
+               station_ = value;
+               RaisePropertyChanged("Station");
+         }  }
+      }
+
+      private double elevation_;
+      public double Elevation
+      {
+         get { return elevation_; }
+         set
+         {
+            if (elevation_ != value)
+            {
+               elevation_ = value;
+               RaisePropertyChanged("Elevation");
+            }
+         }
+      }
+
+      private double length_;
+      public double Length
+      {
+         get { return length_; }
+         set
+         {
+            if (length_ != value)
+            {
+               length_ = value;
+               RaisePropertyChanged("Length");
+            }
+         }
+      }
 
       public CogoStation getEndStation()
       {
-         return station + (length / 2.0);
+         return Station + (Length / 2.0);
       }
 
       public CogoStation getBeginStation()
       {
-         return station - (length / 2.0);
+         return Station - (Length / 2.0);
       }
 
+      /// <summary>
+      /// Raises the property changed event.
+      /// </summary>
+      /// <param name="propertyName">Name of the property.</param>
+      protected void RaisePropertyChanged(string propertyName)
+      {
+         var handler = this.PropertyChanged;
+         if (handler != null)
+         {
+            handler(this, new PropertyChangedEventArgs(propertyName));
+         }
+      }
+
+      /// <summary>
+      /// Occurs when a property value changes.
+      /// </summary>
       public event PropertyChangedEventHandler PropertyChanged;
 
-      private void OnPropertyChanged(string propertyName)
-      {
-         if (this.PropertyChanged != null)
-            this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-      }
 
    }
 

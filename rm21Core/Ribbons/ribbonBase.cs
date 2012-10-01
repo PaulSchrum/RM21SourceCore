@@ -6,15 +6,19 @@ using System.Collections.ObjectModel;
 using ptsCogo.coordinates.CurvilinearCoordinates;
 using ptsCogo;
 using ptsCogo.Angle;
+using System.ComponentModel;
 
 
 
 namespace rm21Core
 {
-   public abstract class ribbonBase : IRibbonLike
+   public abstract class ribbonBase : IRibbonLike, INotifyPropertyChanged
    {
       private int myIndex_ { get; set; }
+
+      //private Profile width_;
       public Profile Widths { get; private set; }
+      
       internal Profile interpretWidths { get; set; }
       public Profile CrossSlopes { get; private set; }
       internal Profile interpretCrossSlopes { get; set; }
@@ -139,6 +143,23 @@ namespace rm21Core
       public virtual string getHashName(){return "not implemented: Class = ribbonBase";}
       public ObservableCollection<Irm21TreeViewItemable> getChildren() { return null; }
 
+      /// <summary>
+      /// Raises the property changed event.
+      /// </summary>
+      /// <param name="propertyName">Name of the property.</param>
+      protected void RaisePropertyChanged(string propertyName)
+      {
+         var handler = this.PropertyChanged;
+         if (handler != null)
+         {
+            handler(this, new PropertyChangedEventArgs(propertyName));
+         }
+      }
+
+      /// <summary>
+      /// Occurs when a property value changes.
+      /// </summary>
+      public event PropertyChangedEventHandler PropertyChanged;
    }
 
    public enum enmWidthInterpret
