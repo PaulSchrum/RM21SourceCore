@@ -11,6 +11,8 @@ namespace MainRM21WPFapp.ViewModels
    {
       public event PropertyChangedEventHandler PropertyChanged;
 
+      protected void RaisePropertyChanged(String str) { OnPropertyChanged(str); }
+
       protected virtual void OnPropertyChanged(string propertyName)
       {
          if (this.PropertyChanged != null)

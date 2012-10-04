@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using rm21Core;
+using ptsCogo;
 
 namespace MainRM21WPFapp.ViewModels
 {
@@ -26,9 +27,36 @@ namespace MainRM21WPFapp.ViewModels
          get { return theRibbon_.getHashName(); }
       }
 
-      internal void OnIsSelected()
+      private Profile widths_;
+      public Profile Widths
       {
-         getRoadwayModelVM().SelectedRibbon = this;
+         get { return widths_; }
+         set
+         {
+            if (widths_ != value)
+            {
+               widths_ = value;
+
+               RaisePropertyChanged("Widths");
+            }
+         }
       }
+
+      private Profile crossSlopes_;
+      public Profile CrossSlopes
+      {
+         get { return crossSlopes_; }
+         set
+         {
+            if (crossSlopes_ != value)
+            {
+               crossSlopes_ = value;
+
+               RaisePropertyChanged("CrossSlopes");
+            }
+         }
+      }
+
+
    }
 }

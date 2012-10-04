@@ -108,9 +108,9 @@ namespace MainRM21WPFapp.ViewModels
             {
                _isSelected = value;
                this.OnPropertyChanged("IsSelected");
-               if (this is RibbonViewModel)
+               if (this.IsSelected == true)
                {
-                  (this as RibbonViewModel).OnIsSelected();
+                  this.OnIsSelected();
                }
             }
          }
@@ -178,6 +178,15 @@ namespace MainRM21WPFapp.ViewModels
          CorridorTreeViewModel corridorTVM = topParent as CorridorTreeViewModel;
          return corridorTVM.ownerRoadwayVM;
       }
+
+      internal void OnIsSelected()
+      {
+         if (this is RibbonViewModel)
+            getRoadwayModelVM().SelectedRibbon = this as RibbonViewModel;
+         else
+            getRoadwayModelVM().SelectedRibbon = null;
+      }
+
 
    }
 }

@@ -108,9 +108,9 @@
                                 Margin="6,4">
                         <TabItem Header="Widths" >
                             <ListView 
-                                ItemsSource="{Binding Path=TheRibbon.Widths}">
+                                ItemsSource="{Binding Path=Widths}">
                                 <StackPanel Orientation="Horizontal" 
-                                            DataContext="{Binding Path=TheRibbon.Widths.VpiList.theVPIs}">
+                                            DataContext="{Binding Path=Widths.VpiList.theVPIs}">
                                     <TextBox Width="110" 
                                              BorderBrush="#F7141414" Text="{Binding Path=Station.trueStation}">
                                     </TextBox>
@@ -124,12 +124,16 @@
                         
                         <TabItem Header="Cross Slopes" >
                             <ListView 
-                                ItemsSource="{Binding Path=TheRibbon.CrossSlopes}">
-                                <StackPanel Orientation="Horizontal">
+                                ItemsSource="{Binding Path=CrossSlopes}">
+                                <StackPanel Orientation="Horizontal"
+                                            DataContext="{Binding Path=CrossSlopes.VpiList.theVPIs}">
                                     <TextBox Width="110" 
-                                             BorderBrush="#F7141414">Test Station</TextBox>
+                                             BorderBrush="#F7141414" Text="{Binding Path=Station.trueStation}">
+                                    </TextBox>
+                                    
                                     <TextBox Width="80" 
-                                             BorderBrush="#F7141414">Test Cross Slope</TextBox>
+                                             BorderBrush="#F7141414" Text="{Binding Path=Elevation}">
+                                    </TextBox>
                                 </StackPanel>
                             </ListView>
                         </TabItem>

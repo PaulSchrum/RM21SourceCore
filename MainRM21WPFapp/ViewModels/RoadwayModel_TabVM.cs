@@ -88,8 +88,10 @@ namespace MainRM21WPFapp.ViewModels
             if (selectedRibbon_ != value)
             {
                selectedRibbon_ = value;
-
                RaisePropertyChanged("SelectedRibbon");
+
+               selectedRibbon_.Widths = selectedRibbon_.TheRibbon.Widths;
+               selectedRibbon_.CrossSlopes = selectedRibbon_.TheRibbon.CrossSlopes;
             }
          }
       }
