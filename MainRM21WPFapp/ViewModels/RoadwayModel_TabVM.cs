@@ -90,8 +90,11 @@ namespace MainRM21WPFapp.ViewModels
                selectedRibbon_ = value;
                RaisePropertyChanged("SelectedRibbon");
 
-               selectedRibbon_.Widths = selectedRibbon_.TheRibbon.Widths;
-               selectedRibbon_.CrossSlopes = selectedRibbon_.TheRibbon.CrossSlopes;
+               if (selectedRibbon_ != null)
+               {
+                  selectedRibbon_.WidthsVM = new ProfileVPI_VM(selectedRibbon_.TheRibbon.Widths);
+                  selectedRibbon_.CrossSlopesVM = new ProfileVPI_VM(selectedRibbon_.TheRibbon.CrossSlopes);
+               }
             }
          }
       }

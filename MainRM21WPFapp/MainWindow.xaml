@@ -105,36 +105,22 @@
                     
                     <TabControl Grid.Row="1" Grid.Column="2" 
                                 DataContext="{Binding Path=SelectedRibbon}" 
-                                Margin="6,4">
-                        <TabItem Header="Widths" >
-                            <ListView 
-                                ItemsSource="{Binding Path=Widths}">
-                                <StackPanel Orientation="Horizontal" 
-                                            DataContext="{Binding Path=Widths.VpiList.theVPIs}">
-                                    <TextBox Width="110" 
-                                             BorderBrush="#F7141414" Text="{Binding Path=Station.trueStation}">
-                                    </TextBox>
-                                    <TextBox Width="80" 
-                                             BorderBrush="#F7141414" 
-                                             Text="{Binding Path=Elevation}">
-                                    </TextBox>
-                                </StackPanel>
+                                Margin="6,4" >
+                        <TabItem Header="Widths" DataContext="{Binding Path=WidthsVM}">
+                            <ListView ItemsSource="{Binding Path=rawVPI_VM}">
+                                <ListView.View>
+                                    <GridView >
+                                        <GridViewColumn Header="Station" 
+                                             DisplayMemberBinding="{Binding Path=StationVM.Val}" />
+                                        <GridViewColumn Header="Width"
+                                            DisplayMemberBinding="{Binding Path=ElevationVM.Val}"  />
+                                    </GridView>
+                                </ListView.View>
                             </ListView>
                         </TabItem>
                         
                         <TabItem Header="Cross Slopes" >
-                            <ListView 
-                                ItemsSource="{Binding Path=CrossSlopes}">
-                                <StackPanel Orientation="Horizontal"
-                                            DataContext="{Binding Path=CrossSlopes.VpiList.theVPIs}">
-                                    <TextBox Width="110" 
-                                             BorderBrush="#F7141414" Text="{Binding Path=Station.trueStation}">
-                                    </TextBox>
-                                    
-                                    <TextBox Width="80" 
-                                             BorderBrush="#F7141414" Text="{Binding Path=Elevation}">
-                                    </TextBox>
-                                </StackPanel>
+                            <ListView >
                             </ListView>
                         </TabItem>
                     </TabControl>

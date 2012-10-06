@@ -216,7 +216,7 @@ namespace ptsCogo
             if (profSeg.length > 0.0)
             {
                returnList.add(new rawVPI(profSeg.beginStation, profSeg.beginElevation));
-               if (count == 0)
+               if (count == -1)
                {
                   returnList.add(new rawVPI(profSeg.endStation, profSeg.endElevation));
                }
@@ -483,6 +483,16 @@ namespace ptsCogo
             return false;
          else
             return aVC.beginIsPINC;
+      }
+
+      public int SegmentCount
+      {
+         get
+         {
+            if (allVCs == null) return 0;
+            return allVCs.Count;
+         }
+         private set { }
       }
 
       private class verticalCurve
