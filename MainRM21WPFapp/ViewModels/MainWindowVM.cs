@@ -8,6 +8,7 @@ using rm21Core.CorridorTypes;
 using rm21Core.Ribbons;
 using System.Windows.Input;
 using ptsCogo;
+using System.Windows;
 
 namespace MainRM21WPFapp.ViewModels
 {
@@ -29,8 +30,6 @@ namespace MainRM21WPFapp.ViewModels
 
          CurrentCorridor = theRM21model.allCorridors[0];
       }
-      
-
 
       private void setupCorridorL()
       {
@@ -42,7 +41,12 @@ namespace MainRM21WPFapp.ViewModels
          PGLGrouping pglGrRT = new PGLGrouping(1);
 
          pglGrLT.addOutsideRibbon(new RoadwayLane((CogoStation)1000, (CogoStation)10000, 12.0, -0.02));
-         pglGrLT.addOutsideRibbon(new Shoulder((CogoStation)1000, (CogoStation)10000, 10.0, -0.08));
+
+         Shoulder aShldr = new Shoulder((CogoStation)1000, (CogoStation)10000, 10.0, -0.08);
+         aShldr.addWidenedSegment((CogoStation)2000.0, (CogoStation)2040.0, 17.0,
+            (CogoStation)2250.0, (CogoStation)2290.00);
+
+         pglGrLT.addOutsideRibbon(aShldr);
          pglGrLT.addOutsideRibbon(new FrontSlopeCutDitch((CogoStation)1000, (CogoStation)10000, 15.0,  -1.0 / 6.0));
          
 
@@ -55,11 +59,14 @@ namespace MainRM21WPFapp.ViewModels
 
       }
 
-      private System.Windows.Window myViewReference_;
-      public System.Windows.Window myViewReference
+      private MainWindow myViewReference_;
+      public MainWindow myViewReference
       {
          get { return myViewReference_; }
-         set { myViewReference_ = value; } 
+         set 
+         { 
+            myViewReference_ = value;
+         } 
       }
 
       private RoadwayModel_TabVM roadwayModelTabVM_;

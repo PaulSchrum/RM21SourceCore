@@ -39,6 +39,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -58,6 +59,7 @@
     </ApplicationDefinition>
     <Compile Include="RelayCommand.cs" />
     <Compile Include="ViewModels\CorridorTreeViewModel.cs" />
+    <Compile Include="ViewModels\CrossSectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindowVM.cs" />
     <Compile Include="ViewModels\NotifyPropertyChangedVMbase.cs" />
     <Compile Include="ViewModels\PglGroupingViewModel.cs" />
@@ -66,6 +68,7 @@
     <Compile Include="ViewModels\RibbonViewModel.cs" />
     <Compile Include="ViewModels\RibbonWidthsVM.cs" />
     <Compile Include="ViewModels\RoadwayModel_TabVM.cs" />
+    <Compile Include="ViewModels\SchrumCadViewModel.cs" />
     <Compile Include="ViewModels\TreeViewItemViewModel.cs" />
     <Compile Include="Views\CorridorTreeView.xaml.cs">
       <DependentUpon>CorridorTreeView.xaml</DependentUpon>

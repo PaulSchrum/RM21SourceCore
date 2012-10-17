@@ -23,6 +23,8 @@ namespace MainRM21WPFapp
       public MainWindow()
       {
          InitializeComponent();
+         MainWindowVM topVM = (MainWindowVM) DataContext;
+         topVM.myViewReference = this;
       }
    }
 }

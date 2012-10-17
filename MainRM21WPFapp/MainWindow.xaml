@@ -5,9 +5,11 @@
         xmlns:corridorTreeView="clr-namespace:MainRM21WPFapp.Views"
         xmlns:corTreeVM="clr-namespace:MainRM21WPFapp.ViewModels"
         Title="RM21 Demonstration Application" Height="500" Width="700">
+    
     <Window.DataContext>
         <mainVM:MainWindowVM />
     </Window.DataContext>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" MaxHeight="30" MinHeight="30" />
@@ -119,8 +121,16 @@
                             </ListView>
                         </TabItem>
                         
-                        <TabItem Header="Cross Slopes" >
-                            <ListView >
+                        <TabItem Header="Cross Slopes" DataContext="{Binding Path=CrossSlopesVM}">
+                            <ListView ItemsSource="{Binding Path=rawVPI_VM}">
+                                <ListView.View>
+                                    <GridView >
+                                        <GridViewColumn Header="Station" 
+                                             DisplayMemberBinding="{Binding Path=StationVM.Val}" />
+                                        <GridViewColumn Header="Cross Slope"
+                                            DisplayMemberBinding="{Binding Path=ElevationVM.Val}"  />
+                                    </GridView>
+                                </ListView.View>
                             </ListView>
                         </TabItem>
                     </TabControl>
@@ -130,9 +140,14 @@
                         Orientation="Horizontal">
                         <TextBlock Width="140">Cross Section View</TextBlock>
                         <TextBlock Width="48">Station</TextBlock>
-                        <TextBox Background="White" Width="180">20+00.00</TextBox>
+                        <TextBox Background="White" Width="180" 
+                                 Text="{Binding Path=CurrentStation}"></TextBox>
                     </StackPanel>
-                    <Canvas Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Background="Black"></Canvas>
+                    <RichTextBox></RichTextBox>
+                    <Canvas Name="xsCanvas"
+                        Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" 
+                            Background="Black" UseLayoutRounding="True" 
+                            ClipToBounds="True"></Canvas>
                     
                 </Grid>
             </TabItem>

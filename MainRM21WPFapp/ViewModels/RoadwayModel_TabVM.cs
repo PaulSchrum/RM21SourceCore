@@ -21,9 +21,12 @@ namespace MainRM21WPFapp.ViewModels
          CurrentCorridor = parentVM_.CurrentCorridor;
          this.testText9_26_ = "Not set.";
          theCorridorAsTreeViewModel = new CorridorTreeViewModel();
+         CrossSectionViewModel = new CrossSectionViewModel(this);
+         CurrentStation = 1000.0;
+         //CrossSectionViewModel.CurrentStation = CurrentStation;
       }
 
-      private MainWindowVM parentVM_;
+      internal MainWindowVM parentVM_;
 
       private CorridorTreeViewModel theCorridorAsTreeViewModel_;
       public CorridorTreeViewModel theCorridorAsTreeViewModel
@@ -41,6 +44,20 @@ namespace MainRM21WPFapp.ViewModels
          }
       }
 
+      private CrossSectionViewModel xsVM_;
+      public CrossSectionViewModel CrossSectionViewModel
+      {
+         get { return xsVM_; }
+         set
+         {
+            if (xsVM_ != value)
+            {
+               xsVM_ = value;
+               RaisePropertyChanged("CrossSectionViewModel");
+            }
+         }
+      }
+
       private String testText9_26_;
       public String TestText9_26
       {
@@ -52,6 +69,7 @@ namespace MainRM21WPFapp.ViewModels
                testText9_26_ = value;
                //theCorridorAsTreeViewModel = new CorridorTreeViewModel(currentCorridor_);
                RaisePropertyChanged("TestText9_26");
+               
             }
          }
       }
@@ -71,10 +89,6 @@ namespace MainRM21WPFapp.ViewModels
                theCorridorAsTreeViewModel.TheCorridor = currentCorridor_;
 
                RaisePropertyChanged("CurrentCorridor");
-               if (parentVM_ != null && parentVM_.CurrentCorridor != null && parentVM_.CurrentCorridor.Name != null)
-               {
-                  TestText9_26 = "Corridor is " + parentVM_.CurrentCorridor.Name;
-               }
             }
          }
       }
@@ -95,6 +109,22 @@ namespace MainRM21WPFapp.ViewModels
                   selectedRibbon_.WidthsVM = new ProfileVPI_VM(selectedRibbon_.TheRibbon.Widths);
                   selectedRibbon_.CrossSlopesVM = new ProfileVPI_VM(selectedRibbon_.TheRibbon.CrossSlopes);
                }
+            }
+         }
+      }
+
+      private double currentStation_;
+      public double CurrentStation
+      {
+         get { return currentStation_; }
+         set
+         {
+            if (currentStation_ != value)
+            {
+               currentStation_ = value;
+               RaisePropertyChanged("CurrentStation");
+               if (null != CrossSectionViewModel)
+                  CrossSectionViewModel.CurrentStation = currentStation_;
             }
          }
       }
