@@ -27,9 +27,9 @@ namespace MainRM21WPFapp.ViewModels
       }
    }
 
-   public class schrumCanvasTransform
+   public class TransformedCanvas
    {
-      public schrumCanvasTransform(Canvas aCanvas)
+      public TransformedCanvas(Canvas aCanvas)
       {
          if (aCanvas == null)
             throw new NullReferenceException();
@@ -142,16 +142,66 @@ namespace MainRM21WPFapp.ViewModels
       }
    }
 
+
    /* */
    public class schrumCadElementViewModel
    {
-      public Point controlPt { get; set; }
-      public double rotation { get; set; }
+      public Line aLine = new Line();
+      public schrumCadElementViewModel(TransformedCanvas transformedCnvas)
+      {
+         TransformedCanvas = transformedCnvas;
+         Stroke = Brushes.White;
+         StrokeThickness = 1;
+
+      }
+
+      protected TransformedCanvas TransformedCanvas { get; set; }
+
+      public Brush Stroke { get; set; }
+      public double StrokeThickness { get; set; }
+
+      public virtual void drawOnCanvas()
+      {
+
+      }
    }
 
-   public class scLineVM : schrumCadElementViewModel
+   public class CadLine : schrumCadElementViewModel
    {
-      public double length { get; set; }
-   }  /* */
+      public double X1 { get; set; }
+      public double Y1 { get; set; }
+      public double X2 { get; set; }
+      public double Y2 { get; set; }
+
+      public CadLine(TransformedCanvas transformedCanvas)
+         : base(transformedCanvas)
+      {
+
+      }
+
+      public Line asWPFLine()
+      {
+         Line retLine = new Line();
+
+         retLine.Stroke = Stroke;
+         retLine.StrokeThickness = StrokeThickness;
+         retLine.HorizontalAlignment = HorizontalAlignment.Left;
+         retLine.VerticalAlignment = VerticalAlignment.Bottom;
+         retLine.X1 = X1;
+         retLine.Y1 = Y1;
+         retLine.X2 = X2;
+         retLine.Y2 = Y2;
+         return retLine;
+      }
+
+      public override void drawOnCanvas()
+      {
+         Line wpfLine = asWPFLine();
+         base.drawOnCanvas();
+         if (TransformedCanvas != null)
+            TransformedCanvas.Add(wpfLine);
+      }
+
+   }  
 
 }

@@ -20,6 +20,7 @@ namespace MainRM21WPFapp.ViewModels
       }
 
       public Canvas xsCanvas{get; set;}
+      private TransformedCanvas CanvasXfrmd;
 
       private RoadwayModel_TabVM parentVM_;
 
@@ -39,8 +40,9 @@ namespace MainRM21WPFapp.ViewModels
 
                if (parentVM_.parentVM_.myViewReference == null)  return;
                
-               schrumCanvasTransform CanvasXfrmd = 
-                  new schrumCanvasTransform(parentVM_.parentVM_.myViewReference.xsCanvas);
+               if (CanvasXfrmd == null)
+                  CanvasXfrmd = 
+                     new TransformedCanvas(parentVM_.parentVM_.myViewReference.xsCanvas);
 
                CanvasXfrmd.Scale = 10.0; CanvasXfrmd.verticalExagg = 5.0;
                var aLine = new System.Windows.Shapes.Line() 
@@ -66,25 +68,30 @@ namespace MainRM21WPFapp.ViewModels
                   StrokeThickness = 1,
                   Stroke = Brushes.YellowGreen
                };
-               CanvasXfrmd.Add(aLine2);
+               //CanvasXfrmd.Add(aLine2);
 
-               //String txt = "Text Text";
-               //RichTextBox rtb = new RichTextBox();
-               //rtb.DataContext = null;
-               //rtb.AppendText("Test Text");
-               //rtb.FontSize = 0.5;
-               //rtb.MinWidth = 50; rtb.MinHeight = 25;
-               //rtb.HorizontalAlignment = HorizontalAlignment.Left;
-               //rtb.VerticalAlignment = VerticalAlignment.Bottom;
-               //rtb.LayoutTransform = new TranslateTransform(100, 50);
-               //rtb.Foreground = Brushes.Tomato;
-               //rtb.Background = Brushes.Black;
-               //rtb.BorderBrush = Brushes.Gold;
-               //rtb.RenderTransformOrigin = new Point(77, 22);
-               //rtb.IsReadOnly = true;
-               //xsCanvas.Children.Add(rtb);
+               CadLine testLine = new CadLine(CanvasXfrmd);
+               testLine.X1 = 0; testLine.Y1 = 5;
+               testLine.X2 = 105; testLine.Y2 = 12;
+               testLine.drawOnCanvas();
 
-               //y2_ += 20;
+               TextBox textbox = new TextBox();
+               textbox.Text = "Hi There.";
+               textbox.LayoutTransform = new ScaleTransform(1.0, -1.0, 0, 0);
+               textbox.Background = Brushes.Transparent;
+               textbox.Foreground = Brushes.White;
+               textbox.BorderThickness = new Thickness(0, 0, 0, 0);
+               //textbox.Name = "tb1";
+               textbox.HorizontalAlignment = HorizontalAlignment.Left;
+               textbox.VerticalAlignment = VerticalAlignment.Bottom;
+               textbox.VerticalContentAlignment = VerticalAlignment.Bottom;
+               textbox.FontSize = 12.0;
+
+               /* */
+               CanvasXfrmd.Canvas.Children.Add(textbox);
+               textbox.SetValue(Canvas.TopProperty, 66.4);
+               textbox.SetValue(Canvas.LeftProperty, 176.96);
+               /* */
             }
          }
       }

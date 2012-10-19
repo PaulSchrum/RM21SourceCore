@@ -147,7 +147,8 @@
                     <Canvas Name="xsCanvas"
                         Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" 
                             Background="Black" UseLayoutRounding="True" 
-                            ClipToBounds="True"></Canvas>
+                            ClipToBounds="True">
+                    </Canvas>
                     
                 </Grid>
             </TabItem>
