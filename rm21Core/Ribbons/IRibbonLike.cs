@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ptsCogo.coordinates.CurvilinearCoordinates;
+using ptsCogo;
 
 namespace rm21Core
 {
@@ -11,6 +12,9 @@ namespace rm21Core
       int getChildRibbonCount();
       IRibbonLike getChildRibbonByIndex(int index);
       void accumulateRibbonTraversal(ref StationOffsetElevation aSOE);
+      void DrawCrossSection(IRM21cad2dDrawingContext cadContext, 
+         ref StationOffsetElevation aSOE, int whichSide);
+      void moveToOuterEdge(ref StationOffsetElevation aSOE, int whichSide);
 
       int getMyIndex();
       void setMyIndex(int index);

@@ -140,6 +140,44 @@ namespace rm21Core
          foreach (var child in outsideRibbons) { children.Add(child); }
          return children;
       }
+
+      internal void DrawCrossSection(IRM21cad2dDrawingContext cadContext, 
+         CogoStation station, int whichSide_)
+      {
+         int whichSide = Math.Sign(whichSide_);
+         StationOffsetElevation StaOffEL =
+            new StationOffsetElevation(station.trueStation, 0.0, 0.0);
+
+         if (pglProfile != null)
+               StaOffEL.elevation = pglProfile.getElevation(station);
+         
+         if (thePGLoffsetRibbon != null)
+            thePGLoffsetRibbon.DrawCrossSection(cadContext, ref StaOffEL, whichSide);
+
+         if (insideRibbons != null)
+         {
+            double pglOffset = StaOffEL.offset;
+            double pglElevation = StaOffEL.elevation;
+
+            foreach (var aRibbon in insideRibbons)
+            {
+               aRibbon.DrawCrossSection(cadContext, ref StaOffEL, -1 * whichSide);
+            }
+
+            StaOffEL.offset = pglOffset;
+            StaOffEL.elevation = pglElevation;
+         }
+
+         if (outsideRibbons != null)
+         {
+            foreach (var aRibbon in outsideRibbons)
+            {
+               aRibbon.DrawCrossSection(cadContext, ref StaOffEL, whichSide);
+            }
+         }
+      }
+
+
    }
 
 }

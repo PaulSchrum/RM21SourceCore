@@ -6,6 +6,7 @@ using ptsCogo.coordinates.CurvilinearCoordinates;
 using ptsCogo;
 using ptsCogo.Angle;
 using System.Collections.ObjectModel;
+using System.Windows.Media;
 
 namespace rm21Core
 {
@@ -56,6 +57,17 @@ namespace rm21Core
          return Name;
       }
 
+      public void DrawCrossSection(IRM21cad2dDrawingContext cadContext, CogoStation station)
+      {
+         if (allPGLgroupings != null)
+         {
+            foreach (var pglGrouping in allPGLgroupings)
+            {
+               pglGrouping.DrawCrossSection(cadContext, station, pglGrouping.myIndex);
+            }
+         }
+      }
+
    }
 
 }
@@ -64,5 +76,16 @@ namespace rm21Core
 // class negatableIndexList<T> : List<T>
 // which would cover my worries about iterating from -2 to +2
 // while skipping zero.
+
+
+public interface IRM21cad2dDrawingContext
+{
+   void setElementLevel(string LevelName);
+   void setElementColor(Color Color);
+   void setElementWeight(double Weight);
+   void Draw(double X1, double Y1, double X2, double Y2);  /* * /
+   void Draw(string TextContent, double X1, double Y1, double rotationAngle); /* */
+}
+
 
 

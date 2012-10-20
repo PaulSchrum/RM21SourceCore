@@ -4,7 +4,7 @@
         xmlns:mainVM="clr-namespace:MainRM21WPFapp.ViewModels"
         xmlns:corridorTreeView="clr-namespace:MainRM21WPFapp.Views"
         xmlns:corTreeVM="clr-namespace:MainRM21WPFapp.ViewModels"
-        Title="RM21 Demonstration Application" Height="500" Width="700">
+        Title="RM21 Demonstration Application" Height="500" Width="700" WindowState="Maximized">
     
     <Window.DataContext>
         <mainVM:MainWindowVM />

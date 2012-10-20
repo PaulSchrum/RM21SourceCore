@@ -39,25 +39,19 @@ namespace MainRM21WPFapp.ViewModels
                /* */
 
                if (parentVM_.parentVM_.myViewReference == null)  return;
+               if (parentVM_.CurrentCorridor == null) return;
+               currentCorridor_ = parentVM_.CurrentCorridor;
                
                if (CanvasXfrmd == null)
                   CanvasXfrmd = 
                      new TransformedCanvas(parentVM_.parentVM_.myViewReference.xsCanvas);
 
-               CanvasXfrmd.Scale = 10.0; CanvasXfrmd.verticalExagg = 5.0;
+               CanvasXfrmd.Scale = 30.0;
+               CanvasXfrmd.verticalExagg = 25.0;
 
                CanvasXfrmd.Canvas.Children.Clear();
+               currentCorridor_.DrawCrossSection(CanvasXfrmd, new CogoStation(currentStation_));
 
-               CadLine testLine = new CadLine(CanvasXfrmd);
-               testLine.X1 = 0; testLine.Y1 = 5;
-               testLine.X2 = 105; testLine.Y2 = 12;
-               testLine.drawOnCanvas();
-
-               CadText CadText = new CadText(CanvasXfrmd);
-               CadText.Text = "Text Item 3.";
-               CadText.X1 = 100.0; CadText.Y1 = 1.0;
-               CadText.RotationAngle = -33;
-               CadText.drawOnCanvas();
             }
          }
       }

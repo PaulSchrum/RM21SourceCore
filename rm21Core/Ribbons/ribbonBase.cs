@@ -67,6 +67,38 @@ namespace rm21Core
 
       }
 
+      public virtual void moveToOuterEdge(ref StationOffsetElevation aSOE, int whichSide)
+      {
+         //double traversedWidth;
+         tupleNullableDoubles result;
+         double? theWidth = getActualWidth((CogoStation)aSOE.station, out result);
+         if (result.isSingleValue == false)
+         { throw new NotImplementedException("Width discontinuity is not allowed. This happens at station = " + aSOE.station); }
+
+         double? theCrossSlope = getCrossSlope((CogoStation)aSOE.station, out result);
+         if (result.isSingleValue == false)
+         { throw new NotImplementedException("Cross slope discontinuity is not allowed. This happens at station = " + aSOE.station); }
+
+         if (theWidth == null) theWidth = 0.0;
+
+         aSOE.offset += theWidth * whichSide;
+
+         /* * /
+         if ((double)availableWidth > aSOE.offset)
+         {
+            traversedWidth = aSOE.offset;
+            aSOE.offset = 0.0;
+         }
+         else
+         {
+            traversedWidth = (double)availableWidth;
+            aSOE.offset -= traversedWidth;
+         }  /* */
+
+         if (theCrossSlope == null) theCrossSlope = 0.0;
+         aSOE.elevation += theCrossSlope;
+      }
+
       public virtual void accumulateRibbonTraversal(ref StationOffsetElevation aSOE)
       {
          double traversedWidth;
@@ -79,6 +111,8 @@ namespace rm21Core
          if (result.isSingleValue == false)
          { throw new NotImplementedException("Cross slope discontinuity is not allowed. This happens at station = " + aSOE.station); }
 
+         if (availableWidth == null) availableWidth = 0.0;
+
          if ((double)availableWidth > aSOE.offset)
          {
             traversedWidth = aSOE.offset;
@@ -90,7 +124,19 @@ namespace rm21Core
             aSOE.offset -= traversedWidth;
          }
 
+         if (crossSlope == null) crossSlope = 0.0;
          aSOE.elevation += traversedWidth * (double)crossSlope;
+      }
+
+      public virtual void DrawCrossSection(IRM21cad2dDrawingContext cadContext, 
+         ref StationOffsetElevation aSOE, int whichSide)
+      {
+         double X1 = aSOE.offset;
+         double Y1 = aSOE.elevation;
+         this.moveToOuterEdge(ref aSOE, whichSide);
+         if (X1 == aSOE.offset && Y1 == aSOE.elevation) return;
+
+         cadContext.Draw(X1, Y1, aSOE.offset, aSOE.elevation);
       }
 
       public virtual double? getActualWidth(CogoStation aStation)

@@ -27,7 +27,7 @@ namespace MainRM21WPFapp.ViewModels
       }
    }
 
-   public class TransformedCanvas
+   public class TransformedCanvas: IRM21cad2dDrawingContext
    {
       public TransformedCanvas(Canvas aCanvas)
       {
@@ -42,9 +42,41 @@ namespace MainRM21WPFapp.ViewModels
          inchesPerUnit = 12.0;
          Scale = 1.0;
          verticalExagg = 1.0;
+
+         StrokeThickness_ = 1.0;
+         Stroke_ = Brushes.White;
       }
 
       public Canvas Canvas { get; set; }
+
+      public void setElementLevel(string LevelName)
+      { }
+
+      public void setElementWeight(double weight)
+      {
+         StrokeThickness_ = weight;
+      }
+      protected double StrokeThickness_;
+
+      public void setElementColor(Color color)
+      { Stroke_ = new SolidColorBrush(color); }
+      protected SolidColorBrush Stroke_;
+
+      public void Draw(double X1, double Y1, double X2, double Y2)
+      {
+         Line aLine = new Line();
+         aLine.X1 = X1;
+         aLine.Y1 = Y1;
+         aLine.X2 = X2;
+         aLine.Y2 = Y2;
+         aLine.HorizontalAlignment = HorizontalAlignment.Left;
+         aLine.VerticalAlignment = VerticalAlignment.Bottom;
+         aLine.StrokeThickness = StrokeThickness_;
+         aLine.Stroke = Stroke_;
+
+         TransformWorldToCanvas(ref aLine);
+         Canvas.Children.Add(aLine);
+      }
 
       public void Add(Line aLine)
       {
@@ -91,26 +123,26 @@ namespace MainRM21WPFapp.ViewModels
 
       public double verticalExagg { get; set; }
 
-      public double translateX { get; set; }
-      public double translateY { get; set; }
+      public double translateX { get { return Canvas.ActualWidth / 2.0; } set { } }
+      public double translateY { get { return Canvas.ActualHeight / 2.0; } set { } }
 
       private void computeRealScale()
       {
          if (scale_ == 0.0) return;
-         realScale_ = 96.0 / inchesPerUnit / scale_;
+         realScale_ = 96.0 / scale_;
       }
 
       private double TransformWorldToCanvasX(double X)
       {
-         X += translateX;
          X *= realScale_;
+         X += translateX;
          return X;
       }
 
       private double TransformWorldToCanvasY(double Y)
       {
-         Y += translateY/verticalExagg;
          Y *= (realScale_ * verticalExagg);
+         Y += translateY;
          return Y;
       }
 
