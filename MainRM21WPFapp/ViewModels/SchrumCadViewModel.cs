@@ -63,6 +63,22 @@ namespace MainRM21WPFapp.ViewModels
 
       }
 
+      public void Add(TextBox textBox, double x1, double y1, double rotationAngle)
+      {
+         ScaleTransform flipVerticalXform = new ScaleTransform(1.0, -1.0, 0, 0);
+         TransformGroup xFormGroup = new TransformGroup();
+         xFormGroup.Children.Add(flipVerticalXform);
+         xFormGroup.Children.Add(new RotateTransform(rotationAngle));
+         textBox.LayoutTransform = xFormGroup;
+
+         Canvas.Children.Add(textBox);
+         textBox.SetValue(Canvas.TopProperty, TransformWorldToCanvasY(y1));
+         textBox.SetValue
+            (Canvas.LeftProperty,
+               TransformWorldToCanvasX(x1) - (textBox.ActualWidth / 2.0));
+
+      }
+
       private double scale_;
       public double Scale 
       { get{return scale_;}
@@ -140,6 +156,7 @@ namespace MainRM21WPFapp.ViewModels
          return returnTextBlock;
 
       }
+
    }
 
 
@@ -160,6 +177,9 @@ namespace MainRM21WPFapp.ViewModels
       public Brush Stroke { get; set; }
       public double StrokeThickness { get; set; }
 
+      public double X1 { get; set; }
+      public double Y1 { get; set; }
+
       public virtual void drawOnCanvas()
       {
 
@@ -168,16 +188,12 @@ namespace MainRM21WPFapp.ViewModels
 
    public class CadLine : schrumCadElementViewModel
    {
-      public double X1 { get; set; }
-      public double Y1 { get; set; }
-      public double X2 { get; set; }
-      public double Y2 { get; set; }
-
       public CadLine(TransformedCanvas transformedCanvas)
          : base(transformedCanvas)
-      {
+      {      }
 
-      }
+      public double X2 { get; set; }
+      public double Y2 { get; set; }
 
       public Line asWPFLine()
       {
@@ -202,6 +218,38 @@ namespace MainRM21WPFapp.ViewModels
             TransformedCanvas.Add(wpfLine);
       }
 
-   }  
+   }
 
+   public class CadText : schrumCadElementViewModel
+   {
+      public CadText(TransformedCanvas transformedCanvas)
+         : base(transformedCanvas)
+      {
+         TextSize = 12.0;
+         RotationAngle = 0.0;
+      }
+
+      public String Text { get; set; }
+      public double TextSize { get; set; }
+      public double RotationAngle { get; set; }
+
+      public override void drawOnCanvas()
+      {
+         TextBox textBox = new TextBox();
+         textBox.Text = Text;
+         textBox.Background = Brushes.Transparent;
+         textBox.Foreground = Brushes.White;
+         textBox.BorderThickness = new Thickness(0, 0, 0, 0);
+         textBox.HorizontalAlignment = HorizontalAlignment.Center;
+         textBox.VerticalAlignment = VerticalAlignment.Bottom;
+         textBox.VerticalContentAlignment = VerticalAlignment.Bottom;
+         textBox.FontSize = TextSize;
+
+         base.drawOnCanvas();
+         if (TransformedCanvas != null)
+            TransformedCanvas.Add(textBox, X1, Y1, RotationAngle);
+
+      }
+
+   }
 }
