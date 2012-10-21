@@ -7,6 +7,7 @@ using ptsCogo.coordinates.CurvilinearCoordinates;
 using ptsCogo;
 using ptsCogo.Angle;
 using System.ComponentModel;
+using System.Windows.Media;
 
 
 
@@ -96,7 +97,7 @@ namespace rm21Core
          }  /* */
 
          if (theCrossSlope == null) theCrossSlope = 0.0;
-         aSOE.elevation += theCrossSlope;
+         aSOE.elevation += theCrossSlope * theWidth;
       }
 
       public virtual void accumulateRibbonTraversal(ref StationOffsetElevation aSOE)
@@ -131,12 +132,33 @@ namespace rm21Core
       public virtual void DrawCrossSection(IRM21cad2dDrawingContext cadContext, 
          ref StationOffsetElevation aSOE, int whichSide)
       {
+         double ribbonWidth;
          double X1 = aSOE.offset;
          double Y1 = aSOE.elevation;
          this.moveToOuterEdge(ref aSOE, whichSide);
          if (X1 == aSOE.offset && Y1 == aSOE.elevation) return;
 
          cadContext.Draw(X1, Y1, aSOE.offset, aSOE.elevation);
+
+         ribbonWidth = Math.Abs(aSOE.offset - X1);
+         cadContext.setElementWeight(0.8);
+         cadContext.setElementColor(Color.FromArgb(124, 255, 255, 255));
+         cadContext.Draw(X1, 5.5, aSOE.offset, 5.5);
+         cadContext.Draw(aSOE.offset, 0.5, aSOE.offset, 6.5);
+         string widthStr = (Math.Round(ribbonWidth*10)/10).ToString();
+         cadContext.Draw(widthStr, X1 + whichSide * ribbonWidth / 2, 6.0, 0.0);
+
+         Slope mySlope = new Slope((aSOE.elevation - Y1) / (aSOE.offset - X1));
+         if (whichSide > 0)
+            cadContext.Draw(mySlope.ToString(), 
+               (X1 + aSOE.offset) / 2,
+               (Y1 + aSOE.elevation) / 2, 
+               mySlope.getAsDegrees());
+         else
+            cadContext.Draw(mySlope.FlipDirection().ToString(),
+               (X1 + aSOE.offset) / 2,
+               (Y1 + aSOE.elevation) / 2,
+               mySlope.getAsDegrees());
       }
 
       public virtual double? getActualWidth(CogoStation aStation)

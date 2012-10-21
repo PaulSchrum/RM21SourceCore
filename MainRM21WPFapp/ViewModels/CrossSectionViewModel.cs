@@ -46,8 +46,8 @@ namespace MainRM21WPFapp.ViewModels
                   CanvasXfrmd = 
                      new TransformedCanvas(parentVM_.parentVM_.myViewReference.xsCanvas);
 
-               CanvasXfrmd.Scale = 30.0;
-               CanvasXfrmd.verticalExagg = 25.0;
+               CanvasXfrmd.Scale = 10.0;
+               CanvasXfrmd.verticalExagg = 1.0;
 
                CanvasXfrmd.Canvas.Children.Clear();
                currentCorridor_.DrawCrossSection(CanvasXfrmd, new CogoStation(currentStation_));

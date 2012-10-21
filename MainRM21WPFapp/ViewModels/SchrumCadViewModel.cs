@@ -78,37 +78,24 @@ namespace MainRM21WPFapp.ViewModels
          Canvas.Children.Add(aLine);
       }
 
-      public void Add(Line aLine)
-      {
-         Line copyOfaLine = new Line();
-         copyOfaLine.X1 = aLine.X1;
-         copyOfaLine.Y1 = aLine.Y1;
-         copyOfaLine.X2 = aLine.X2;
-         copyOfaLine.Y2 = aLine.Y2;
-         copyOfaLine.HorizontalAlignment = aLine.HorizontalAlignment;
-         copyOfaLine.VerticalAlignment = aLine.VerticalAlignment;
-         copyOfaLine.StrokeThickness = aLine.StrokeThickness;
-         copyOfaLine.Stroke = aLine.Stroke;
-
-         TransformWorldToCanvas(ref copyOfaLine);
-         Canvas.Children.Add(copyOfaLine);
-
-      }
-
-      public void Add(TextBox textBox, double x1, double y1, double rotationAngle)
+      public void Draw(string textContent, double x1, double y1, double rotationAngle)
       {
          ScaleTransform flipVerticalXform = new ScaleTransform(1.0, -1.0, 0, 0);
          TransformGroup xFormGroup = new TransformGroup();
          xFormGroup.Children.Add(flipVerticalXform);
          xFormGroup.Children.Add(new RotateTransform(rotationAngle));
+         TextBox textBox = new TextBox();
+         textBox.Text = textContent;
          textBox.LayoutTransform = xFormGroup;
+         textBox.Background = Brushes.Transparent;
+         textBox.Foreground = Stroke_;
+         textBox.BorderThickness = new Thickness(0.0);
 
          Canvas.Children.Add(textBox);
          textBox.SetValue(Canvas.TopProperty, TransformWorldToCanvasY(y1));
          textBox.SetValue
             (Canvas.LeftProperty,
                TransformWorldToCanvasX(x1) - (textBox.ActualWidth / 2.0));
-
       }
 
       private double scale_;
@@ -242,14 +229,6 @@ namespace MainRM21WPFapp.ViewModels
          return retLine;
       }
 
-      public override void drawOnCanvas()
-      {
-         Line wpfLine = asWPFLine();
-         base.drawOnCanvas();
-         if (TransformedCanvas != null)
-            TransformedCanvas.Add(wpfLine);
-      }
-
    }
 
    public class CadText : schrumCadElementViewModel
@@ -264,24 +243,6 @@ namespace MainRM21WPFapp.ViewModels
       public String Text { get; set; }
       public double TextSize { get; set; }
       public double RotationAngle { get; set; }
-
-      public override void drawOnCanvas()
-      {
-         TextBox textBox = new TextBox();
-         textBox.Text = Text;
-         textBox.Background = Brushes.Transparent;
-         textBox.Foreground = Brushes.White;
-         textBox.BorderThickness = new Thickness(0, 0, 0, 0);
-         textBox.HorizontalAlignment = HorizontalAlignment.Center;
-         textBox.VerticalAlignment = VerticalAlignment.Bottom;
-         textBox.VerticalContentAlignment = VerticalAlignment.Bottom;
-         textBox.FontSize = TextSize;
-
-         base.drawOnCanvas();
-         if (TransformedCanvas != null)
-            TransformedCanvas.Add(textBox, X1, Y1, RotationAngle);
-
-      }
 
    }
 }

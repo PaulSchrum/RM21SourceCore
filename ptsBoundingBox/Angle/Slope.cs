@@ -17,6 +17,16 @@ namespace ptsCogo.Angle
          setFromXY(1.0, slopeASaDouble);
       }
 
+      /* */
+      public Slope FlipDirection()
+      {
+         if (this.isVertical() == true)
+            return this;
+
+         return new Slope(-1.0 * Math.Atan(angle_));
+
+      } /* */
+
       public bool isVertical()
       {
          if (Math.Abs(Math.Sin(angle_)) == 1.0)
@@ -42,6 +52,26 @@ namespace ptsCogo.Angle
       {
          Slope aSlope = new Slope(slopeAs_double);
          return aSlope;
+      }
+
+      public double getAsSlope()
+      {
+         if (this.isVertical() == true)
+            return Double.PositiveInfinity;
+
+         return Math.Tan(angle_);
+      }
+
+      public override string ToString()
+      {
+         if (this.isVertical() == true)
+            return "Vertical";
+
+         double slopeValue = this.getAsSlope();
+         if (Math.Abs(slopeValue) <= 0.1)
+            return String.Format("{0:0.0%}", slopeValue);
+         else
+            return String.Format("{0:0.0} : 1", 1/slopeValue);
       }
    }
 }
