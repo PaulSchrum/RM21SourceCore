@@ -84,18 +84,6 @@ namespace rm21Core
 
          aSOE.offset += theWidth * whichSide;
 
-         /* * /
-         if ((double)availableWidth > aSOE.offset)
-         {
-            traversedWidth = aSOE.offset;
-            aSOE.offset = 0.0;
-         }
-         else
-         {
-            traversedWidth = (double)availableWidth;
-            aSOE.offset -= traversedWidth;
-         }  /* */
-
          if (theCrossSlope == null) theCrossSlope = 0.0;
          aSOE.elevation += theCrossSlope * theWidth;
       }

@@ -28,10 +28,10 @@ namespace MainRM21WPFapp.ViewModels
 
          loadData();
 
-         CurrentCorridor = theRM21model.allCorridors[0];
+         CurrentCorridor = theRM21model.allCorridors[1];
       }
 
-      private void setupCorridorL()
+      private void setupCorridors()
       {
          rm21Corridor aCorridor = 
             theRM21model.allCorridors.FirstOrDefault
@@ -40,17 +40,24 @@ namespace MainRM21WPFapp.ViewModels
          PGLGrouping pglGrLT = new PGLGrouping(-1);
          PGLGrouping pglGrRT = new PGLGrouping(1);
 
-         pglGrLT.addOutsideRibbon(new RoadwayLane((CogoStation)1000, (CogoStation)10000, 12.0, -0.02));
+         RoadwayLane rdyLane = new RoadwayLane((CogoStation)1000, (CogoStation)10000, 12.0, -0.02);
+         rdyLane.addCrossSlopeChangedSegment((CogoStation) 2200, (CogoStation) 2300, 0.08,
+            (CogoStation) 2500, (CogoStation) 2600);
+         pglGrLT.addOutsideRibbon(rdyLane);
 
          Shoulder aShldr = new Shoulder((CogoStation)1000, (CogoStation)10000, 10.0, -0.08);
          aShldr.addWidenedSegment((CogoStation)2000.0, (CogoStation)2040.0, 17.0,
             (CogoStation)2250.0, (CogoStation)2290.00);
+         aShldr.addCrossSlopeChangedSegment((CogoStation)2200, (CogoStation)2300, 0.02,
+            (CogoStation)2500, (CogoStation)2600);
 
          pglGrLT.addOutsideRibbon(aShldr);
          pglGrLT.addOutsideRibbon(new FrontSlopeCutDitch((CogoStation)1000, (CogoStation)10000, 15.0,  -1.0 / 4.0));
-         
 
-         pglGrRT.addOutsideRibbon(new RoadwayLane((CogoStation)1000, (CogoStation)10000, 12.0, -0.02));
+         rdyLane = new RoadwayLane((CogoStation)1000, (CogoStation)10000, 12.0, -0.02);
+         rdyLane.addCrossSlopeChangedSegment((CogoStation)2240, (CogoStation)2300, -0.08,
+            (CogoStation)2500, (CogoStation)2560);
+         pglGrRT.addOutsideRibbon(rdyLane);
          pglGrRT.addOutsideRibbon(new Shoulder((CogoStation)1000, (CogoStation)10000, 10.0, -0.08));
          pglGrRT.addOutsideRibbon(new FrontSlopeCutDitch((CogoStation)1000, (CogoStation)10000, 15.0, -1.0 / 4.0));
 
@@ -132,7 +139,7 @@ namespace MainRM21WPFapp.ViewModels
       public ICommand LoadDataCmd { get; private set; }
       private void loadData()
       {
-         setupCorridorL();
+         setupCorridors();
       }
 
    }

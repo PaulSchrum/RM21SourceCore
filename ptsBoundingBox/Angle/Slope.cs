@@ -69,9 +69,14 @@ namespace ptsCogo.Angle
 
          double slopeValue = this.getAsSlope();
          if (Math.Abs(slopeValue) <= 0.1)
-            return String.Format("{0:0.0%}", slopeValue);
+         {
+            if (slopeValue > 0.0)
+               return String.Format("+{0:0.0%}", slopeValue);
+            else
+               return String.Format("{0:0.0%}", slopeValue);
+         }
          else
-            return String.Format("{0:0.0} : 1", 1/slopeValue);
+            return String.Format("{0:0.0} : 1", 1 / slopeValue);
       }
    }
 }
