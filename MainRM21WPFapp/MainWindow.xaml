@@ -138,10 +138,15 @@
                     <StackPanel 
                         Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"  
                         Orientation="Horizontal">
-                        <TextBlock Width="140">Cross Section View</TextBlock>
-                        <TextBlock Width="48">Station</TextBlock>
-                        <TextBox Background="White" Width="180" 
+                        <TextBlock Width="125">Cross Section View</TextBlock>
+                        <TextBlock Width="40">Station</TextBlock>
+                        <TextBox Background="White" Width="96" 
                                  Text="{Binding Path=CurrentStation}"></TextBox>
+                        <TextBlock Width="20"></TextBlock>
+                        <TextBox Background="White" Width="48" HorizontalAlignment="Right"
+                                 Text="{Binding Path=CrossSectionViewModel.ViewScaleFeetPerInch}" >
+                        </TextBox>
+                        <TextBlock Width="60" Text="&quot; Per Ft" Margin="4,0,0,0"></TextBlock>
                     </StackPanel>
                     <RichTextBox></RichTextBox>
                     <Canvas Name="xsCanvas"
