@@ -8,6 +8,7 @@ using ptsCogo;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Input;
 
 namespace MainRM21WPFapp.ViewModels
 {
@@ -21,6 +22,13 @@ namespace MainRM21WPFapp.ViewModels
          currentCorridor_ = parentVM_.CurrentCorridor;
          ViewScaleFeetPerInch = 10.0;
          currentCorridor_ = parentVM_.CurrentCorridor;
+         AdvanceDistance = 50.0;
+
+         AdvanceStationAheadCmd = new RelayCommand(advanceStationAhead, () => canAdvanceAhead);
+         canAdvanceAhead = true;
+
+         AdvanceStationBackCmd = new RelayCommand(advanceStationBack, () => canAdvanceBack);
+         canAdvanceBack = true;
 
       }
 
@@ -48,6 +56,21 @@ namespace MainRM21WPFapp.ViewModels
       }
 
 
+      private double advanceDistance_;
+      public double AdvanceDistance
+      {
+         get { return advanceDistance_; }
+         set
+         {
+            if (advanceDistance_ != value)
+            {
+               advanceDistance_  = value;
+               RaisePropertyChanged("AdvanceDistance");
+            }
+         }
+      }
+
+
       private double currentStation_;
       public double CurrentStation 
       {
@@ -62,6 +85,20 @@ namespace MainRM21WPFapp.ViewModels
                updateTransformedCanvas();
             }
          }
+      }
+
+      private bool canAdvanceAhead;
+      public ICommand AdvanceStationAheadCmd { get; private set; }
+      private void advanceStationAhead()
+      {
+         parentVM_.CurrentStation += AdvanceDistance;
+      }
+
+      private bool canAdvanceBack;
+      public ICommand AdvanceStationBackCmd { get; private set; }
+      private void advanceStationBack()
+      {
+         parentVM_.CurrentStation -= AdvanceDistance;
       }
 
       private void updateTransformedCanvas()

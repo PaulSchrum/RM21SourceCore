@@ -44,6 +44,7 @@
                         <RowDefinition Height="2*" />
                         <RowDefinition Height="20"></RowDefinition>
                         <RowDefinition Height="1*" />
+                        <RowDefinition Height="20" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
@@ -56,7 +57,7 @@
                     
                     <Canvas Grid.Row="1" Grid.Column="0" Margin="4" 
                             Background="Black" 
-                            Grid.ColumnSpan="1" Grid.RowSpan="3"></Canvas>
+                            Grid.ColumnSpan="1" Grid.RowSpan="4"></Canvas>
                     
                     <TextBlock Grid.Column="1" VerticalAlignment="Bottom" Margin="6,0">Corridor Tree</TextBlock>
                     <TextBlock Grid.Column="2" 
@@ -136,24 +137,36 @@
                     </TabControl>
                     
                     <StackPanel 
-                        Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"  
+                        Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
                         Orientation="Horizontal">
                         <TextBlock Width="125">Cross Section View</TextBlock>
                         <TextBlock Width="40">Station</TextBlock>
-                        <TextBox Background="White" Width="96" 
+                        <TextBox Background="White" Width="60" 
                                  Text="{Binding Path=CurrentStation}"></TextBox>
-                        <TextBlock Width="20"></TextBlock>
-                        <TextBox Background="White" Width="48" HorizontalAlignment="Right"
-                                 Text="{Binding Path=CrossSectionViewModel.ViewScaleFeetPerInch}" >
-                        </TextBox>
-                        <TextBlock Width="60" Text="&quot; Per Ft" Margin="4,0,0,0"></TextBlock>
+                        <TextBlock Width="10"></TextBlock>
+                        <Button Content="&lt;" Width="24"
+                                Command="{Binding Path=CrossSectionViewModel.AdvanceStationBackCmd}"></Button>
+                        <TextBlock Width="10"></TextBlock>
+                        <Button Content="&gt;" Width="24"
+                                Command="{Binding Path=CrossSectionViewModel.AdvanceStationAheadCmd}"></Button>
+                        <TextBlock Width="10"></TextBlock>
+                        <TextBlock>Advance Distance</TextBlock>
+                        <TextBox Background="White" Width="32" 
+                                 Text="{Binding Path=CrossSectionViewModel.AdvanceDistance}"></TextBox>
                     </StackPanel>
-                    <RichTextBox></RichTextBox>
                     <Canvas Name="xsCanvas"
                         Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" 
                             Background="Black" UseLayoutRounding="True" 
                             ClipToBounds="True">
                     </Canvas>
+                    <StackPanel
+                        Orientation="Horizontal"
+                        Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" >
+                        <TextBox Background="White" Width="48"
+                            Text="{Binding Path=CrossSectionViewModel.ViewScaleFeetPerInch}">
+                        </TextBox>
+                        <TextBlock Width="30" Text="'/&quot;" Margin="4,0,0,0"></TextBlock>
+                    </StackPanel>
                     
                 </Grid>
             </TabItem>
