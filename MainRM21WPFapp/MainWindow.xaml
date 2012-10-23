@@ -145,10 +145,10 @@
                                  Text="{Binding Path=CurrentStation}"></TextBox>
                         <TextBlock Width="10"></TextBlock>
                         <Button Content="&lt;" Width="24"
-                                Command="{Binding Path=CrossSectionViewModel.AdvanceStationBackCmd}"></Button>
+                                Command="{Binding Path=CrossSectionViewModel.AdvanceStationBackCmd}" FontWeight="Bold"></Button>
                         <TextBlock Width="10"></TextBlock>
                         <Button Content="&gt;" Width="24"
-                                Command="{Binding Path=CrossSectionViewModel.AdvanceStationAheadCmd}"></Button>
+                                Command="{Binding Path=CrossSectionViewModel.AdvanceStationAheadCmd}" FontWeight="Bold"></Button>
                         <TextBlock Width="10"></TextBlock>
                         <TextBlock>Advance Distance</TextBlock>
                         <TextBox Background="White" Width="32" 
@@ -166,6 +166,14 @@
                             Text="{Binding Path=CrossSectionViewModel.ViewScaleFeetPerInch}">
                         </TextBox>
                         <TextBlock Width="30" Text="'/&quot;" Margin="4,0,0,0"></TextBlock>
+                        <TextBlock Margin="20,0,4,0">Window Center: X</TextBlock>
+                        <TextBox Background="White" Width="48" 
+                                 Text="{Binding Path=CrossSectionViewModel.WindowCenterX}">
+                        </TextBox>
+                        <TextBlock Margin="20,0,4,0">Y</TextBlock>
+                        <TextBox Background="White" Width="48" 
+                                 Text="{Binding Path=CrossSectionViewModel.WindowCenterY}">
+                        </TextBox>
                     </StackPanel>
                     
                 </Grid>

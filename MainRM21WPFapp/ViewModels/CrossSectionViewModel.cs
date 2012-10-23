@@ -72,7 +72,7 @@ namespace MainRM21WPFapp.ViewModels
 
 
       private double currentStation_;
-      public double CurrentStation 
+      public double CurrentStation
       {
          get { return currentStation_; }
          set
@@ -86,6 +86,39 @@ namespace MainRM21WPFapp.ViewModels
             }
          }
       }
+
+      private double windowCenterX_;
+      public double WindowCenterX
+      {
+         get { return windowCenterX_; }
+         set
+         {
+            if (windowCenterX_ != value)
+            {
+               windowCenterX_ = value;
+               RaisePropertyChanged("WindowCenterX");
+
+               updateTransformedCanvas();
+            }
+         }
+      }
+
+      private double windowCenterY_;
+      public double WindowCenterY
+      {
+         get { return windowCenterY_; }
+         set
+         {
+            if (windowCenterY_ != value)
+            {
+               windowCenterY_ = value;
+               RaisePropertyChanged("WindowCenterY");
+
+               updateTransformedCanvas();
+            }
+         }
+      }
+
 
       private bool canAdvanceAhead;
       public ICommand AdvanceStationAheadCmd { get; private set; }
@@ -115,6 +148,8 @@ namespace MainRM21WPFapp.ViewModels
 
          CanvasXfrmd.Scale = ViewScaleFeetPerInch;
          CanvasXfrmd.verticalExagg = 1.0;
+         CanvasXfrmd.WindowCenterX = WindowCenterX;
+         CanvasXfrmd.WindowCenterY = WindowCenterY;
 
          CanvasXfrmd.Canvas.Children.Clear();
          currentCorridor_.DrawCrossSection(CanvasXfrmd, new CogoStation(currentStation_));

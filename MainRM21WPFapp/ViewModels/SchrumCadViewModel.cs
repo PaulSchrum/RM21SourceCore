@@ -38,6 +38,8 @@ namespace MainRM21WPFapp.ViewModels
          Canvas.LayoutTransform = new ScaleTransform(1.0, -1.0);
          translateX = Canvas.ActualWidth / 2.0;
          translateY = Canvas.ActualHeight / 2.0;
+         WindowCenterX = 0.0;
+         WindowCenterY = 0.0;
 
          inchesPerUnit = 12.0;
          Scale = 1.0;
@@ -57,6 +59,9 @@ namespace MainRM21WPFapp.ViewModels
          StrokeThickness_ = weight;
       }
       protected double StrokeThickness_;
+
+      public double WindowCenterX { get; set; }
+      public double WindowCenterY { get; set; }
 
       public void setElementColor(Color color)
       { Stroke_ = new SolidColorBrush(color); }
@@ -121,6 +126,7 @@ namespace MainRM21WPFapp.ViewModels
 
       private double TransformWorldToCanvasX(double X)
       {
+         X -= WindowCenterX;
          X *= realScale_;
          X += translateX;
          return X;
@@ -128,6 +134,7 @@ namespace MainRM21WPFapp.ViewModels
 
       private double TransformWorldToCanvasY(double Y)
       {
+         Y -= WindowCenterY;
          Y *= (realScale_ * verticalExagg);
          Y += translateY;
          return Y;
