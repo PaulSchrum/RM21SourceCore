@@ -4,8 +4,11 @@
         xmlns:mainVM="clr-namespace:MainRM21WPFapp.ViewModels"
         xmlns:corridorTreeView="clr-namespace:MainRM21WPFapp.Views"
         xmlns:corTreeVM="clr-namespace:MainRM21WPFapp.ViewModels"
+        xmlns:converters="clr-namespace:MainRM21WPFapp.Converters"
         Title="RM21 Demonstration Application" Height="500" Width="700" WindowState="Maximized">
-    
+    <Window.Resources>
+        <converters:CogoStationConverter x:Key="CogoStationConverter1" />
+    </Window.Resources>
     <Window.DataContext>
         <mainVM:MainWindowVM />
     </Window.DataContext>
@@ -142,7 +145,8 @@
                         <TextBlock Width="125">Cross Section View</TextBlock>
                         <TextBlock Width="40">Station</TextBlock>
                         <TextBox Background="White" Width="60" 
-                                 Text="{Binding Path=CurrentStation}"></TextBox>
+                                 Text="{Binding Path=CurrentStation, Converter={StaticResource CogoStationConverter1}, ConverterParameter=0}" 
+                                 DataContext="{Binding}"></TextBox>
                         <TextBlock Width="10"></TextBlock>
                         <Button Content="&lt;" Width="24"
                                 Command="{Binding Path=CrossSectionViewModel.AdvanceStationBackCmd}" FontWeight="Bold"></Button>

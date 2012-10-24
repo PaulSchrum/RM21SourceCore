@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using System.Windows.Data;
 
 namespace ptsCogo
 {
@@ -153,6 +154,6 @@ namespace ptsCogo
       /// public bool lastOperationWentPastBeginStation {get;internal set;} (may be true after subtract)
       /// public bool lastOperationWentPastEndStation {get;internal set;} (may be true after addition)
       /// public bool suppressBoundaryChecking {get;set;} -- used to increase performance
-
+      /// 
    }
 }

@@ -71,8 +71,8 @@ namespace MainRM21WPFapp.ViewModels
       }
 
 
-      private double currentStation_;
-      public double CurrentStation
+      private CogoStation currentStation_;
+      public CogoStation CurrentStation
       {
          get { return currentStation_; }
          set

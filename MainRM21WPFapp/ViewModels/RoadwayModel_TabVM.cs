@@ -19,10 +19,9 @@ namespace MainRM21WPFapp.ViewModels
       { 
          parentVM_ = parent;
          CurrentCorridor = parentVM_.CurrentCorridor;
-         this.testText9_26_ = "Not set.";
          theCorridorAsTreeViewModel = new CorridorTreeViewModel();
          CrossSectionViewModel = new CrossSectionViewModel(this);
-         CurrentStation = 1000.0;
+         CurrentStation = (CogoStation) 1100.0;
          //CrossSectionViewModel.CurrentStation = CurrentStation;
       }
 
@@ -54,22 +53,6 @@ namespace MainRM21WPFapp.ViewModels
             {
                xsVM_ = value;
                RaisePropertyChanged("CrossSectionViewModel");
-            }
-         }
-      }
-
-      private String testText9_26_;
-      public String TestText9_26
-      {
-         get { return testText9_26_; }
-         set
-         {
-            if (testText9_26_ != value)
-            {
-               testText9_26_ = value;
-               //theCorridorAsTreeViewModel = new CorridorTreeViewModel(currentCorridor_);
-               RaisePropertyChanged("TestText9_26");
-               
             }
          }
       }
@@ -113,8 +96,8 @@ namespace MainRM21WPFapp.ViewModels
          }
       }
 
-      private double currentStation_;
-      public double CurrentStation
+      private CogoStation currentStation_;
+      public CogoStation CurrentStation
       {
          get { return currentStation_; }
          set
