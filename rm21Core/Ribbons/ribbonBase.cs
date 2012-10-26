@@ -119,6 +119,7 @@ namespace rm21Core
       }
 
       protected double LiederLineHeight { get; set; }
+      protected bool SuppressSlopeText { get; set; }
 
       public virtual void DrawCrossSection(IRM21cad2dDrawingContext cadContext, 
          ref StationOffsetElevation aSOE, int whichSide)
@@ -140,17 +141,21 @@ namespace rm21Core
          string widthStr = (Math.Round(ribbonWidth*10)/10).ToString();
          cadContext.Draw(widthStr, X1 + whichSide * ribbonWidth / 2, LLH + 0.5, 0.0);
 
-         Slope mySlope = new Slope((aSOE.elevation - Y1) / (aSOE.offset - X1));
-         if (whichSide > 0)
-            cadContext.Draw(mySlope.ToString(), 
-               (X1 + aSOE.offset) / 2,
-               (Y1 + aSOE.elevation) / 2, 
-               mySlope.getAsDegrees());
-         else
-            cadContext.Draw(mySlope.FlipDirection().ToString(),
-               (X1 + aSOE.offset) / 2,
-               (Y1 + aSOE.elevation) / 2,
-               mySlope.getAsDegrees());
+         if (false == SuppressSlopeText)
+         {
+            Slope mySlope = new Slope((aSOE.elevation - Y1) / (aSOE.offset - X1));
+            if (whichSide > 0)
+               cadContext.Draw(mySlope.ToString(),
+                  (X1 + aSOE.offset) / 2,
+                  (Y1 + aSOE.elevation) / 2,
+                  mySlope.getAsDegrees());
+            else
+               cadContext.Draw(mySlope.FlipDirection().ToString(),
+                  (X1 + aSOE.offset) / 2,
+                  (Y1 + aSOE.elevation) / 2,
+                  mySlope.getAsDegrees());
+         }
+         SuppressSlopeText = false;
       }
 
       public virtual double? getActualWidth(CogoStation aStation)

@@ -97,10 +97,35 @@ namespace MainRM21WPFapp.ViewModels
          textBox.BorderThickness = new Thickness(0.0);
 
          Canvas.Children.Add(textBox);
-         textBox.SetValue(Canvas.TopProperty, TransformWorldToCanvasY(y1));
-         textBox.SetValue
-            (Canvas.LeftProperty,
-               TransformWorldToCanvasX(x1) - (textBox.ActualWidth / 2.0));
+         positionTextBoxByJustification(textBox, x1, y1, rotationAngle);
+      }
+
+      private void positionTextBoxByJustification(TextBox textBox, double X1, double Y1, double rotAngle)
+      {
+         // for now, the only justification is Center Top
+         double tWidth = textBox.ActualWidth + textBox.Margin.Left + textBox.Margin.Right;
+         tWidth /= 2.0;  // Center Justification
+         double tHeight = textBox.ActualHeight + textBox.Margin.Bottom + textBox.Margin.Top; // Bottom Justification
+
+         //double anglWidthAdjustment = -1.0 * Math.Cos(rotAngle * 180.0 / Math.PI);
+         //double anglHeightAdjustment = 
+
+         double textScale = 1.0;
+         double textHeight = 96.0 * textBox.FontSize / 72.0;
+         double textWidth = 0.4 * textBox.Text.Length * textHeight;
+
+         double adjustX1 = TransformWorldToCanvasX(X1);
+         double adjustY1 = TransformWorldToCanvasY(Y1);
+         double addAdjustX1 = textWidth * Math.Cos(rotAngle * 180.0 / Math.PI) / -2.0;
+         double addAdjustY1 = textHeight * Math.Sin(-1 * rotAngle * 180.0 / Math.PI) / 2.0;
+
+         /* * /
+         addAdjustX1 = 0.0; /* */
+         /* */
+         addAdjustY1 = 0.0; /* */
+
+         textBox.SetValue(Canvas.LeftProperty, adjustX1 + addAdjustX1);
+         textBox.SetValue(Canvas.TopProperty, adjustY1 + addAdjustY1);
       }
 
       private double scale_;

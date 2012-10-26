@@ -151,7 +151,7 @@
                         <Button Content="&lt;" Width="24"
                                 Command="{Binding Path=CrossSectionViewModel.AdvanceStationBackCmd}" FontWeight="Bold"></Button>
                         <TextBlock Width="10"></TextBlock>
-                        <Button Content="&gt;" Width="24"
+                        <Button Content="&gt;" Width="24" Name="btn_advance"
                                 Command="{Binding Path=CrossSectionViewModel.AdvanceStationAheadCmd}" FontWeight="Bold"></Button>
                         <TextBlock Width="24"></TextBlock>
                         <TextBlock>Advance Distance</TextBlock>

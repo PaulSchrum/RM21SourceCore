@@ -25,6 +25,7 @@ namespace MainRM21WPFapp
          InitializeComponent();
          MainWindowVM topVM = (MainWindowVM) DataContext;
          topVM.myViewReference = this;
+         btn_advance.Focus();
       }
 
       private void xsCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

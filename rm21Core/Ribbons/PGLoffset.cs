@@ -25,6 +25,8 @@ namespace rm21Core.Ribbons
       {
          cadContext.setElementColor(Color.FromArgb(128, 128, 128, 128));
          cadContext.setElementWeight(0.75);
+
+         SuppressSlopeText = true;
          base.DrawCrossSection(cadContext, ref aSOE, whichSide);
       }
 

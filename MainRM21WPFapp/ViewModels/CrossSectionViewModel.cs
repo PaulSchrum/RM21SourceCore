@@ -172,9 +172,9 @@ namespace MainRM21WPFapp.ViewModels
 
          System.Windows.Input.MouseWheelEventArgs wheel = e as System.Windows.Input.MouseWheelEventArgs;
          if (wheel.Delta > 0)
-            ViewScaleFeetPerInch *= Math.Sqrt(2.0);
-         else if (wheel.Delta < 0)
             ViewScaleFeetPerInch /= Math.Sqrt(2.0);
+         else if (wheel.Delta < 0)
+            ViewScaleFeetPerInch *= Math.Sqrt(2.0);
 
       }
       /* end Handle mouse scroll wheel as a way to zoom the canvas */
