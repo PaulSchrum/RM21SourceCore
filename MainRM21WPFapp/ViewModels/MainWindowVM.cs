@@ -40,9 +40,27 @@ namespace MainRM21WPFapp.ViewModels
          PGLGrouping pglGrLT = new PGLGrouping(-1);
          PGLGrouping pglGrRT = new PGLGrouping(1);
 
-         RoadwayLane rdyLane = new RoadwayLane((CogoStation)1000, (CogoStation)10000, 12.0, -0.02);
-         rdyLane.addCrossSlopeChangedSegment((CogoStation) 2200, (CogoStation) 2300, 0.08,
-            (CogoStation) 2500, (CogoStation) 2600);
+         PGLoffset pgloRT = new PGLoffset((CogoStation)1000.0, (CogoStation)10000, 0.0, 0.0);  /* PGL RT */
+         pgloRT.addWidenedSegment((CogoStation)2555.0, (CogoStation)2955.0, 15.0,
+            (CogoStation)8050.0, (CogoStation)8050.001);
+         pglGrRT.thePGLoffsetRibbon = pgloRT;
+
+         PGLoffset pgloLT = new PGLoffset((CogoStation)1000.0, (CogoStation)10000, 0.0, 0.0);  /* PGL LT */
+         pgloLT.addWidenedSegment((CogoStation)2555.0, (CogoStation)2955.0, 15.0,
+            (CogoStation)8050.0, (CogoStation)8050.001);
+         pglGrLT.thePGLoffsetRibbon = pgloLT;
+
+         /* Back Thru Lane, Inner */
+         RoadwayLane rdyLane = new RoadwayLane((CogoStation)1000, (CogoStation)10000, 0.0, -0.02);
+         rdyLane.addWidenedSegment((CogoStation)2235, (CogoStation)2555, 12.0,
+            (CogoStation)8050, (CogoStation)8050.001);
+         rdyLane.addCrossSlopeChangedSegment((CogoStation)2200, (CogoStation)2300, 0.08,
+            (CogoStation)2500, (CogoStation)2600);
+         pglGrLT.addOutsideRibbon(rdyLane);
+         /* Back Thru Lane, Outer */
+         rdyLane = new RoadwayLane((CogoStation)1000, (CogoStation)10000, 12.0, -0.02);
+         rdyLane.addCrossSlopeChangedSegment((CogoStation)2200, (CogoStation)2300, 0.08,
+            (CogoStation)2500, (CogoStation)2600);
          pglGrLT.addOutsideRibbon(rdyLane);
 
          Shoulder aShldr = new Shoulder((CogoStation)1000, (CogoStation)10000, 10.0, -0.08);
@@ -52,14 +70,51 @@ namespace MainRM21WPFapp.ViewModels
             (CogoStation)2500, (CogoStation)2600);
 
          pglGrLT.addOutsideRibbon(aShldr);
+
+         /* Outside Cut Ditch, LT */
          pglGrLT.addOutsideRibbon(new FrontSlopeCutDitch((CogoStation)1000, (CogoStation)10000, 15.0,  -1.0 / 4.0));
 
+         /* Median Shoulder LT */
+         aShldr = new Shoulder((CogoStation)1000, (CogoStation)10000, 0.0, -0.04);
+         aShldr.addWidenedSegment((CogoStation)2555.0, (CogoStation)2715.0, 6.0,
+            (CogoStation)8050.0, (CogoStation)8050.001);
+         pglGrLT.addInsideRibbon(aShldr);
+
+         /* Median Ditch Slope LT */
+         FrontSlopeCutDitch ditchFS = new FrontSlopeCutDitch((CogoStation) 1000, (CogoStation) 10000, 0.0,  -1.0 / 4.0);
+         ditchFS.addWidenedSegment((CogoStation) 2715.0, (CogoStation) 2955.0, 9.0,
+            (CogoStation)8050.0, (CogoStation)8050.001);
+         pglGrLT.addInsideRibbon(ditchFS);
+
+
+         /* Ahead Thru Lane, Inner */
+         rdyLane = new RoadwayLane((CogoStation)1000, (CogoStation)10000, 0.0, -0.02);
+         rdyLane.addWidenedSegment((CogoStation)2235, (CogoStation)2555, 12.0,
+            (CogoStation)8050, (CogoStation)8050.001);
+         rdyLane.addCrossSlopeChangedSegment((CogoStation)2240, (CogoStation)2300, -0.08,
+            (CogoStation)2500, (CogoStation)2560);
+         pglGrRT.addOutsideRibbon(rdyLane);
+
+         /* Ahead Thru Lane, Outer */
          rdyLane = new RoadwayLane((CogoStation)1000, (CogoStation)10000, 12.0, -0.02);
          rdyLane.addCrossSlopeChangedSegment((CogoStation)2240, (CogoStation)2300, -0.08,
             (CogoStation)2500, (CogoStation)2560);
          pglGrRT.addOutsideRibbon(rdyLane);
          pglGrRT.addOutsideRibbon(new Shoulder((CogoStation)1000, (CogoStation)10000, 10.0, -0.08));
          pglGrRT.addOutsideRibbon(new FrontSlopeCutDitch((CogoStation)1000, (CogoStation)10000, 15.0, -1.0 / 4.0));
+
+         /* Median Shoulder RT */
+         aShldr = new Shoulder((CogoStation)1000, (CogoStation)10000, 0.0, -0.04);  
+         aShldr.addWidenedSegment((CogoStation)2555.0, (CogoStation)2715.0, 6.0,
+            (CogoStation)8050.0, (CogoStation)8050.001);
+         pglGrRT.addInsideRibbon(aShldr);
+
+         /* Median Ditch Slope RT */
+         ditchFS = new FrontSlopeCutDitch((CogoStation)1000, (CogoStation)10000, 0.0, -1.0 / 4.0);
+         ditchFS.addWidenedSegment((CogoStation)2715.0, (CogoStation)2955.0, 9.0,
+            (CogoStation)8050.0, (CogoStation)8050.001);
+         pglGrRT.addInsideRibbon(ditchFS);
+
 
          aCorridor.addPGLgrouping(pglGrLT);
          aCorridor.addPGLgrouping(pglGrRT);

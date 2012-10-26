@@ -58,9 +58,9 @@
                     </TextBlock>  -->
                     <TextBlock Grid.Row="0" Grid.Column="0">Plan View Schematic</TextBlock>
                     
-                    <Canvas Grid.Row="1" Grid.Column="0" Margin="4" 
-                            Background="Black" 
-                            Grid.ColumnSpan="1" Grid.RowSpan="4"></Canvas>
+                    <Canvas Grid.Row="1" Margin="4" 
+                            Background="Black" Grid.RowSpan="3"
+                            Name="planCanvas"></Canvas>
                     
                     <TextBlock Grid.Column="1" VerticalAlignment="Bottom" Margin="6,0">Corridor Tree</TextBlock>
                     <TextBlock Grid.Column="2" 
@@ -153,7 +153,7 @@
                         <TextBlock Width="10"></TextBlock>
                         <Button Content="&gt;" Width="24"
                                 Command="{Binding Path=CrossSectionViewModel.AdvanceStationAheadCmd}" FontWeight="Bold"></Button>
-                        <TextBlock Width="10"></TextBlock>
+                        <TextBlock Width="24"></TextBlock>
                         <TextBlock>Advance Distance</TextBlock>
                         <TextBox Background="White" Width="32" 
                                  Text="{Binding Path=CrossSectionViewModel.AdvanceDistance}"></TextBox>

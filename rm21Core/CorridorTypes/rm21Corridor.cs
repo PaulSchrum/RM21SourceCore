@@ -61,9 +61,9 @@ namespace rm21Core
       {
          cadContext.setElementColor(Color.FromArgb(255, 255, 255, 255));
          cadContext.setElementWeight(1.5);
-         cadContext.Draw(0.0, 0.5, 0.0, 7.0);
-         cadContext.Draw("C", -0.75, 7.6, 0.0);
-         cadContext.Draw("L", -0.5, 7.3, 0.0);
+         cadContext.Draw(0.0, 0.5, 0.0, 8.0);
+         cadContext.Draw("C", -0.75, 8.6, 0.0);
+         cadContext.Draw("L", -0.5, 8.3, 0.0);
       }
 
       public void DrawCrossSection(IRM21cad2dDrawingContext cadContext, CogoStation station)

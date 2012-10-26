@@ -34,6 +34,7 @@ namespace rm21Core
          Widths = new Profile(beginStation, endStation, initialWidth);
          interpretCrossSlopes = new Profile(beginStation, endStation, (double)enmCrossSlopeInterpret.xPercentage);
          CrossSlopes = new Profile(beginStation, endStation, initialSlope);
+         LiederLineHeight = 5.0;
       }
 
       public virtual void addWidenedSegment(CogoStation beginOpenTaperStation, CogoStation endOpenTaperStation, double newTotalWidth,
@@ -117,9 +118,12 @@ namespace rm21Core
          aSOE.elevation += traversedWidth * (double)crossSlope;
       }
 
+      protected double LiederLineHeight { get; set; }
+
       public virtual void DrawCrossSection(IRM21cad2dDrawingContext cadContext, 
          ref StationOffsetElevation aSOE, int whichSide)
       {
+         double LLH = LiederLineHeight;
          double ribbonWidth;
          double X1 = aSOE.offset;
          double Y1 = aSOE.elevation;
@@ -131,10 +135,10 @@ namespace rm21Core
          ribbonWidth = Math.Abs(aSOE.offset - X1);
          cadContext.setElementWeight(0.8);
          cadContext.setElementColor(Color.FromArgb(124, 255, 255, 255));
-         cadContext.Draw(X1, 5.5, aSOE.offset, 5.5);
-         cadContext.Draw(aSOE.offset, 0.5, aSOE.offset, 6.5);
+         cadContext.Draw(X1, LLH + 0.5, aSOE.offset, LLH + 0.5);
+         cadContext.Draw(aSOE.offset, 0.5, aSOE.offset, LLH + 1.5);
          string widthStr = (Math.Round(ribbonWidth*10)/10).ToString();
-         cadContext.Draw(widthStr, X1 + whichSide * ribbonWidth / 2, 6.0, 0.0);
+         cadContext.Draw(widthStr, X1 + whichSide * ribbonWidth / 2, LLH + 0.5, 0.0);
 
          Slope mySlope = new Slope((aSOE.elevation - Y1) / (aSOE.offset - X1));
          if (whichSide > 0)

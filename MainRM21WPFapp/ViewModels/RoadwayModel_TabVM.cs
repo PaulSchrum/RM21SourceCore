@@ -21,7 +21,7 @@ namespace MainRM21WPFapp.ViewModels
          CurrentCorridor = parentVM_.CurrentCorridor;
          theCorridorAsTreeViewModel = new CorridorTreeViewModel();
          CrossSectionViewModel = new CrossSectionViewModel(this);
-         CurrentStation = (CogoStation) 1100.0;
+         CurrentStation = (CogoStation) 1975.0;
          //CrossSectionViewModel.CurrentStation = CurrentStation;
       }
 
