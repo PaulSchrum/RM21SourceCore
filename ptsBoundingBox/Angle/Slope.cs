@@ -23,7 +23,7 @@ namespace ptsCogo.Angle
          if (this.isVertical() == true)
             return this;
 
-         return new Slope(-1.0 * Math.Atan(angle_));
+         return new Slope(-1.0 * Math.Asin(angle_));
 
       } /* */
 
