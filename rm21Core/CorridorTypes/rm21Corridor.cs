@@ -57,25 +57,31 @@ namespace rm21Core
          return Name;
       }
 
-      private void DrawCenterLineAnnotationelements(IRM21cad2dDrawingContext cadContext, CogoStation station)
+      private void DrawCenterLineAnnotationelementsForXS(IRM21cad2dDrawingContext cadContext, CogoStation station)
       {
          cadContext.setElementColor(Color.FromArgb(255, 255, 255, 255));
          cadContext.setElementWeight(1.5);
          cadContext.Draw(0.0, 0.5, 0.0, 8.0);
-         cadContext.Draw("C", -0.75, 8.6, 0.0);
-         cadContext.Draw("L", -0.5, 8.3, 0.0);
+         cadContext.Draw("C", -0.45, 8.6, 0.0);
+         cadContext.Draw("L", -0.2, 8.3, 0.0);
       }
 
       public void DrawCrossSection(IRM21cad2dDrawingContext cadContext, CogoStation station)
       {
          if (allPGLgroupings != null)
          {
-            DrawCenterLineAnnotationelements(cadContext, station);
+            DrawCenterLineAnnotationelementsForXS(cadContext, station);
             foreach (var pglGrouping in allPGLgroupings)
             {
                pglGrouping.DrawCrossSection(cadContext, station, pglGrouping.myIndex);
             }
          }
+      }
+
+      public void DrawPlanViewSchematic(IRM21cad2dDrawingContext cadContext, CogoStation station)
+      {
+         cadContext.setElementColor(Color.FromArgb(255, 255, 255, 0));  // yellow
+         cadContext.setElementWeight(2.25);
       }
 
    }
@@ -90,6 +96,8 @@ namespace rm21Core
 
 public interface IRM21cad2dDrawingContext
 {
+   void resetDashArray();
+   void addToDashArray(double dashLength);
    void setElementLevel(string LevelName);
    void setElementColor(Color Color);
    void setElementWeight(double Weight);

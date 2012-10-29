@@ -47,6 +47,8 @@ namespace MainRM21WPFapp.ViewModels
 
          StrokeThickness_ = 1.0;
          Stroke_ = Brushes.White;
+         strokeDashArray_ = new DoubleCollection();
+
       }
 
       public Canvas Canvas { get; set; }
@@ -67,6 +69,15 @@ namespace MainRM21WPFapp.ViewModels
       { Stroke_ = new SolidColorBrush(color); }
       protected SolidColorBrush Stroke_;
 
+
+      public void resetDashArray()
+      {
+         strokeDashArray_ = new DoubleCollection();
+      }
+      public void addToDashArray(double dashLength)
+      { strokeDashArray_.Add(dashLength);}
+      protected DoubleCollection strokeDashArray_ { get; set; }
+
       public void Draw(double X1, double Y1, double X2, double Y2)
       {
          Line aLine = new Line();
@@ -78,6 +89,7 @@ namespace MainRM21WPFapp.ViewModels
          aLine.VerticalAlignment = VerticalAlignment.Bottom;
          aLine.StrokeThickness = StrokeThickness_;
          aLine.Stroke = Stroke_;
+         aLine.StrokeDashArray = strokeDashArray_;
 
          TransformWorldToCanvas(ref aLine);
          Canvas.Children.Add(aLine);
@@ -204,6 +216,7 @@ namespace MainRM21WPFapp.ViewModels
          return returnTextBlock;
 
       }
+
 
    }
 

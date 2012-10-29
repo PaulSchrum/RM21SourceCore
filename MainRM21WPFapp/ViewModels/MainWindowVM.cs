@@ -128,6 +128,7 @@ namespace MainRM21WPFapp.ViewModels
          set 
          { 
             myViewReference_ = value;
+            RoadwayModelTabVM.CrossSectionViewModel.initializeDrawing();
          } 
       }
 

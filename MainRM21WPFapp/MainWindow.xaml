@@ -171,7 +171,8 @@
                         Orientation="Horizontal"
                         Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" >
                         <TextBox Background="White" Width="48"
-                            Text="{Binding Path=CrossSectionViewModel.ViewScaleFeetPerInch}">
+                            Text="{Binding Path=CrossSectionViewModel.ViewScaleFeetPerInch}" 
+                                 ToolTip="View Scale">
                         </TextBox>
                         <TextBlock Width="30" Text="'/&quot;" Margin="4,0,0,0"></TextBlock>
                         <TextBlock Margin="20,0,4,0">Window Center: X</TextBlock>

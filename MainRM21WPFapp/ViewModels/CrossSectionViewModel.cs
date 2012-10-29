@@ -207,6 +207,11 @@ namespace MainRM21WPFapp.ViewModels
          parentVM_.CurrentStation -= AdvanceDistance;
       }
 
+      internal void initializeDrawing()
+      {
+         //updateTransformedCanvas();
+      }
+
       private void updateTransformedCanvas()
       {
          if (parentVM_ == null) return;

@@ -23,8 +23,10 @@ namespace rm21Core.Ribbons
       public override void DrawCrossSection(IRM21cad2dDrawingContext cadContext,
          ref StationOffsetElevation aSOE, int whichSide)
       {
+         base.setupCrossSectionDrawing(cadContext);
          cadContext.setElementColor(Color.FromArgb(128, 128, 128, 128));
          cadContext.setElementWeight(0.75);
+         cadContext.addToDashArray(5);
 
          SuppressSlopeText = true;
          base.DrawCrossSection(cadContext, ref aSOE, whichSide);

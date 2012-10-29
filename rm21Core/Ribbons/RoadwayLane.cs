@@ -20,7 +20,8 @@ namespace rm21Core
       public override void DrawCrossSection(IRM21cad2dDrawingContext cadContext, 
          ref StationOffsetElevation aSOE, int whichSide)
       {
-         cadContext.setElementColor(Color.FromArgb(255, 128, 128,128));
+         base.setupCrossSectionDrawing(cadContext);
+         cadContext.setElementColor(Color.FromArgb(255, 128, 128, 128));
          cadContext.setElementWeight(1.5);
          base.DrawCrossSection(cadContext, ref aSOE, whichSide);
       }

@@ -121,6 +121,11 @@ namespace rm21Core
       protected double LiederLineHeight { get; set; }
       protected bool SuppressSlopeText { get; set; }
 
+      public void setupCrossSectionDrawing(IRM21cad2dDrawingContext cadContext)
+      {
+         cadContext.resetDashArray();
+      }
+
       public virtual void DrawCrossSection(IRM21cad2dDrawingContext cadContext, 
          ref StationOffsetElevation aSOE, int whichSide)
       {
@@ -133,6 +138,7 @@ namespace rm21Core
 
          cadContext.Draw(X1, Y1, aSOE.offset, aSOE.elevation);
 
+         setupCrossSectionDrawing(cadContext);
          ribbonWidth = Math.Abs(aSOE.offset - X1);
          cadContext.setElementWeight(0.8);
          cadContext.setElementColor(Color.FromArgb(124, 255, 255, 255));
