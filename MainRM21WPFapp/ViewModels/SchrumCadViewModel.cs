@@ -121,11 +121,6 @@ namespace MainRM21WPFapp.ViewModels
          double addAdjustX1 = textWidth * Math.Cos(rotAngle * Math.PI / 180.0) / -2.0;
          double addAdjustY1 = textHeight * Math.Sin(-1 * rotAngle * Math.PI / 180.0) / 2.0;
          
-         /* * /
-         addAdjustX1 = 0.0; /* */
-         /* * /
-         addAdjustY1 = 0.0; /* */
-
          textBox.SetValue(Canvas.LeftProperty, adjustX1 + addAdjustX1);
          textBox.SetValue(Canvas.TopProperty, adjustY1 + addAdjustY1);
       }
