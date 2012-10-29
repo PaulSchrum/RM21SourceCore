@@ -5,7 +5,7 @@
         xmlns:corridorTreeView="clr-namespace:MainRM21WPFapp.Views"
         xmlns:corTreeVM="clr-namespace:MainRM21WPFapp.ViewModels"
         xmlns:converters="clr-namespace:MainRM21WPFapp.Converters"
-        Title="RM21 Demonstration Application" Height="500" Width="700" WindowState="Maximized">
+        Title="RM21 Demonstration Application" Height="500" Width="700" WindowState="Maximized" ContentRendered="Window_ContentRendered">
     <Window.Resources>
         <converters:CogoStationConverter x:Key="CogoStationConvert" />
     </Window.Resources>
@@ -58,9 +58,12 @@
                     </TextBlock>  -->
                     <TextBlock Grid.Row="0" Grid.Column="0">Plan View Schematic</TextBlock>
                     
-                    <Canvas Grid.Row="1" Margin="4" 
+                    <Canvas Name="psCanvas"
+                        Grid.Row="1" Margin="4" 
                             Background="Black" Grid.RowSpan="3"
-                            Name="planCanvas"></Canvas>
+                            UseLayoutRounding="True" 
+                            ClipToBounds="True" 
+                            ></Canvas>
                     
                     <TextBlock Grid.Column="1" VerticalAlignment="Bottom" Margin="6,0">Corridor Tree</TextBlock>
                     <TextBlock Grid.Column="2" 

@@ -28,8 +28,8 @@ namespace ptsCogo
       }
       
       private List<Region> allRegions;
-      internal double minTrueStation;
-      internal double maxTrueStation;
+      public double BeginStation { get; set; }
+      public double EndStation {get; set;}
       private GenericAlignment anAlignment;
 
       public GenericAlignment() { Parent = null; }
@@ -37,8 +37,8 @@ namespace ptsCogo
       {
          allRegions = new List<Region>();
          allRegions.Add(new Region(beginSta, endSta, 1));
-         minTrueStation = beginSta;
-         maxTrueStation = endSta;
+         BeginStation = beginSta;
+         EndStation = endSta;
       }
 
       public GenericAlignment(GenericAlignment anAlignment)
@@ -53,7 +53,7 @@ namespace ptsCogo
 
          Region aNewRegion = new Region(beginSta, endSta, allRegions.Count);
          aNewRegion.trueBeginStation_ = allRegions[allRegions.Count - 1].getEndTrueStation();
-         maxTrueStation = maxTrueStation + (endSta - beginSta);
+         EndStation = EndStation + (endSta - beginSta);
          allRegions.Add(aNewRegion);
       }
 
@@ -105,14 +105,14 @@ namespace ptsCogo
          aStationRef.trueStation = trueStation;
          aStationRef.region = getRegionFromTrueStation(trueStation);
          Region aRegion = allRegions[aStationRef.region - 1];
-         if (trueStation > maxTrueStation)
+         if (trueStation > EndStation)
          {
-            aStationRef.extended = trueStation - maxTrueStation;
+            aStationRef.extended = trueStation - EndStation;
             aStationRef.station = aRegion.endStationDbl;
          }
-         else if (trueStation < minTrueStation)
+         else if (trueStation < BeginStation)
          {
-            aStationRef.extended = trueStation - minTrueStation;
+            aStationRef.extended = trueStation - BeginStation;
             aStationRef.region = 1;
             aStationRef.station = aRegion.beginStationDbl;
          }
@@ -122,9 +122,9 @@ namespace ptsCogo
 
       internal int getRegionFromTrueStation(double trueStation)
       {
-         if (trueStation < minTrueStation)
+         if (trueStation < BeginStation)
             return 1;
-         else if (trueStation > maxTrueStation)
+         else if (trueStation > EndStation)
             return allRegions.Count;
          else
          {

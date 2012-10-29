@@ -20,10 +20,11 @@ namespace MainRM21WPFapp
    /// </summary>
    public partial class MainWindow : Window
    {
+      private MainWindowVM topVM { get; set; }
       public MainWindow()
       {
          InitializeComponent();
-         MainWindowVM topVM = (MainWindowVM) DataContext;
+         topVM = (MainWindowVM) DataContext;
          topVM.myViewReference = this;
          btn_advance.Focus();
       }
@@ -71,6 +72,11 @@ namespace MainRM21WPFapp
          topVM.myViewReference = this;
          RoadwayModel_TabVM rvm = topVM.RoadwayModelTabVM;
          rvm.CrossSectionViewModel.StationTextMouseWheel(sender, e);
+      }
+
+      private void Window_ContentRendered(object sender, EventArgs e)
+      {
+         topVM.updateCanvases();
       }
 
    }

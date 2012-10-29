@@ -27,6 +27,8 @@ namespace rm21Core
          Name = name_;
       }
 
+      public GenericAlignment Alignment = new GenericAlignment(1000.0, 10000.0);
+
       public string Name { get; set; }
 
       public void addPGLgrouping(PGLGrouping aPGLgrouping)
@@ -82,6 +84,13 @@ namespace rm21Core
       {
          cadContext.setElementColor(Color.FromArgb(255, 255, 255, 0));  // yellow
          cadContext.setElementWeight(2.25);
+
+         double begSta = Alignment.BeginStation;
+         double endSta = Alignment.EndStation;
+
+         //cadContext.Draw(0.0, begSta, 0.0, endSta);
+         cadContext.Draw(0.0, 10.0, 2.0, 20.00);
+
       }
 
    }

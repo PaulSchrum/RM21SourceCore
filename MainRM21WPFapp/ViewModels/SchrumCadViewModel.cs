@@ -122,7 +122,7 @@ namespace MainRM21WPFapp.ViewModels
          //double anglWidthAdjustment = -1.0 * Math.Cos(rotAngle * 180.0 / Math.PI);
          //double anglHeightAdjustment = 
 
-         double textScale = 1.0;
+         //double textScale = 1.0;
          double textHeight = 96.0 * textBox.FontSize / 72.0;
          double textWidth = 0.4 * textBox.Text.Length * textHeight;
 

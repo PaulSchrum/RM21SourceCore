@@ -12,9 +12,10 @@ using System.Windows.Input;
 
 namespace MainRM21WPFapp.ViewModels
 {
-   public class CrossSectionViewModel : SchrumCadViewModel
+   public class PlanSchematicViewModel : SchrumCadViewModel
    {
-      public CrossSectionViewModel(RoadwayModel_TabVM parentVM) : base()
+      public PlanSchematicViewModel(RoadwayModel_TabVM parentVM)
+         : base()
       {
          parentVM_ = parentVM;
          if (parentVM_ == null) return;
@@ -35,7 +36,7 @@ namespace MainRM21WPFapp.ViewModels
 
       }
 
-      public Canvas xsCanvas{get; set;}
+      public Canvas planCanvas{get; set;}
       public TransformedCanvas CanvasXfrmd;
 
       private RoadwayModel_TabVM parentVM_;
@@ -222,7 +223,7 @@ namespace MainRM21WPFapp.ViewModels
 
          if (CanvasXfrmd == null)
             CanvasXfrmd = 
-               new TransformedCanvas(parentVM_.parentVM_.myViewReference.xsCanvas);
+               new TransformedCanvas(parentVM_.parentVM_.myViewReference.psCanvas);
 
          CanvasXfrmd.Scale = ViewScaleFeetPerInch;
          CanvasXfrmd.verticalExagg = 1.0;
@@ -230,7 +231,14 @@ namespace MainRM21WPFapp.ViewModels
          CanvasXfrmd.WindowCenterY = WindowCenterY;
 
          CanvasXfrmd.Canvas.Children.Clear();
-         currentCorridor_.DrawCrossSection(CanvasXfrmd, new CogoStation(currentStation_));
+
+         CogoStation passStation;
+         if (null == currentStation_)
+            passStation = null;
+         else
+            passStation = new CogoStation(currentStation_);
+
+         currentCorridor_.DrawPlanViewSchematic(CanvasXfrmd, passStation);
       }
    }
 }

@@ -22,7 +22,7 @@ namespace MainRM21WPFapp.ViewModels
          theCorridorAsTreeViewModel = new CorridorTreeViewModel();
          CrossSectionViewModel = new CrossSectionViewModel(this);
          CurrentStation = (CogoStation) 1975.0;
-         //CrossSectionViewModel.CurrentStation = CurrentStation;
+         PlanSchematicViewModel = new PlanSchematicViewModel(this);
       }
 
       internal MainWindowVM parentVM_;
@@ -53,6 +53,20 @@ namespace MainRM21WPFapp.ViewModels
             {
                xsVM_ = value;
                RaisePropertyChanged("CrossSectionViewModel");
+            }
+         }
+      }
+
+      private PlanSchematicViewModel psVM_;
+      public PlanSchematicViewModel PlanSchematicViewModel
+      {
+         get { return psVM_; }
+         set
+         {
+            if (psVM_ != value)
+            {
+               psVM_ = value;
+               RaisePropertyChanged("PlanSchematicViewModel");
             }
          }
       }
@@ -108,6 +122,9 @@ namespace MainRM21WPFapp.ViewModels
                RaisePropertyChanged("CurrentStation");
                if (null != CrossSectionViewModel)
                   CrossSectionViewModel.CurrentStation = currentStation_;
+               /*
+               if (null != PlanSchematicViewModel)
+                  PlanSchematicViewModel.CurrentStation = currentStation_; */
             }
          }
       }

@@ -37,6 +37,9 @@ namespace MainRM21WPFapp.ViewModels
             theRM21model.allCorridors.FirstOrDefault
                   (aCorr => aCorr.Name.Equals("L"));
 
+         aCorridor.Alignment.BeginStation = 1000.0;
+         aCorridor.Alignment.EndStation = 10000.0;
+
          PGLGrouping pglGrLT = new PGLGrouping(-1);
          PGLGrouping pglGrRT = new PGLGrouping(1);
 
@@ -128,7 +131,7 @@ namespace MainRM21WPFapp.ViewModels
          set 
          { 
             myViewReference_ = value;
-            RoadwayModelTabVM.CrossSectionViewModel.initializeDrawing();
+            //RoadwayModelTabVM.CrossSectionViewModel.initializeDrawing();
          } 
       }
 
@@ -174,6 +177,15 @@ namespace MainRM21WPFapp.ViewModels
                TestText3_9_26 = "Top level test, " + currentCorridor_.Name;
                RaisePropertyChanged("CurrentCorridor");
             }
+         }
+      }
+
+      public void updateCanvases()
+      {
+         if (null != RoadwayModelTabVM)
+         {
+            RoadwayModelTabVM.CrossSectionViewModel.initializeDrawing();
+            RoadwayModelTabVM.PlanSchematicViewModel.initializeDrawing();
          }
       }
 

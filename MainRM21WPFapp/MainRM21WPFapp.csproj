@@ -64,6 +64,7 @@
     <Compile Include="ViewModels\MainWindowVM.cs" />
     <Compile Include="ViewModels\NotifyPropertyChangedVMbase.cs" />
     <Compile Include="ViewModels\PglGroupingViewModel.cs" />
+    <Compile Include="ViewModels\PlanSchematicViewModel.cs" />
     <Compile Include="ViewModels\RibbonAspectVMbase.cs" />
     <Compile Include="ViewModels\RibbonCrossSlopesVM.cs" />
     <Compile Include="ViewModels\RibbonViewModel.cs" />
