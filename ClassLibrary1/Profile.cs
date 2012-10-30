@@ -15,8 +15,8 @@ namespace ptsCogo
       private double stationEqualityTolerance = 0.00005;
       private bool iHaveOneOrMoreVerticalCurves { get; set; }
 
-      public double beginProfTrueStation {get; private set;}
-      public double endProfTrueStation { get; private set; }
+      public double BeginProfTrueStation {get; private set;}
+      public double EndProfTrueStation { get; private set; }
 
       private vpiList thisAsVpiList_;  // To Do: Make sure all modifications to the data
       // get reflected in thisAsVpiList.
@@ -61,19 +61,19 @@ namespace ptsCogo
             rawVPI vpi2 = rawVPIlist.getVPIbyIndex(1);
 
             verticalCurve aNewVerticalCurve = new verticalCurve();
-            aNewVerticalCurve.beginElevation = vpi1.Elevation;
+            aNewVerticalCurve.BeginElevation = vpi1.Elevation;
 
-            aNewVerticalCurve.beginStation = vpi1.Station;
-            beginProfTrueStation = vpi1.Station.trueStation;
+            aNewVerticalCurve.BeginStation = vpi1.Station;
+            BeginProfTrueStation = vpi1.Station.trueStation;
             
-            aNewVerticalCurve.length = vpi2.Station - vpi1.Station;
-            endProfTrueStation = vpi2.Station.trueStation;
+            aNewVerticalCurve.Length = vpi2.Station - vpi1.Station;
+            EndProfTrueStation = vpi2.Station.trueStation;
 
-            aNewVerticalCurve.beginSlope = (vpi2.Elevation - vpi1.Elevation) /
-                                             aNewVerticalCurve.length;
-            aNewVerticalCurve.isTangent = true;
-            aNewVerticalCurve.beginIsPINC = false;
-            aNewVerticalCurve.endIsPINC = false;
+            aNewVerticalCurve.BeginSlope = (vpi2.Elevation - vpi1.Elevation) /
+                                             aNewVerticalCurve.Length;
+            aNewVerticalCurve.IsTangent = true;
+            aNewVerticalCurve.IsBeginPINC = false;
+            aNewVerticalCurve.IsEndPINC = false;
 
             allVCs = new List<verticalCurve>();
             allVCs.Add(aNewVerticalCurve);
@@ -102,7 +102,7 @@ namespace ptsCogo
                      if (count == 3)
                      {
                         allVCs = new List<verticalCurve>();
-                        beginProfTrueStation = vpi1.Station.trueStation;
+                        BeginProfTrueStation = vpi1.Station.trueStation;
                      }
 
                      g1 = (vpi2.Elevation - vpi1.Elevation) /
@@ -118,23 +118,23 @@ namespace ptsCogo
                      if (incomingTanLen > 0.0)
                      {
                         newVC = new verticalCurve();
-                        newVC.beginSlope = g1;
-                        newVC.beginStation = vpi1.getEndStation();
-                        newVC.endSlope = g1;
-                        newVC.length = incomingTanLen;
-                        newVC.beginElevation = vpi2.Elevation + getELchangeAlongSlope(g1, 
+                        newVC.BeginSlope = g1;
+                        newVC.BeginStation = vpi1.getEndStation();
+                        newVC.EndSlope = g1;
+                        newVC.Length = incomingTanLen;
+                        newVC.BeginElevation = vpi2.Elevation + getELchangeAlongSlope(g1, 
                            (vpi1.getEndStation() - vpi2.Station));
                         
-                        newVC.beginIsPINC = false;
+                        newVC.IsBeginPINC = false;
                         if (allVCs.Count > 0)
                         {
-                           newVC.beginIsPINC = allVCs.Last<verticalCurve>().endIsPINC;
+                           newVC.IsBeginPINC = allVCs.Last<verticalCurve>().IsEndPINC;
                         }
 
-                        newVC.endIsPINC = false;
+                        newVC.IsEndPINC = false;
                         if (utilFunctions.tolerantCompare(vpi2.Length, 0.0, stationEqualityTolerance) == 0)
                         {
-                           newVC.endIsPINC = true;
+                           newVC.IsEndPINC = true;
                         }
                         
                         allVCs.Add(newVC);
@@ -146,13 +146,13 @@ namespace ptsCogo
                      {
                         iHaveOneOrMoreVerticalCurves = true;
                         newVC = new verticalCurve();
-                        newVC.beginSlope = g1;
-                        newVC.beginStation = vpi2.getBeginStation();
-                        newVC.endSlope = g2;
-                        newVC.length = vpi2.Length;
-                        newVC.beginElevation = vpi2.Elevation - getELchangeAlongSlope(g1, newVC.length / 2.0);
+                        newVC.BeginSlope = g1;
+                        newVC.BeginStation = vpi2.getBeginStation();
+                        newVC.EndSlope = g2;
+                        newVC.Length = vpi2.Length;
+                        newVC.BeginElevation = vpi2.Elevation - getELchangeAlongSlope(g1, newVC.Length / 2.0);
                         allVCs.Add(newVC);
-                        endProfTrueStation = newVC.beginStation.trueStation + newVC.length;
+                        EndProfTrueStation = newVC.BeginStation.trueStation + newVC.Length;
                      }
                      // End: add a VC for the current vertical curve if VClen > 0
 
@@ -163,22 +163,22 @@ namespace ptsCogo
                         if (outgoingTangentLength > 0.0)
                         {
                            newVC = new verticalCurve();
-                           newVC.beginSlope = g2;
-                           newVC.beginStation = vpi2.getEndStation();
-                           newVC.endSlope = g2;
-                           newVC.length = outgoingTangentLength;
-                           newVC.beginElevation = vpi2.Elevation + getELchangeAlongSlope(g2, vpi2.Length / 2.0);
+                           newVC.BeginSlope = g2;
+                           newVC.BeginStation = vpi2.getEndStation();
+                           newVC.EndSlope = g2;
+                           newVC.Length = outgoingTangentLength;
+                           newVC.BeginElevation = vpi2.Elevation + getELchangeAlongSlope(g2, vpi2.Length / 2.0);
                            
-                           newVC.beginIsPINC = false;
+                           newVC.IsBeginPINC = false;
                            if (allVCs.Count > 0)
                            {
-                              newVC.beginIsPINC = allVCs.Last<verticalCurve>().endIsPINC;
+                              newVC.IsBeginPINC = allVCs.Last<verticalCurve>().IsEndPINC;
                            }
 
-                           newVC.endIsPINC = false;
+                           newVC.IsEndPINC = false;
 
                            allVCs.Add(newVC);
-                           endProfTrueStation = newVC.beginStation.trueStation + newVC.length;
+                           EndProfTrueStation = newVC.BeginStation.trueStation + newVC.Length;
                         }
                      }
                      // End: if this is the final VPI, add a final tangent if necessary
@@ -213,12 +213,12 @@ namespace ptsCogo
          foreach (var profSeg in allVCs)
          {
             count--;
-            if (profSeg.length > 0.0)
+            if (profSeg.Length > 0.0)
             {
-               returnList.add(new rawVPI(profSeg.beginStation, profSeg.beginElevation));
+               returnList.add(new rawVPI(profSeg.BeginStation, profSeg.BeginElevation));
                if (count == -1)
                {
-                  returnList.add(new rawVPI(profSeg.endStation, profSeg.endElevation));
+                  returnList.add(new rawVPI(profSeg.EndStation, profSeg.EndElevation));
                }
             }
          }
@@ -238,38 +238,38 @@ namespace ptsCogo
          newVC = new verticalCurve();
          // To Do's
          //Insert new pi after last station
-         if (newStation > endProfTrueStation)
+         if (newStation > EndProfTrueStation)
          {
             vcIndex = allVCs.Count - 1;
             otherVC = allVCs[vcIndex];
-            newVC.beginStation = otherVC.endStation;
-            endProfTrueStation = newStation.trueStation;
-            otherVC.endIsPINC = true;
-            newVC.beginElevation = verticalCurve.getElevation(otherVC, (CogoStation)otherVC.endStation);
-            newVC.beginIsPINC = true;
-            newVC.endIsPINC = false;
-            newVC.isTangent = true;
-            newVC.beginSlope = (newElevation - newVC.beginElevation) /
-                  (newStation - newVC.beginStation);
-            newVC.endSlope = newVC.beginSlope;
-            newVC.length = newStation - newVC.beginStation;
+            newVC.BeginStation = otherVC.EndStation;
+            EndProfTrueStation = newStation.trueStation;
+            otherVC.IsEndPINC = true;
+            newVC.BeginElevation = verticalCurve.getElevation(otherVC, (CogoStation)otherVC.EndStation);
+            newVC.IsBeginPINC = true;
+            newVC.IsEndPINC = false;
+            newVC.IsTangent = true;
+            newVC.BeginSlope = (newElevation - newVC.BeginElevation) /
+                  (newStation - newVC.BeginStation);
+            newVC.EndSlope = newVC.BeginSlope;
+            newVC.Length = newStation - newVC.BeginStation;
             allVCs.Add(newVC);
          }
-         else if (newStation < beginProfTrueStation)  //Insert new pi before first station
+         else if (newStation < BeginProfTrueStation)  //Insert new pi before first station
          {
             vcIndex = 0;
             otherVC = allVCs[vcIndex];
-            newVC.beginStation = newStation;
-            beginProfTrueStation = newStation.trueStation;
-            otherVC.beginIsPINC = true;
-            newVC.beginElevation = newElevation;
-            newVC.beginIsPINC = false;
-            newVC.endIsPINC = true;
-            newVC.isTangent = true;
-            newVC.beginSlope = (otherVC.beginElevation - newElevation) /
-                  (otherVC.beginStation - newStation);
-            newVC.endSlope = newVC.beginSlope;
-            newVC.length = otherVC.beginStation - newStation;
+            newVC.BeginStation = newStation;
+            BeginProfTrueStation = newStation.trueStation;
+            otherVC.IsBeginPINC = true;
+            newVC.BeginElevation = newElevation;
+            newVC.IsBeginPINC = false;
+            newVC.IsEndPINC = true;
+            newVC.IsTangent = true;
+            newVC.BeginSlope = (otherVC.BeginElevation - newElevation) /
+                  (otherVC.BeginStation - newStation);
+            newVC.EndSlope = newVC.BeginSlope;
+            newVC.Length = otherVC.BeginStation - newStation;
             allVCs.Insert(0, newVC);
          }
          //insert new pi interior to the profile, but one that has no vertical curves
@@ -279,7 +279,7 @@ namespace ptsCogo
             otherVC = allVCs[vcIndex];
             
             // see if new station is already in the profile as a vpi
-            if(newStation == otherVC.beginStation)
+            if(newStation == otherVC.BeginStation)
             {
                if (vcIndex == 0)  // currently at the first vc
                {
@@ -290,7 +290,7 @@ namespace ptsCogo
                   throw new NotImplementedException();
                }
             }
-            else if(newStation == otherVC.endStation)
+            else if(newStation == otherVC.EndStation)
             {
                if (vcIndex == allVCs.Count - 1)  // currently at the last vc
                {
@@ -305,8 +305,8 @@ namespace ptsCogo
             {
                CogoStation station1, station2, station3;
                double elevation1, elevation2, elevation3;
-               station1 = otherVC.beginStation; station2 = newStation; station3 = otherVC.endStation;
-               elevation1 = otherVC.beginElevation; elevation2 = newElevation;
+               station1 = otherVC.BeginStation; station2 = newStation; station3 = otherVC.EndStation;
+               elevation1 = otherVC.BeginElevation; elevation2 = newElevation;
                elevation3 = verticalCurve.getElevation(otherVC, station3);
 
                otherVC.setVerticalTangent(station1, elevation1, station2, elevation2);
@@ -318,20 +318,20 @@ namespace ptsCogo
                {
                   int VCindex0 = vcIndex - 1;
                   otherOtherVC = allVCs[VCindex0];
-                  if (otherOtherVC.endSlope == otherVC.beginSlope)
-                     otherOtherVC.endIsPINC = otherVC.beginIsPINC = false;
+                  if (otherOtherVC.EndSlope == otherVC.BeginSlope)
+                     otherOtherVC.IsEndPINC = otherVC.IsBeginPINC = false;
                   else
-                     otherOtherVC.endIsPINC = otherVC.beginIsPINC = true;
+                     otherOtherVC.IsEndPINC = otherVC.IsBeginPINC = true;
                }
 
                if (vcIndex < allVCs.Count-1)
                {
                   int VCindex3 = vcIndex + 1;
                   otherOtherVC = allVCs[VCindex3];
-                  if (otherOtherVC.beginSlope == otherVC.endSlope)
-                     otherOtherVC.beginIsPINC = otherVC.endIsPINC = false;
+                  if (otherOtherVC.BeginSlope == otherVC.EndSlope)
+                     otherOtherVC.IsBeginPINC = otherVC.IsEndPINC = false;
                   else
-                     otherOtherVC.beginIsPINC = otherVC.endIsPINC = true;
+                     otherOtherVC.IsBeginPINC = otherVC.IsEndPINC = true;
                }
 
                allVCs.Insert(vcIndex+1, newVC);
@@ -352,7 +352,7 @@ namespace ptsCogo
 
       private void setIndexToTheCorrectVC(CogoStation aStation)
       {
-         while (aStation.trueStation > allVCs[vcIndex].endStation.trueStation)
+         while (aStation.trueStation > allVCs[vcIndex].EndStation.trueStation)
          {
             vcIndex++;
             if (vcIndex > allVCs.Count-1)
@@ -361,7 +361,7 @@ namespace ptsCogo
                throw new IndexOutOfRangeException();
             }
          }
-         while (aStation.trueStation < allVCs[vcIndex].beginStation.trueStation)
+         while (aStation.trueStation < allVCs[vcIndex].BeginStation.trueStation)
          {
             vcIndex--;
             if (vcIndex < 0)
@@ -399,8 +399,8 @@ namespace ptsCogo
 
       private void getValueByDelegate(CogoStation station, out tupleNullableDoubles theOutValue, verticalCurve.getSwitchForProfiles getFunction)
       {
-         if ((station.trueStation < beginProfTrueStation - stationEqualityTolerance) ||
-             (station.trueStation > endProfTrueStation + stationEqualityTolerance))
+         if ((station.trueStation < BeginProfTrueStation - stationEqualityTolerance) ||
+             (station.trueStation > EndProfTrueStation + stationEqualityTolerance))
          {  // it means we are off the profile
             theOutValue.back = null;
             theOutValue.ahead = null;
@@ -413,7 +413,7 @@ namespace ptsCogo
          verticalCurve aVC = allVCs[vcIndex];
 
          // if we are at the begin station, check to see how we relate to the previous vc
-         if (utilFunctions.tolerantCompare(station.trueStation, aVC.beginStation.trueStation, stationEqualityTolerance) == 0)
+         if (utilFunctions.tolerantCompare(station.trueStation, aVC.BeginStation.trueStation, stationEqualityTolerance) == 0)
          {
             // if we are at the beginning of the profile, split theOutValue
             if (vcIndex == 0)
@@ -425,7 +425,7 @@ namespace ptsCogo
             else  // if station is on the boundary between two verticalCurves,
             {     // then see if we need to split theOutValue
                if (getFunction == verticalCurve.getKvalue &&
-                   aVC.beginIsPINC)
+                   aVC.IsBeginPINC)
                {
                   theOutValue.back = theOutValue.ahead = 0.0;
                   theOutValue.isSingleValue = true;
@@ -444,7 +444,7 @@ namespace ptsCogo
          }
          // End: if we are at the begin station, check to see how we relate to the previous vc
          // if we are at the end station, check to see how we relate to the next vc
-         else if (utilFunctions.tolerantCompare(station.trueStation, aVC.endStation.trueStation, stationEqualityTolerance) == 0)
+         else if (utilFunctions.tolerantCompare(station.trueStation, aVC.EndStation.trueStation, stationEqualityTolerance) == 0)
          {
             // if we are at the end of the profile, split theOutValue
             if (vcIndex == allVCs.Count - 1)
@@ -456,7 +456,7 @@ namespace ptsCogo
             else  // if station is on the boundary between two verticalCurves,
             {     // then see if we need to split theOutValue
                if (getFunction == verticalCurve.getKvalue &&
-                   aVC.endIsPINC)
+                   aVC.IsEndPINC)
                {
                   theOutValue.back = theOutValue.ahead = 0.0;
                   theOutValue.isSingleValue = true;
@@ -484,11 +484,11 @@ namespace ptsCogo
 
       public bool isOnPINC(CogoStation aStation)
       {
-         var aVC = allVCs.FirstOrDefault(vc => utilFunctions.tolerantCompare(vc.beginStation.trueStation, aStation.trueStation, stationEqualityTolerance) == 0);
+         var aVC = allVCs.FirstOrDefault(vc => utilFunctions.tolerantCompare(vc.BeginStation.trueStation, aStation.trueStation, stationEqualityTolerance) == 0);
          if (aVC == null)
             return false;
          else
-            return aVC.beginIsPINC;
+            return aVC.IsBeginPINC;
       }
 
       public int SegmentCount
@@ -506,9 +506,9 @@ namespace ptsCogo
          private double length_;
          private CogoStation endStation_;
          private bool isTangent_;
-         private double kValue_;
+         private double slopeRateOfChange_;
 
-         public bool isTangent 
+         public bool IsTangent 
          { 
             get { return isTangent_; } 
             set 
@@ -516,35 +516,35 @@ namespace ptsCogo
                isTangent_ = value;
                if (isTangent_ == true)
                {
-                  kValue = double.PositiveInfinity;
+                  slopeRateOfChange_ = double.PositiveInfinity;
                }
             } 
          }
 
-         public CogoStation beginStation { get; set; }
-         public CogoStation endStation { get { return endStation_; } private set { } }
-         public double beginElevation { get; set; }
-         public double beginSlope { get; set; }
-         public double endSlope { get; set; }
-         public double endElevation { get { return getElevation(this, endStation); } }
-         public bool beginIsPINC { get; set; }  // PINC = PI, No Curve.
-         public bool endIsPINC { get; set; }    //  used to detect undefined K values at PINC stations
-         public double kValue { get { return 0.01 / kValue_; } private set { kValue_ = value; } }
-         public double length 
+         public CogoStation BeginStation { get; set; }
+         public CogoStation EndStation { get { return endStation_; } private set { } }
+         public double BeginElevation { get; set; }
+         public double BeginSlope { get; set; }
+         public double EndSlope { get; set; }
+         public double EndElevation { get { return getElevation(this, EndStation); } }
+         public bool IsBeginPINC { get; set; }  // PINC = PI, No Curve.
+         public bool IsEndPINC { get; set; }    //  used to detect undefined K values at PINC stations
+         public double Kvalue { get { return 0.01 / slopeRateOfChange_; } private set { } }
+         public double Length 
          { get { return length_; } 
             set
             { 
                length_ = value;
                if (length_ > 0.0)
                {
-                  endStation_ = beginStation + length_;
+                  endStation_ = BeginStation + length_;
                   if (isTangent_ == false)
                   {
-                     kValue = (endSlope - beginSlope) / length_;
+                     slopeRateOfChange_ = (EndSlope - BeginSlope) / length_;
                   }
                   else
                   {
-                     kValue = double.PositiveInfinity;
+                     slopeRateOfChange_ = double.PositiveInfinity;
                   }
                }
                else if (length_ < 0.0)
@@ -552,18 +552,18 @@ namespace ptsCogo
                   throw new NotSupportedException("Length of vertical curve not allowed to be less than 0.");
                }
                else
-                  endStation_ = beginStation;
+                  endStation_ = BeginStation;
             } 
          }
 
          internal void setVerticalTangent(CogoStation sta1, double EL1, CogoStation sta2, double EL2)
          {
-            beginStation = sta1;
-            beginElevation = EL1;
-            beginSlope = getSlopeFromDoubles(EL1, EL2, sta1.trueStation, sta2.trueStation);
-            isTangent = true;
-            endSlope = beginSlope;
-            length = sta2 - sta1;
+            BeginStation = sta1;
+            BeginElevation = EL1;
+            BeginSlope = getSlopeFromDoubles(EL1, EL2, sta1.trueStation, sta2.trueStation);
+            IsTangent = true;
+            EndSlope = BeginSlope;
+            Length = sta2 - sta1;
          }
 
          internal delegate double getSwitchForProfiles(verticalCurve aVC, CogoStation station);
@@ -573,14 +573,14 @@ namespace ptsCogo
             double theElevation;
             double lenSquared; double lenIntoVC;
 
-            lenIntoVC = station - aVC.beginStation;
+            lenIntoVC = station - aVC.BeginStation;
             lenSquared = lenIntoVC * lenIntoVC;
 
-            theElevation = aVC.beginElevation +
-               (lenIntoVC * aVC.beginSlope);
+            theElevation = aVC.BeginElevation +
+               (lenIntoVC * aVC.BeginSlope);
 
-            if (aVC.isTangent == false)
-               theElevation += (lenSquared / (200.0 * aVC.kValue));
+            if (aVC.IsTangent == false)
+               theElevation += (lenSquared / (200.0 * aVC.Kvalue));
 
             return theElevation;
          }
@@ -590,18 +590,18 @@ namespace ptsCogo
             double theSlope;
             double lenSquared; double lenIntoVC;
 
-            lenIntoVC = station - aVC.beginStation;
+            lenIntoVC = station - aVC.BeginStation;
             lenSquared = lenIntoVC * lenIntoVC;
 
-            theSlope = aVC.beginSlope +
-               (lenIntoVC / (100.0 * aVC.kValue));
+            theSlope = aVC.BeginSlope +
+               (lenIntoVC / (100.0 * aVC.Kvalue));
 
             return theSlope;
          }
 
          static public double getKvalue(verticalCurve aVC, CogoStation station)
          {
-            return aVC.kValue;
+            return aVC.Kvalue;
          }
       }
    }

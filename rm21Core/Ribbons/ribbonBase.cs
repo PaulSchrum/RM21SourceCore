@@ -209,13 +209,13 @@ namespace rm21Core
 
       public CogoStation BeginStation
       {
-         get { return (CogoStation) Widths.beginProfTrueStation; }
+         get { return (CogoStation) Widths.BeginProfTrueStation; }
          private set { }
       }
 
       public CogoStation EndStation
       {
-         get { return (CogoStation)Widths.endProfTrueStation; }
+         get { return (CogoStation)Widths.EndProfTrueStation; }
          private set { }
       }
 
