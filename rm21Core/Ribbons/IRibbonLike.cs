@@ -12,8 +12,11 @@ namespace rm21Core
       int getChildRibbonCount();
       IRibbonLike getChildRibbonByIndex(int index);
       void accumulateRibbonTraversal(ref StationOffsetElevation aSOE);
-      void DrawCrossSection(IRM21cad2dDrawingContext cadContext, 
+      void DrawCrossSection(IRM21cad2dDrawingContext cadContext,
          ref StationOffsetElevation aSOE, int whichSide);
+      void DrawPlanViewSchematic(IRM21cad2dDrawingContext cadContext,
+         int whichSide);
+
       void moveToOuterEdge(ref StationOffsetElevation aSOE, int whichSide);
 
       int getMyIndex();

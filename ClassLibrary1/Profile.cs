@@ -91,7 +91,7 @@ namespace ptsCogo
             //   The real assignments for vpi1 and 2 are at the end of the foureach loop
             vpi1 = rawVPIlist.getVPIbyIndex(0);
             vpi2 = rawVPIlist.getVPIbyIndex(1);
-
+            
             foreach (rawVPI vpi3 in rawVPIlist.getVPIlist())
             {
                count++;
@@ -665,7 +665,7 @@ namespace ptsCogo
          return theVPIs[indx];
       }
 
-      internal ObservableCollection<rawVPI> getVPIlist()
+      public ObservableCollection<rawVPI> getVPIlist()
       {
          return theVPIs;
       }

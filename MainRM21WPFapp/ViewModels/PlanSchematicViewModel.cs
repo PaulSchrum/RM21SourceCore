@@ -34,6 +34,7 @@ namespace MainRM21WPFapp.ViewModels
          AdvanceStationBackCmd = new RelayCommand(advanceStationBack, () => canAdvanceBack);
          canAdvanceBack = true;
 
+         WindowCenterY = 1020.0;
       }
 
       public Canvas planCanvas{get; set;}

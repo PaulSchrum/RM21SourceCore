@@ -177,7 +177,31 @@ namespace rm21Core
          }
       }
 
+      internal void DrawPlanViewSchematic(IRM21cad2dDrawingContext cadContext, int whichSide_)
+      {
+         int whichSide = Math.Sign(whichSide_);
 
+         if (thePGLoffsetRibbon != null)
+            thePGLoffsetRibbon.DrawPlanViewSchematic(cadContext, whichSide);
+
+         if (insideRibbons != null)
+         {
+
+            foreach (var aRibbon in insideRibbons)
+            {
+               aRibbon.DrawPlanViewSchematic(cadContext, -1 * whichSide);
+            }
+
+         }
+
+         if (outsideRibbons != null)
+         {
+            foreach (var aRibbon in outsideRibbons)
+            {
+               aRibbon.DrawPlanViewSchematic(cadContext, whichSide);
+            }
+         }
+      }
    }
 
 }

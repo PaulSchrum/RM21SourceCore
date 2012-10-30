@@ -122,9 +122,9 @@ namespace MainRM21WPFapp.ViewModels
                RaisePropertyChanged("CurrentStation");
                if (null != CrossSectionViewModel)
                   CrossSectionViewModel.CurrentStation = currentStation_;
-               /*
+               
                if (null != PlanSchematicViewModel)
-                  PlanSchematicViewModel.CurrentStation = currentStation_; */
+                  PlanSchematicViewModel.CurrentStation = currentStation_;
             }
          }
       }

@@ -88,9 +88,12 @@ namespace rm21Core
          double begSta = Alignment.BeginStation;
          double endSta = Alignment.EndStation;
 
-         //cadContext.Draw(0.0, begSta, 0.0, endSta);
-         cadContext.Draw(0.0, 10.0, 2.0, 20.00);
+         cadContext.Draw(0.0, begSta, 0.0, endSta);
 
+         foreach (var pglGrouping in allPGLgroupings)
+         {
+            pglGrouping.DrawPlanViewSchematic(cadContext, pglGrouping.myIndex);
+         }
       }
 
    }

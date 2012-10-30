@@ -164,6 +164,13 @@ namespace rm21Core
          SuppressSlopeText = false;
       }
 
+
+      public virtual void DrawPlanViewSchematic(IRM21cad2dDrawingContext cadContext,
+         int whichSide)
+      {
+
+      }
+      
       public virtual double? getActualWidth(CogoStation aStation)
       {
          tupleNullableDoubles rslt = new tupleNullableDoubles();
@@ -198,6 +205,18 @@ namespace rm21Core
       public IRibbonLike getChildRibbonByIndex(int index)
       {
          return this;
+      }
+
+      public CogoStation BeginStation
+      {
+         get { return (CogoStation) Widths.beginProfTrueStation; }
+         private set { }
+      }
+
+      public CogoStation EndStation
+      {
+         get { return (CogoStation)Widths.endProfTrueStation; }
+         private set { }
       }
 
       public int getMyIndex() { return MyIndex; }
