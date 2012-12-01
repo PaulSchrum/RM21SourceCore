@@ -24,7 +24,17 @@ namespace rm21Core
       // and to the left for the left PGLGrouping (myIndex < 0)
       
       public LinkedList<IRibbonLike> insideRibbons;
-      //private int whichSide;
+
+      //////////////////////////////////////////////////////////
+      // private profiles which represent absolute offset from 
+      //    baseline to outside edge of ribbon
+      //////////////////////////////////////////////////////////
+      protected Profile thePGLoffsetWidthProfile { get; set; }
+
+      private LinkedList<Profile> outsideRibbonWidthsProfile { get; set; }
+
+      private LinkedList<Profile> inseRibbonWidthsProfile { get; set; }
+      //////////////////////////////////////////////////////////
 
       public PGLGrouping(int whichSide)
       {

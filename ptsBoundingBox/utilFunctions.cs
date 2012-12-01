@@ -33,5 +33,33 @@ namespace ptsCogo
 
          return -1;
       }
+
+      public static double? addRecipricals(double? val1, double? val2)
+      {
+         if (null == val1)
+         {
+            if (null == val2)
+               return null;
+            else
+               return val2;
+         }
+         else if (null == val2)
+         {
+            return val1;
+         }
+         else
+         {
+            if (val1 == 0.0)
+               return val2;
+            else if (val2 == 0.0)
+               return val1;
+            else
+            {
+               double? recip1 = 1 / val1;
+               double? recip2 = 1 / val2;
+               return 1 / (recip1 + recip2);
+            }
+         }
+      }
    }
 }

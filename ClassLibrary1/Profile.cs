@@ -26,7 +26,10 @@ namespace ptsCogo
          set { buildThisFromRawVPIlist(value); }
       }
 
-      private Profile() { }
+      private Profile() 
+      {
+         vpiList aVpiList = new vpiList();
+      }
 
       //public Profile(CogoStation beginStation, CogoStation endStation, int singleElevation)
       //   : this(beginStation, endStation, (double)singleElevation)
@@ -194,6 +197,173 @@ namespace ptsCogo
       {
          buildThisFromRawVPIlist(newVPIlist);
       }
+      
+      public static Profile arithmaticAddProfile(Profile This, Profile Other, double scaleSecondProfile)
+      {
+         if (Other == null) throw new ArgumentNullException();
+         
+         if (null == Other.allVCs) throw new Exception("Second profile variable has no vertical curves.");
+         // to do: check to see if both profiles are on the same hor alignment or
+         //         are both unassociated with a horizontal alignment
+
+         Profile scaledProfileOther = scaleAprofile(Other, scaleSecondProfile);
+         if (null == This) return scaledProfileOther;
+
+         Profile newProf = new Profile();
+         newProf.allVCs = new List<verticalCurve>();
+
+         This.vcIndex = 0; Other.vcIndex = 0;
+
+         Profile prof1; Profile prof2;
+         /* if profile stations do not overlap, append end to end */
+         if (This.EndProfTrueStation <= Other.BeginProfTrueStation ||
+             Other.EndProfTrueStation <= This.BeginProfTrueStation)
+         {
+            if (This.EndProfTrueStation <= Other.BeginProfTrueStation)
+            {
+               prof1 = This;
+               prof2 = Other;
+            }
+            else
+            {
+               prof1 = Other;
+               prof2 = This;
+            }
+
+            foreach (var vc in prof1.allVCs)
+            {
+               newProf.allVCs.Add(new verticalCurve(vc));
+            }
+
+            double gapLength = prof2.BeginProfTrueStation - prof1.EndProfTrueStation;
+            if (gapLength > 0.0)
+            {
+               var gapVC = new verticalCurve();
+               gapVC.IsaProfileGap = true;
+               gapVC.BeginStation = (CogoStation) prof1.EndProfTrueStation;
+               gapVC.Length = gapLength;
+               newProf.allVCs.Add(gapVC);
+            }
+
+            foreach(var vc in prof2.allVCs)
+            {
+               var dupVC = new verticalCurve(vc);
+               dupVC.Scale(scaleSecondProfile);
+               newProf.allVCs.Add(dupVC);
+            }
+
+            newProf.BeginProfTrueStation = Math.Min(prof1.BeginProfTrueStation, prof2.BeginProfTrueStation);
+            newProf.EndProfTrueStation = Math.Max(prof1.EndProfTrueStation, prof2.EndProfTrueStation);
+            newProf.iHaveOneOrMoreVerticalCurves = prof1.iHaveOneOrMoreVerticalCurves && prof2.iHaveOneOrMoreVerticalCurves;
+
+            return newProf;
+         }
+         /* end if profile stations do not overlap, append end to end */
+
+         prof1 = This;
+         prof2 = scaledProfileOther;
+         List<CogoStation> mergedStationList = mergeStationLists(prof1, prof2);
+         CogoStation begSta = new CogoStation();
+
+         verticalCurve prevVC = new verticalCurve();
+         long count = -1;
+         foreach (var endSta in mergedStationList)
+         {
+            count++;
+            if (count == 0)
+            {
+               begSta = endSta;
+               continue;
+            }
+            
+            double? begEL1 = prof1.getElevationFromTheRight(begSta);
+            double? begEL2 = prof2.getElevationFromTheRight(begSta);
+
+            double? endEL1 = prof1.getElevationFromTheLeft(endSta);  //start here.  why is this returning null?
+            double? endEL2 = prof2.getElevationFromTheLeft(endSta);
+
+            double? begSlope1 = prof1.getSlopeFromTheRight(begSta);
+            double? begSlope2 = prof2.getSlopeFromTheRight(begSta);
+
+            double? endSlope1 = prof1.getSlopeFromTheLeft(endSta);
+            double? endSlope2 = prof2.getSlopeFromTheLeft(endSta);
+
+            double? Kvalue1 = prof1.getKValueFromTheRight(begSta);
+            double? Kvalue2 = prof2.getKValueFromTheRight(begSta);
+
+            double newBegEL = (double)(begEL1 + begEL2);
+            double newEndEL = (double)(endEL1 + endEL2);
+
+            double newBegSlope = (double)(begSlope1 + begSlope2);
+            double newEndSlope = (double)(endSlope1 + endSlope2);
+
+            double newKValue = (double)utilFunctions.addRecipricals(Kvalue1, Kvalue2);
+
+            double length = endSta - begSta;
+
+            var newVC = new verticalCurve(begSta, newBegEL, newBegSlope, length, newKValue);
+            newProf.allVCs.Add(newVC);
+
+            if (count == 1)
+            {
+               newVC.IsBeginPINC = false;
+            }
+            else
+            {
+               prevVC.IsEndPINC = newVC.IsBeginPINC = false;
+               if (prevVC.EndSlope != newVC.BeginSlope)
+                  prevVC.IsEndPINC = newVC.IsBeginPINC = true;
+               else if (prevVC.EndElevation != newVC.BeginElevation)
+                  prevVC.IsEndPINC = newVC.IsBeginPINC = true;
+            }
+
+            prevVC = newVC;
+            begSta = endSta;
+         }
+
+         return newProf;
+      }
+
+      private static Profile scaleAprofile(Profile ProfileToScale, double scaleSecondProfile)
+      {
+         if (null == ProfileToScale) throw new ArgumentNullException();
+
+         Profile retProfile = new Profile();
+         retProfile.BeginProfTrueStation = ProfileToScale.BeginProfTrueStation;
+         retProfile.EndProfTrueStation = ProfileToScale.EndProfTrueStation;
+         retProfile.allVCs = new List<verticalCurve>();
+         foreach (verticalCurve vc in ProfileToScale.allVCs)
+         {
+            verticalCurve newVC = new verticalCurve(vc);
+            if (newVC.IsaProfileGap == false)
+            {
+               newVC.BeginElevation *= scaleSecondProfile;
+               newVC.BeginSlope *= scaleSecondProfile;
+               newVC.EndSlope *= scaleSecondProfile;
+               newVC.Length = vc.Length;  // force computation of slopeRateOfChange_
+            }
+            retProfile.allVCs.Add(newVC);
+         }
+         return retProfile;
+      }
+
+      private void scaleProfile(double scaleFactor)
+      {
+         foreach (var vc in allVCs)
+         {
+            vc.Scale(scaleFactor);
+         }
+      }
+
+      private static List<CogoStation> mergeStationLists(Profile This, Profile Other)
+      {
+         List<CogoStation> listOfStations = This.allVCs.Select(vc => vc.BeginStation).ToList();
+         listOfStations = listOfStations.Union(This.allVCs.Select(vc => vc.EndStation).ToList()).ToList();
+         listOfStations = listOfStations.Union(Other.allVCs.Select(vc => vc.BeginStation).ToList()).ToList();
+         listOfStations = listOfStations.Union(Other.allVCs.Select(vc => vc.EndStation).ToList()).ToList();
+         listOfStations = listOfStations.OrderBy(sta => sta).ToList();
+         return listOfStations;
+      } 
 
       /// <summary>
       /// Warning: currently does not handle profiles with vertical curves
@@ -372,6 +542,18 @@ namespace ptsCogo
          }
       }
 
+      public double? getElevationFromTheRight(CogoStation station)
+      {
+         var resultTND = new tupleNullableDoubles();
+         getElevation(station, out resultTND);
+         return resultTND.ahead;
+      }
+
+      public double? getElevationFromTheLeft(CogoStation station)
+      {
+         return getElevation(station);
+      }
+
       public double? getElevation(CogoStation station)
       {
          var resultTND = new tupleNullableDoubles();
@@ -385,10 +567,38 @@ namespace ptsCogo
          getValueByDelegate(station, out theElevation, callFunction);
       }
 
+      public double? getSlopeFromTheRight(CogoStation station)
+      {
+         var resultTND = new tupleNullableDoubles();
+         getSlope(station, out resultTND);
+         return resultTND.ahead;
+      }
+
+      public double? getSlopeFromTheLeft(CogoStation station)
+      {
+         var resultTND = new tupleNullableDoubles();
+         getSlope(station, out resultTND);
+         return resultTND.back;
+      }
+
       public void getSlope(CogoStation station, out tupleNullableDoubles theSlope)
       {
          verticalCurve.getSwitchForProfiles callFunction = new verticalCurve.getSwitchForProfiles(verticalCurve.getSlope);
          getValueByDelegate(station, out theSlope, callFunction);
+      }
+
+      public double? getKValueFromTheRight(CogoStation station)
+      {
+         var resultTND = new tupleNullableDoubles();
+         getKvalue(station, out resultTND);
+         return resultTND.ahead;
+      }
+
+      public double? getKValueFromTheLeft(CogoStation station)
+      {
+         var resultTND = new tupleNullableDoubles();
+         getKvalue(station, out resultTND);
+         return resultTND.back;
       }
 
       public void getKvalue(CogoStation station, out tupleNullableDoubles theSlope)
@@ -399,6 +609,14 @@ namespace ptsCogo
 
       private void getValueByDelegate(CogoStation station, out tupleNullableDoubles theOutValue, verticalCurve.getSwitchForProfiles getFunction)
       {
+         if (null == allVCs)
+         {
+            theOutValue.ahead = 0.0;
+            theOutValue.back = 0.0;
+            theOutValue.isSingleValue = true;
+            return;
+         }
+
          if ((station.trueStation < BeginProfTrueStation - stationEqualityTolerance) ||
              (station.trueStation > EndProfTrueStation + stationEqualityTolerance))
          {  // it means we are off the profile
@@ -501,12 +719,106 @@ namespace ptsCogo
          private set { }
       }
 
-      private class verticalCurve
+      internal class verticalCurve
       {
+         public verticalCurve()
+         {
+            IsaProfileGap = false;
+         }
+
+         public verticalCurve(verticalCurve otherVC)
+         {
+            this.BeginStation = (CogoStation) otherVC.BeginStation.trueStation;
+            this.BeginElevation = otherVC.BeginElevation;
+            this.BeginSlope = otherVC.BeginSlope;
+            this.EndSlope = otherVC.EndSlope;
+            this.Length = otherVC.Length;
+            this.IsBeginPINC = otherVC.IsBeginPINC;
+            this.IsEndPINC = otherVC.IsEndPINC;
+            this.IsaProfileGap = otherVC.IsaProfileGap;
+         }
+
+         public verticalCurve(CogoStation beginStation, double begEL, double beginSlope, double length, double KValue)
+         {
+            this.BeginStation = beginStation;
+            this.BeginElevation = begEL;
+            this.BeginSlope = beginSlope;
+
+            if (KValue == 0.0)
+            {
+               this.IsTangent = true;
+               slopeRateOfChange_ = double.PositiveInfinity;
+            }
+            else
+            {
+               this.IsTangent = false;
+               slopeRateOfChange_ = 0.01 / KValue;
+            }
+
+            this.EndSlope = this.BeginSlope + slopeRateOfChange_ * length;
+            this.length_ = length;
+
+            this.IsBeginPINC = false;
+            this.IsEndPINC = false;
+            this.IsaProfileGap = false;
+         }
+
+         // currently untested code
+         // candidate for deleting becuase it is not needed
+         public verticalCurve(verticalCurve vc1, verticalCurve vc2, CogoStation beginStation, CogoStation endStation)
+         {
+            double actualBeginStation = Math.Max(vc1.BeginStation.trueStation, Math.Max(vc2.BeginStation.trueStation, beginStation.trueStation));
+            double actualEndStation = Math.Min(vc1.EndStation.trueStation, Math.Min(vc2.EndStation.trueStation, endStation.trueStation));
+            double newLength = actualEndStation - actualBeginStation;
+
+            if(newLength == 0.0)
+               throw new Exception("Can't create vertical curve with Length = 0");
+            if(newLength < 0)
+               throw new Exception("Can't create vertical curve with Length < 0");
+
+            double newBeginElevation = 
+               getElevation(vc1, (CogoStation) actualBeginStation) + 
+               getElevation(vc2, (CogoStation) actualBeginStation);
+
+            double newEndElevation =
+               getElevation(vc1, (CogoStation)actualEndStation) +
+               getElevation(vc2, (CogoStation)actualEndStation);
+
+            double newBeginSlope =
+               getSlope(vc1, (CogoStation)actualBeginStation) +
+               getSlope(vc2, (CogoStation)actualBeginStation);
+
+            double newEndSlope =
+               getSlope(vc1, (CogoStation)actualEndStation) +
+               getSlope(vc2, (CogoStation)actualEndStation);
+
+            double testPIdistance = Profile.intersect2SlopesInX(
+               actualBeginStation, newBeginElevation, newBeginSlope,
+               actualEndStation, newEndElevation, newEndSlope);
+
+         }
+
+         // currently untested code
+         public verticalCurve createVerticalCurveAsAProfileGap(CogoStation beginStation, CogoStation endStation)
+         {
+            verticalCurve returnVC = new verticalCurve();
+
+            returnVC.BeginStation = beginStation;
+            returnVC.BeginElevation = 0.0;
+            returnVC.BeginSlope = 0.0;
+            returnVC.EndSlope = 0.0;
+            returnVC.Length = endStation - beginStation;
+            returnVC.IsBeginPINC = returnVC.IsEndPINC = true;
+
+            returnVC.IsaProfileGap = true;
+            return returnVC;
+         }
+
          private double length_;
          private CogoStation endStation_;
          private bool isTangent_;
          private double slopeRateOfChange_;
+         public bool IsaProfileGap;  // to do: adjust dependent code to accomodate for this
 
          public bool IsTangent 
          { 
@@ -603,7 +915,31 @@ namespace ptsCogo
          {
             return aVC.Kvalue;
          }
+
+         internal void Scale(double profileScaleFactor)
+         {
+            BeginElevation = BeginElevation * profileScaleFactor;
+            BeginSlope = BeginSlope * profileScaleFactor;
+            EndSlope = EndSlope * profileScaleFactor;
+         }
       }
+
+      public static double intersect2SlopesInX(double sta1, double El1, double slope1, double sta2, double El2, double slope2)
+      {
+         
+         double elDiffAt2 = ((sta2 - sta1) * slope1) - (El2 - El1);
+         if (elDiffAt2 == 0.0)
+            return (sta1 + sta2) / 2.0;
+
+         double relativeSlope = slope2 - slope1;
+         if (relativeSlope == 0.0)
+            throw new Exception("Parallel Slopes do not intersect.");
+
+         double x = elDiffAt2 / relativeSlope;
+
+         return sta2 + x;
+      }
+
    }
 
    public class vpiList : INotifyPropertyChanged

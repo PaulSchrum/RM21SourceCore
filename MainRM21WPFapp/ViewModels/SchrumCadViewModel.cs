@@ -48,7 +48,7 @@ namespace MainRM21WPFapp.ViewModels
          StrokeThickness_ = 1.0;
          Stroke_ = Brushes.White;
          strokeDashArray_ = new DoubleCollection();
-
+         
       }
 
       public Canvas Canvas { get; set; }

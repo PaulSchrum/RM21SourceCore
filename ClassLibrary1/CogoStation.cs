@@ -8,7 +8,7 @@ using System.Windows.Data;
 namespace ptsCogo
 {
    [Serializable]
-   public class CogoStation : INotifyPropertyChanged
+   public class CogoStation : INotifyPropertyChanged, IComparable<CogoStation>
    {
       public GenericAlignment myAlignment { get; internal set; }
       public bool isOnMyAlignemnt { get; internal set; }
@@ -101,6 +101,16 @@ namespace ptsCogo
          return station.trueStation > aDouble;
       }
 
+      public static bool operator >(CogoStation station, CogoStation otherSta)
+      {
+         return station.trueStation > otherSta.trueStation;
+      }
+
+      public static bool operator <(CogoStation station, CogoStation otherSta)
+      {
+         return station.trueStation < otherSta.trueStation;
+      }
+
       public static bool operator <(CogoStation station, double aDouble)
       {
          return station.trueStation < aDouble;
@@ -115,6 +125,18 @@ namespace ptsCogo
       //{
         // return new CogoStation(adbl);
       //}
+
+      public int CompareTo(CogoStation other)
+      {
+         if (this.trueStation == other.trueStation)
+         {
+            return 0;
+         }
+         else if (this.trueStation < other.trueStation)
+            return -1;
+         else 
+            return 1;
+      }
 
       public override string ToString()
       {

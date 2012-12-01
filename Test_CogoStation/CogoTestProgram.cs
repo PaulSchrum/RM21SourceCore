@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ptsCogo;
 using PaulsTestingFramework;
+using NUnitTestingLibrary;
 
 namespace Test_CogoStation
 {
@@ -14,13 +15,29 @@ namespace Test_CogoStation
       private static CogoStation sta1;
       private static CogoStation station2;
       private static CogoStation stationOnOtherAlignment;
+      private static Profile aProfile;
+      private static vpiList aVpiList;
+      private static string conditionString;
+      private static bool expectedBl;
+      private static bool actualBl;
+      private static double? expectedDbl;
+      private static double? actualDbl;
+      private static tupleNullableDoubles result;
 
       static void Main(string[] args)
       {
+         /* Do not delete commented-out code in this method without first discussing with Paul Schrum */
+         /* */
+         TestClassForProfiles TestClassForProfiles = new TestClassForProfiles();
+         TestClassForProfiles.ProfilesTestSetup();
+         TestClassForProfiles.Intersect2SlopesInX_1();
+         TestClassForProfiles.arithmaticAdd_computesCorrectElevation_whenOnTangentAndTangent();
+         /* * /
          testBuildAgenericAlignment();
          setupSomeStations();
          testStationArithmetic();
          testCogoProfile();
+         testCogoProfileArithmatic();  /* */
          Console.WriteLine("Testing Concluded.");
          Console.Read();
       }
@@ -34,12 +51,8 @@ namespace Test_CogoStation
          aVpiList.add(1315.00, 2168.2265, 90.0);
          aVpiList.add(1365.00, 2167.8765);
 
-         Profile aProfile = new Profile(aVpiList);
+         aProfile = new Profile(aVpiList);
 
-         string conditionString;
-         bool expectedBl; bool actualBl;
-         double? expectedDbl; double? actualDbl;
-         tupleNullableDoubles result;
 
          ///////////////////
          System.Console.WriteLine("Test on a vertical curve, station 11+20");
@@ -347,6 +360,115 @@ namespace Test_CogoStation
          actualDbl = result.ahead;
          TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
 
+      }
+
+      private static void testCogoProfileArithmatic()
+      {
+         Profile newProf;
+         aVpiList = new vpiList();
+         aVpiList.add(1062.50, 2178.23);
+         aVpiList.add(1120.00, 2173.973, 115.0);
+         aVpiList.add(1220.00, 2173.140, 85.0);
+         aVpiList.add(1315.00, 2168.2265, 90.0);
+         aVpiList.add(1365.00, 2167.8765);
+
+         aProfile = new Profile(aVpiList);
+
+         try
+         {
+            conditionString = "Verify back elevation is 2174.9175 at 11+20";
+            result.back = result.ahead = 0.0;
+            result.isSingleValue = false;
+            aProfile.getElevation((CogoStation)1120.00, out result);
+            expectedDbl = 2174.9175;
+            actualDbl = Math.Round((double)result.back, 4);
+            TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+            conditionString = "Verify grade is -4.118% at 11+20";
+            result.back = result.ahead = 0.0;
+            result.isSingleValue = false;
+            aProfile.getSlope((CogoStation)1120.00, out result);
+            expectedDbl = -0.041182;
+            actualDbl = Math.Round((double)result.back, 6);
+            TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+            System.Console.WriteLine("Scale by -1.0 a Profile with no VPCs.");
+            newProf = Profile.arithmaticAddProfile(null, aProfile, -1.0);
+
+            conditionString = "Verify back elevation is -2174.9175 at 11+20";
+            result.back = result.ahead = 0.0;
+            result.isSingleValue = false;
+            newProf.getElevation((CogoStation)1120.00, out result);
+            expectedDbl = -2174.9175;
+            actualDbl = Math.Round((double)result.back, 4);
+            TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+
+            conditionString = "Verify grade is +4.118% at 11+20";
+            result.back = result.ahead = 0.0;
+            result.isSingleValue = false;
+            newProf.getSlope((CogoStation)1120.00, out result);
+            expectedDbl = 0.041182;
+            actualDbl = Math.Round((double)result.back, 6);
+            TestingFramework.assertEquals<double?>(expectedDbl, actualDbl, conditionString);
+         }
+         catch (Exception e)
+         {
+            System.Console.WriteLine("Exception: " + e.Message);
+         }
+
+         aVpiList = new vpiList();
+         aVpiList.add(1062.50, 12.0);
+         aVpiList.add(1120.00, 12.0);
+         aVpiList.add(1220.00, 15.0);
+         aVpiList.add(1315.00, 15.0);
+         aVpiList.add(1345.00, 10.0);
+         aVpiList.add(1365.00, 10.0);
+
+         aProfile = new Profile(aVpiList);
+
+         aVpiList = new vpiList();
+         aVpiList.add(2062.50, 12.0);
+         aVpiList.add(2120.00, 12.0);
+         aVpiList.add(2220.00, 15.0);
+
+         Profile otherPfl = new Profile(aVpiList);
+
+         newProf = Profile.arithmaticAddProfile(aProfile, otherPfl, 1.0);
+
+         result.back = result.ahead = 0.0;
+         result.isSingleValue = true;
+         newProf.getElevation((CogoStation)1365.0, out result);
+         TestingFramework.assertEquals<bool>(false, result.isSingleValue,
+            "Is Single Value is false at leading boundary of profile gap.");
+
+         result.back = result.ahead = 0.0;
+         result.isSingleValue = true;
+         newProf.getElevation((CogoStation)2062.50, out result);
+         TestingFramework.assertEquals<bool>(false, result.isSingleValue,
+            "Is Single Value is false at trailing boundary of profile gap.");
+
+
+         // Tests for adding two profiles that cover the same range: No VCs
+         aVpiList = new vpiList();
+         aVpiList.add(1062.50, 12.0);
+         aVpiList.add(1120.00, 12.0);
+         aVpiList.add(1220.00, 15.0);
+         aVpiList.add(1315.00, 15.0);
+         aVpiList.add(1345.00, 10.0);
+         aVpiList.add(1365.00, 10.0);
+
+         aProfile = new Profile(aVpiList);
+
+         aVpiList = new vpiList();
+         aVpiList.add(1062.50, 12.0);
+         aVpiList.add(1120.00, 12.0);
+         aVpiList.add(1219.00, 15.0);
+         aVpiList.add(1315.00, 15.0);
+         aVpiList.add(1345.00, 10.0);
+         aVpiList.add(1365.00, 10.0);
+         otherPfl = new Profile(aVpiList);
+
+         newProf = Profile.arithmaticAddProfile(aProfile, otherPfl, 1.0);
       }
 
       private static void testBuildAgenericAlignment()
