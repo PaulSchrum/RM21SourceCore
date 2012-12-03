@@ -138,6 +138,21 @@ namespace ptsCogo
             return 1;
       }
 
+      public override bool Equals(object obj)
+      {
+         if (!(obj is CogoStation))
+            return base.Equals(obj);
+         else
+         {
+            return this._trueStation == (obj as CogoStation)._trueStation;
+         }
+      }
+
+      public override int GetHashCode()
+      {
+         return base.GetHashCode();
+      }
+
       public override string ToString()
       {
          int leftOfPlus = (int) station / (int) (Math.Pow(10.0, plusOffset));

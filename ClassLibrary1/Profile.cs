@@ -273,6 +273,7 @@ namespace ptsCogo
             if (count == 0)
             {
                begSta = endSta;
+               newProf.BeginProfTrueStation = begSta.trueStation;
                continue;
             }
             
@@ -291,17 +292,17 @@ namespace ptsCogo
             double? Kvalue1 = prof1.getKValueFromTheRight(begSta);
             double? Kvalue2 = prof2.getKValueFromTheRight(begSta);
 
-            double newBegEL = (double)(begEL1 + begEL2);
-            double newEndEL = (double)(endEL1 + endEL2);
+            double newBegEL = utilFunctions.addNullableDoubles(begEL1, begEL2);
+            double newEndEL = utilFunctions.addNullableDoubles(endEL1, endEL2);
 
-            double newBegSlope = (double)(begSlope1 + begSlope2);
-            double newEndSlope = (double)(endSlope1 + endSlope2);
+            double newBegSlope = utilFunctions.addNullableDoubles(begSlope1, begSlope2);
+            double newEndSlope = utilFunctions.addNullableDoubles(endSlope1, endSlope2);
 
-            double newKValue = (double)utilFunctions.addRecipricals(Kvalue1, Kvalue2);
+            double newKValue = utilFunctions.addRecipricals(Kvalue1, Kvalue2);
 
             double length = endSta - begSta;
 
-            var newVC = new verticalCurve(begSta, newBegEL, newBegSlope, length, newKValue);
+            var newVC = new verticalCurve(begSta, newBegEL, newBegSlope, length, newKValue);  // bug: add EndStation value
             newProf.allVCs.Add(newVC);
 
             if (count == 1)
@@ -319,6 +320,7 @@ namespace ptsCogo
 
             prevVC = newVC;
             begSta = endSta;
+            newProf.EndProfTrueStation = endSta.trueStation;
          }
 
          return newProf;
@@ -355,13 +357,19 @@ namespace ptsCogo
          }
       }
 
-      private static List<CogoStation> mergeStationLists(Profile This, Profile Other)
+      private static List<CogoStation> mergeStationLists(Profile First, Profile Other)
       {
-         List<CogoStation> listOfStations = This.allVCs.Select(vc => vc.BeginStation).ToList();
-         listOfStations = listOfStations.Union(This.allVCs.Select(vc => vc.EndStation).ToList()).ToList();
-         listOfStations = listOfStations.Union(Other.allVCs.Select(vc => vc.BeginStation).ToList()).ToList();
-         listOfStations = listOfStations.Union(Other.allVCs.Select(vc => vc.EndStation).ToList()).ToList();
-         listOfStations = listOfStations.OrderBy(sta => sta).ToList();
+         List<Double> listOfDoubles = First.allVCs.Select(vc => vc.BeginStation.trueStation).ToList();
+         listOfDoubles = listOfDoubles.Union(First.allVCs.Select(vc => vc.EndStation.trueStation).ToList()).ToList();
+         listOfDoubles = listOfDoubles.Union(Other.allVCs.Select(vc => vc.BeginStation.trueStation).ToList()).ToList();
+         listOfDoubles = listOfDoubles.Union(Other.allVCs.Select(vc => vc.EndStation.trueStation).ToList()).ToList();
+         listOfDoubles = listOfDoubles.OrderBy(sta => sta).ToList();
+
+         List<CogoStation> listOfStations = new List<CogoStation>();
+         foreach (Double aStationDbl in listOfDoubles)
+         {
+            listOfStations.Add((CogoStation) aStationDbl);
+         }
          return listOfStations;
       } 
 
@@ -741,6 +749,7 @@ namespace ptsCogo
          public verticalCurve(CogoStation beginStation, double begEL, double beginSlope, double length, double KValue)
          {
             this.BeginStation = beginStation;
+            this.endStation_ = beginStation + length;
             this.BeginElevation = begEL;
             this.BeginSlope = beginSlope;
 

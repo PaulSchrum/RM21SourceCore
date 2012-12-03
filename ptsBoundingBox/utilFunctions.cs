@@ -7,6 +7,26 @@ namespace ptsCogo
 {
    public class utilFunctions
    {
+      public static double addNullableDoubles(double? dbl1, double? dbl2)
+      {
+         if (dbl1 == null && dbl2 == null)
+         {
+            return 0.0;
+         }
+         else if (dbl1 == null)
+         {
+            return (double)dbl2;
+         }
+         else if (dbl2 == null)
+         {
+            return (double)dbl1;
+         }
+         else
+         {
+            return (double)(dbl1 + dbl2);
+         }
+      }
+
       public static int tolerantCompare(double value1, double value2, double tolerance)
       {
          double diff = value2 - value1;
@@ -34,30 +54,30 @@ namespace ptsCogo
          return -1;
       }
 
-      public static double? addRecipricals(double? val1, double? val2)
+      public static double addRecipricals(double? val1, double? val2)
       {
          if (null == val1)
          {
             if (null == val2)
-               return null;
+               return 0.0;
             else
-               return val2;
+               return (double) val2;
          }
          else if (null == val2)
          {
-            return val1;
+            return (double)val1;
          }
          else
          {
             if (val1 == 0.0)
-               return val2;
+               return (double) val2;
             else if (val2 == 0.0)
-               return val1;
+               return (double) val1;
             else
             {
                double? recip1 = 1 / val1;
                double? recip2 = 1 / val2;
-               return 1 / (recip1 + recip2);
+               return 1 / (double) (recip1 + recip2);
             }
          }
       }
