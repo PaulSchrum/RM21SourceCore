@@ -26,6 +26,10 @@ namespace NUnitTestingLibrary
          aVpiList.add(1315.00, 15.0);
          aVpiList.add(1345.00, 10.0);
          aVpiList.add(1365.00, 10.0);
+         aVpiList.add(1400.00, 10.0);
+         aVpiList.add(2000.00, 14.0, 200);
+         aVpiList.add(2500.00, 9.0);
+         aVpiList.add(3000.00, 4.0);
 
          profile1 = new Profile(aVpiList);
 
@@ -33,6 +37,14 @@ namespace NUnitTestingLibrary
          aVpiList.add(1062.50, 12.0);
          aVpiList.add(1120.00, 12.0);
          aVpiList.add(1220.00, 15.0);
+         aVpiList.add(1250.00, 15.0);
+         aVpiList.add(1340.00, 10.0);
+         aVpiList.add(1365.00, 10.0);
+         aVpiList.add(1400.00, 10.0);
+         aVpiList.add(2000.00, 14.0, 200);
+         aVpiList.add(2500.00, 9.0);
+         aVpiList.add(3000.00, 4.0);
+
 
          profile2 = new Profile(aVpiList);
 
@@ -47,10 +59,65 @@ namespace NUnitTestingLibrary
          double expectedValue = el1 + el2;
 
          resultingProfile = Profile.arithmaticAddProfile(profile1, profile2, 1.0);
-         double computedElevation = (double) resultingProfile.getElevation(sta);
+         double computedElevation = (double)resultingProfile.getElevation(sta);
 
          Assert.AreEqual(expectedValue, computedElevation, doubleDelta);
+      }
 
+      [Test]
+      public void arithmaticAdd_computesCorrectElevation_whenBothProfilesAreOnVerticalCurves()
+      {
+         CogoStation sta = new CogoStation(1950.0);
+         double el1 = (double)profile1.getElevation(sta);
+         double el2 = (double)profile2.getElevation(sta);
+         double expectedValue = el1 + el2;
+
+         resultingProfile = Profile.arithmaticAddProfile(profile1, profile2, 1.0);
+         double computedElevation = (double)resultingProfile.getElevation(sta);
+
+         Assert.AreEqual(expectedValue, computedElevation, doubleDelta);
+      }
+
+      [Test]
+      public void arithmaticAdd_computesCorrectElevation_whenBothProfilesAreOnVerticalCurves_subtract()
+      {
+         CogoStation sta = new CogoStation(1950.0);
+         double el1 = (double)profile1.getElevation(sta);
+         double el2 = (double)profile2.getElevation(sta);
+         double expectedValue = el1 - el2;
+
+         resultingProfile = Profile.arithmaticAddProfile(profile1, profile2, -1.0);
+         double computedElevation = (double)resultingProfile.getElevation(sta);
+
+         Assert.AreEqual(expectedValue, computedElevation, doubleDelta);
+      }
+
+      [Test]
+      public void arithmaticAdd_computesCorrectElevation_whenOnTangentAndDifferentTangent()
+      {
+         CogoStation sta = new CogoStation(1130.0);
+         double el1 = (double)profile1.getElevation(sta);
+         double el2 = (double)profile2.getElevation(sta);
+         double expectedValue = el1 + el2;
+
+         resultingProfile = Profile.arithmaticAddProfile(profile1, profile2, 1.0);
+         double computedElevation = (double)resultingProfile.getElevation(sta);
+
+         Assert.AreEqual(expectedValue, computedElevation, doubleDelta);
+      }
+
+      [Test]
+      public void arithmaticAdd_computesCorrectElevation_whenOnTangentSubtractingDifferentTangent()
+      {
+         CogoStation sta = new CogoStation(1130.0);
+         double el1 = (double)profile1.getElevation(sta);
+         double el2 = (double)profile2.getElevation(sta);
+         double expectedValue = el1 - el2;
+
+         resultingProfile = Profile.arithmaticAddProfile(profile1, profile2, -1.0);
+         double computedElevation = (double)resultingProfile.getElevation(sta);
+
+         Assert.AreEqual(expectedValue, computedElevation, doubleDelta);
       }
 
       [Test]

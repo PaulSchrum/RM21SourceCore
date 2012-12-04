@@ -32,6 +32,7 @@ namespace Test_CogoStation
          TestClassForProfiles.ProfilesTestSetup();
          TestClassForProfiles.Intersect2SlopesInX_1();
          TestClassForProfiles.arithmaticAdd_computesCorrectElevation_whenOnTangentAndTangent();
+         TestClassForProfiles.arithmaticAdd_computesCorrectElevation_whenOnTangentAndDifferentTangent();
          /* * /
          testBuildAgenericAlignment();
          setupSomeStations();

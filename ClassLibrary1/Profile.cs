@@ -597,22 +597,22 @@ namespace ptsCogo
 
       public double? getKValueFromTheRight(CogoStation station)
       {
-         var resultTND = new tupleNullableDoubles();
-         getKvalue(station, out resultTND);
-         return resultTND.ahead;
+         try { setIndexToTheCorrectVC(station); }
+         catch (IndexOutOfRangeException) { }
+         return allVCs[vcIndex].Kvalue;
       }
 
       public double? getKValueFromTheLeft(CogoStation station)
       {
-         var resultTND = new tupleNullableDoubles();
-         getKvalue(station, out resultTND);
-         return resultTND.back;
+         try { setIndexToTheCorrectVC(station); }
+         catch (IndexOutOfRangeException) { }
+         return allVCs[vcIndex-1].Kvalue;
       }
 
-      public void getKvalue(CogoStation station, out tupleNullableDoubles theSlope)
+      public void getKvalue(CogoStation station, out tupleNullableDoubles theKvalue)
       {
          verticalCurve.getSwitchForProfiles callFunction = new verticalCurve.getSwitchForProfiles(verticalCurve.getKvalue);
-         getValueByDelegate(station, out theSlope, callFunction);
+         getValueByDelegate(station, out theKvalue, callFunction);
       }
 
       private void getValueByDelegate(CogoStation station, out tupleNullableDoubles theOutValue, verticalCurve.getSwitchForProfiles getFunction)
@@ -753,18 +753,19 @@ namespace ptsCogo
             this.BeginElevation = begEL;
             this.BeginSlope = beginSlope;
 
-            if (KValue == 0.0)
+            if (Double.IsPositiveInfinity(KValue))
             {
                this.IsTangent = true;
                slopeRateOfChange_ = double.PositiveInfinity;
+               this.EndSlope = this.BeginSlope;
             }
             else
             {
                this.IsTangent = false;
                slopeRateOfChange_ = 0.01 / KValue;
+               this.EndSlope = this.BeginSlope + (slopeRateOfChange_ * length);
             }
 
-            this.EndSlope = this.BeginSlope + slopeRateOfChange_ * length;
             this.length_ = length;
 
             this.IsBeginPINC = false;
