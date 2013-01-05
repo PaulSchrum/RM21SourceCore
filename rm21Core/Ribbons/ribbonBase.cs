@@ -75,11 +75,37 @@ namespace rm21Core
          tupleNullableDoubles result;
          double? theWidth = getActualWidth((CogoStation)aSOE.station, out result);
          if (result.isSingleValue == false)
-         { throw new NotImplementedException("Width discontinuity is not allowed. This happens at station = " + aSOE.station); }
+         {
+            if (result.ahead !=null)
+            {
+               theWidth = result.ahead;
+            }
+            else if (result.back != null)
+            {
+               theWidth = result.back;
+            }
+            else
+            {
+               throw new NotImplementedException("Width discontinuity is not allowed. This happens at station = " + aSOE.station);
+            }
+         }
 
          double? theCrossSlope = getCrossSlope((CogoStation)aSOE.station, out result);
          if (result.isSingleValue == false)
-         { throw new NotImplementedException("Cross slope discontinuity is not allowed. This happens at station = " + aSOE.station); }
+         {
+            if (result.ahead != null)
+            {
+               theCrossSlope = result.ahead;
+            }
+            else if (result.back != null)
+            {
+               theCrossSlope = result.back;
+            }
+            else
+            {
+               throw new NotImplementedException("Width discontinuity is not allowed. This happens at station = " + aSOE.station);
+            }
+         }
 
          if (theWidth == null) theWidth = 0.0;
 
