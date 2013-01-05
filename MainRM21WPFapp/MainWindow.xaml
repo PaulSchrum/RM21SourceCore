@@ -149,7 +149,7 @@
                         <TextBlock Width="40">Station</TextBlock>
                         <TextBox Background="White" Width="60" 
                                  Text="{Binding Path=CurrentStation, Converter={StaticResource CogoStationConvert}, ConverterParameter=0}" 
-                                 DataContext="{Binding}" MouseWheel="TextBox_MouseWheel"></TextBox>
+                                 DataContext="{Binding}" MouseWheel="TextBox_MouseWheel" GotKeyboardFocus="TextBox_GotKeyboardFocus"></TextBox>
                         <TextBlock Width="10"></TextBlock>
                         <Button Content="&lt;" Width="24"
                                 Command="{Binding Path=CrossSectionViewModel.AdvanceStationBackCmd}" FontWeight="Bold"></Button>
@@ -159,7 +159,7 @@
                         <TextBlock Width="24"></TextBlock>
                         <TextBlock>Advance Distance</TextBlock>
                         <TextBox Background="White" Width="32" 
-                                 Text="{Binding Path=CrossSectionViewModel.AdvanceDistance}"></TextBox>
+                                 Text="{Binding Path=CrossSectionViewModel.AdvanceDistance}" GotKeyboardFocus="TextBox_GotKeyboardFocus"></TextBox>
                     </StackPanel>
                     <Canvas Name="xsCanvas"
                         Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" 

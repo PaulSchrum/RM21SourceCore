@@ -28,11 +28,9 @@ namespace Test_CogoStation
       {
          /* Do not delete commented-out code in this method without first discussing with Paul Schrum */
          /* */
-         TestClassForProfiles TestClassForProfiles = new TestClassForProfiles();
-         TestClassForProfiles.ProfilesTestSetup();
-         TestClassForProfiles.Intersect2SlopesInX_1();
-         TestClassForProfiles.arithmaticAdd_computesCorrectElevation_whenOnTangentAndTangent();
-         TestClassForProfiles.arithmaticAdd_computesCorrectElevation_whenOnTangentAndDifferentTangent();
+         testProfiles();
+         testStations();
+
          /* * /
          testBuildAgenericAlignment();
          setupSomeStations();
@@ -41,6 +39,23 @@ namespace Test_CogoStation
          testCogoProfileArithmatic();  /* */
          Console.WriteLine("Testing Concluded.");
          Console.Read();
+      }
+
+      private static void testStations()
+      {
+         TestClassForStations testClassForStations = new TestClassForStations();
+         testClassForStations.createNewStation_doubleOnly_noAlignment();
+         testClassForStations.createNewStation_stringNoPlus_noAlignment();
+         testClassForStations.createNewStation_string_noAlignment();
+      }
+
+      private static void testProfiles()
+      {
+         TestClassForProfiles TestClassForProfiles = new TestClassForProfiles();
+         TestClassForProfiles.ProfilesTestSetup();
+         TestClassForProfiles.Intersect2SlopesInX_1();
+         TestClassForProfiles.arithmaticAdd_computesCorrectElevation_whenOnTangentAndTangent();
+         TestClassForProfiles.arithmaticAdd_computesCorrectElevation_whenOnTangentAndDifferentTangent();
       }
 
       private static void testCogoProfile()

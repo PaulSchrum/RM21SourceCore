@@ -47,8 +47,38 @@ namespace ptsCogo
 
       public CogoStation(double aStationDbl) : this()
       {
+         setStationFromDouble(aStationDbl);
+      }
+
+      public CogoStation(String aStationString)
+      {
+         double sta;
+         String[] splitResults;
+         splitResults = aStationString.Trim().Split(' ');
+         var testString = removePlusFromStation(splitResults[0]);
+         if (testString.Length == 0)
+            throw new Exception(String.Format("The value {0} can not resolve to a Station value.", aStationString));
+
+         // ignore Regions and Extensions and anything else
+         bool thisIsAdouble;
+         thisIsAdouble = Double.TryParse(testString, out sta);
+         if (thisIsAdouble == true)
+         {
+            setStationFromDouble(sta);
+         }
+         else
+         {
+            throw new Exception(String.Format("The value {0} can not resolve to a Station value.", aStationString));
+         }
+
+         //splitOnExtension = aStationString.Split(new String[](" ext. ", " ext "), StringSplitOptions.RemoveEmptyEntries);
+      }
+
+      private void setStationFromDouble(double aStationDbl)
+      {
          station = aStationDbl; trueStation = aStationDbl;
       }
+
 
       internal CogoStation(GenericAlignment anAlignment) { myAlignment = anAlignment; }
       public CogoStation(CogoStation other)
@@ -60,6 +90,18 @@ namespace ptsCogo
          extended = other.extended;
          trueStation = other.trueStation;
          
+      }
+
+      private static String removePlusFromStation(String inputString)
+      {
+         StringBuilder sb = new StringBuilder();
+         for (int i = 0; i < inputString.Length; i++)
+         {
+            if (inputString[i] != '+')
+               sb.Append(inputString[i]);
+         }
+
+         return sb.ToString();
       }
 
       public event PropertyChangedEventHandler PropertyChanged;
@@ -159,7 +201,11 @@ namespace ptsCogo
          double leftOfPlusDbl = leftOfPlus * Math.Pow(10.0, plusOffset);
          double rightOfPlusDbl = station - leftOfPlusDbl;
          StringBuilder retString = new StringBuilder();
-         retString.AppendFormat("{0}+{1:00.00} R {2} ext. {3:f2}", leftOfPlus, rightOfPlusDbl, region, extended);
+
+         if (extended == 0.0)
+            retString.AppendFormat("{0}+{1:00.00} R {2}", leftOfPlus, rightOfPlusDbl, region);
+         else
+            retString.AppendFormat("{0}+{1:00.00} R {2} ext. {3:f2}", leftOfPlus, rightOfPlusDbl, region, extended);
          return retString.ToString();
       }
 
@@ -178,10 +224,12 @@ namespace ptsCogo
             newStr = newStr.Remove(pos, 1);
          
          double dblValue;
-         Double.TryParse(newStr, out dblValue);
+         bool success = Double.TryParse(newStr, out dblValue);
 
+         if (success == false)
+            throw new Exception("Malformed station string exception");
+         
          return new CogoStation(dblValue);
-
       }
 
       /// Desired features not yet implemented

@@ -79,5 +79,18 @@ namespace MainRM21WPFapp
          topVM.updateCanvases();
       }
 
+      private void selectAllText(TextBox aTextBox)
+      {
+         aTextBox.SelectAll();
+      }
+
+      private void TextBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+      {
+         if (!(sender is TextBox)) return;
+
+         TextBox thisTextBox = (TextBox)sender;
+         selectAllText(thisTextBox);
+      }
+
    }
 }
