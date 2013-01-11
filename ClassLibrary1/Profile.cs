@@ -35,6 +35,15 @@ namespace ptsCogo
       //   : this(beginStation, endStation, (double)singleElevation)
       //{ }
 
+      public Profile(double beginStation, double endStation, double singleElevation)
+      {
+         vpiList aVpiList = new vpiList();
+         aVpiList.add((CogoStation) beginStation, singleElevation);
+         aVpiList.add((CogoStation) endStation, singleElevation);
+
+         buildThisFromRawVPIlist(aVpiList);
+      }
+
       public Profile(CogoStation beginStation, CogoStation endStation, double singleElevation)
       {
          vpiList aVpiList = new vpiList();
