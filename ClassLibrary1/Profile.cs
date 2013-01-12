@@ -26,7 +26,7 @@ namespace ptsCogo
          set { buildThisFromRawVPIlist(value); }
       }
 
-      private Profile() 
+      public Profile() 
       {
          vpiList aVpiList = new vpiList();
       }
@@ -211,7 +211,7 @@ namespace ptsCogo
       {
          if (Other == null) throw new ArgumentNullException();
          
-         if (null == Other.allVCs) throw new Exception("Second profile variable has no vertical curves.");
+         if (null == Other.allVCs) throw new Exception("Second profile variable has no profile segments.");
          // to do: check to see if both profiles are on the same hor alignment or
          //         are both unassociated with a horizontal alignment
 
@@ -273,6 +273,14 @@ namespace ptsCogo
          prof2 = scaledProfileOther;
          List<CogoStation> mergedStationList = mergeStationLists(prof1, prof2);
          CogoStation begSta = new CogoStation();
+
+         // temp code.  delete before commiting
+         int a = 0;
+         if (prof1.allVCs.Count == 1 || prof2.allVCs.Count == 1)
+         {
+            generateProfileInstatingCodeToAidTesting(prof1);
+            generateProfileInstatingCodeToAidTesting(prof2);
+         }
 
          verticalCurve prevVC = new verticalCurve();
          long count = -1;
@@ -959,6 +967,85 @@ namespace ptsCogo
          return sta2 + x;
       }
 
+      public void addSegment(CogoStation beginStation, double beginElevation,
+         double beginSlope, double endSlope, double length, bool isBeginPINC,
+         bool isEndPINC, bool isAProfileGap)
+      {
+         verticalCurve aVC = new verticalCurve();
+         aVC.IsaProfileGap = isAProfileGap;
+         if (false == isAProfileGap)
+         {
+            aVC.BeginStation = beginStation;
+            aVC.BeginElevation = beginElevation;
+            aVC.BeginSlope = beginSlope;
+            aVC.EndSlope = endSlope;
+            aVC.Length = length;
+            aVC.IsBeginPINC = isBeginPINC;
+            aVC.IsEndPINC = isEndPINC;
+         }
+
+         if (null == this.allVCs)
+            this.allVCs = new List<verticalCurve>();
+
+         this.allVCs.Add(aVC);
+      }
+
+      public static void generateProfileInstatingCodeToAidTesting(Profile aProf)
+      {
+         long index = 0;
+         StringBuilder instantiationCode = new StringBuilder();
+         instantiationCode.AppendLine("   {");
+         instantiationCode.AppendLine("      Profile aPfl = new Profile();");
+         instantiationCode.AppendLine("      ");
+
+         foreach (var aVC in aProf.allVCs)
+         {
+            instantiationCode.AppendLine("      ");
+            instantiationCode.Append("      // Add a Segment: No ");
+            instantiationCode.AppendLine(index.ToString());
+            instantiationCode.AppendLine("      aPfl.AddSegment(");
+            instantiationCode.Append("            ");
+            instantiationCode.Append(aVC.BeginStation.trueStation.ToString());
+            instantiationCode.AppendLine(",  // BeginStation");
+
+            instantiationCode.Append("            ");
+            instantiationCode.Append(aVC.BeginElevation.ToString());
+            instantiationCode.Append(",  // BeginElevation -- EndElevation = ");
+            instantiationCode.AppendLine(aVC.EndElevation.ToString());
+
+            instantiationCode.Append("            ");
+            instantiationCode.Append(aVC.BeginSlope.ToString());
+            instantiationCode.AppendLine(",  // BeginSlope");
+
+            instantiationCode.Append("            ");
+            instantiationCode.Append(aVC.EndSlope.ToString());
+            instantiationCode.Append(",  // EndSlope -- KValue = ");
+            instantiationCode.AppendLine(aVC.Kvalue.ToString());
+
+            instantiationCode.Append("            ");
+            instantiationCode.Append(aVC.Length.ToString());
+            instantiationCode.AppendLine(",  // Length");
+
+            instantiationCode.Append("            ");
+            instantiationCode.Append(aVC.IsBeginPINC.ToString());
+            instantiationCode.AppendLine(",  // IsBeginPINC");
+
+            instantiationCode.Append("            ");
+            instantiationCode.Append(aVC.IsEndPINC.ToString());
+            instantiationCode.AppendLine(",  // IsEndPINC");
+
+            instantiationCode.Append("            ");
+            instantiationCode.Append(aVC.IsaProfileGap.ToString());
+            instantiationCode.AppendLine(");  // IsaProfileGap");
+
+            index++;
+
+         }
+
+         instantiationCode.AppendLine("   }");
+
+         System.Windows.Forms.Clipboard.SetText(instantiationCode.ToString());
+      }
    }
 
    public class vpiList : INotifyPropertyChanged
