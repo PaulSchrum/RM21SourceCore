@@ -16,7 +16,7 @@ namespace rm21Core
    {
       // offset from 3d space curve to the Profile Grade Line
       //private ribbonBase PGLoffsetRibbon_;
-      public ribbonBase thePGLoffsetRibbon { get; set; }
+      public PGLoffset thePGLoffsetRibbon { get; set; }
 
       public LinkedList<IRibbonLike> outsideRibbons { get; set; }
       // All elements from the PGL toward the outside.  This is to the right
@@ -50,11 +50,17 @@ namespace rm21Core
 
       public void addOutsideRibbon(IRibbonLike newOutsideRibbon)
       {
+         IRibbonLike nextInnerRibbon = this.thePGLoffsetRibbon;
          if (outsideRibbons == null)
             outsideRibbons = new LinkedList<IRibbonLike>();
+         else
+         {
+            nextInnerRibbon = outsideRibbons.Last();
+         }
 
          newOutsideRibbon.setMyIndex(outsideRibbons.Count);
          outsideRibbons.AddLast(newOutsideRibbon);
+         newOutsideRibbon.setInsideRibbon(nextInnerRibbon);
       }
 
       public void addInsideRibbon(IRibbonLike newInsideRibbon)
@@ -66,9 +72,29 @@ namespace rm21Core
          insideRibbons.AddLast(newInsideRibbon);
       }
 
-      public void setPGLoffsetRibbon(ribbonBase newPGLoffsetRibbon)
+      public void setPGLoffsetRibbon(PGLoffset newPGLoffsetRibbon)
       {
+         if (outsideRibbons != null && outsideRibbons.Count > 0)
+         {
+            outsideRibbons.First().setInsideRibbon(null);
+         }
+
+         if (insideRibbons != null && insideRibbons.Count > 0)
+         {
+            insideRibbons.First().setInsideRibbon(null);
+         }
+
          thePGLoffsetRibbon = newPGLoffsetRibbon;
+
+         if (outsideRibbons != null && outsideRibbons.Count > 0)
+         {
+            outsideRibbons.First().setInsideRibbon(thePGLoffsetRibbon);
+         }
+
+         if (insideRibbons != null && insideRibbons.Count > 0)
+         {
+            insideRibbons.First().setInsideRibbon(thePGLoffsetRibbon);
+         }
       }
 
       //public void accumulateRibbonTraversal(ref StationOffsetElevation aSOE);

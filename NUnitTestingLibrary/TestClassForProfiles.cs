@@ -155,6 +155,96 @@ namespace NUnitTestingLibrary
          Assert.AreEqual(expectedX, x, 0.000001);
       }
 
+      [Test]
+      public void fixedBug2012011_1()
+      {
+         Profile pfl2 = new Profile();
+         pfl2.addSegment(
+               (CogoStation) 1000,  // BeginStation
+               12,  // BeginElevation -- EndElevation = 12
+               0,  // BeginSlope
+               0,  // EndSlope -- KValue = Infinity
+               9000,  // Length
+               false,  // IsBeginPINC
+               false,  // IsEndPINC
+               false);  // IsaProfileGap
+
+         Profile pfl1 = new Profile();
+         // Add a Segment: No 0
+         pfl1.addSegment(
+               (CogoStation)1000,  // BeginStation
+               0,  // BeginElevation -- EndElevation = 0
+               0,  // BeginSlope
+               0,  // EndSlope -- KValue = 0
+               1235,  // Length
+               false,  // IsBeginPINC
+               true,  // IsEndPINC
+               false);  // IsaProfileGap
+
+         // Add a Segment: No 1
+         pfl1.addSegment(
+               (CogoStation)2235,  // BeginStation
+               0,  // BeginElevation -- EndElevation = 12
+               0.0375,  // BeginSlope
+               0.0375,  // EndSlope -- KValue = 0
+               320,  // Length
+               true,  // IsBeginPINC
+               false,  // IsEndPINC
+               false);  // IsaProfileGap
+
+         // Add a Segment: No 2
+         pfl1.addSegment(
+               (CogoStation)2555,  // BeginStation
+               12,  // BeginElevation -- EndElevation = 27
+               0.0375,  // BeginSlope
+               0.0375,  // EndSlope -- KValue = 0
+               400,  // Length
+               false,  // IsBeginPINC
+               true,  // IsEndPINC
+               false);  // IsaProfileGap
+
+         // Add a Segment: No 3
+         pfl1.addSegment(
+               (CogoStation)2955,  // BeginStation
+               27,  // BeginElevation -- EndElevation = 27
+               0,  // BeginSlope
+               0,  // EndSlope -- KValue = 0
+               5095,  // Length
+               true,  // IsBeginPINC
+               true,  // IsEndPINC
+               false);  // IsaProfileGap
+
+         // Add a Segment: No 4
+         pfl1.addSegment(
+               (CogoStation)8050,  // BeginStation
+               27,  // BeginElevation -- EndElevation = 0
+               -26999.9999944994,  // BeginSlope
+               -26999.9999944994,  // EndSlope -- KValue = 0
+               0.00100000000020373,  // Length
+               true,  // IsBeginPINC
+               true,  // IsEndPINC
+               false);  // IsaProfileGap
+
+         // Add a Segment: No 5
+         pfl1.addSegment(
+               (CogoStation)8050.001,  // BeginStation
+               0,  // BeginElevation -- EndElevation = 0
+               0,  // BeginSlope
+               0,  // EndSlope -- KValue = 0
+               1949.999,  // Length
+               true,  // IsBeginPINC
+               false,  // IsEndPINC
+               false);  // IsaProfileGap
+
+         Profile pflResult = Profile.arithmaticAddProfile(pfl1, pfl2, -1.0);
+
+         double actualElevation = (double)pflResult.getElevation((CogoStation)5000);
+         double expectedElevation = 15.0;
+
+         Assert.AreEqual(expectedElevation, actualElevation, 0.000001);
+      
+      }
+
    }
 
 }

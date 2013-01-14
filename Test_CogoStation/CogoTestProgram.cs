@@ -47,6 +47,7 @@ namespace Test_CogoStation
          testClassForStations.createNewStation_doubleOnly_noAlignment();
          testClassForStations.createNewStation_stringNoPlus_noAlignment();
          testClassForStations.createNewStation_string_noAlignment();
+         
       }
 
       private static void testProfiles()
@@ -56,6 +57,7 @@ namespace Test_CogoStation
          TestClassForProfiles.Intersect2SlopesInX_1();
          TestClassForProfiles.arithmaticAdd_computesCorrectElevation_whenOnTangentAndTangent();
          TestClassForProfiles.arithmaticAdd_computesCorrectElevation_whenOnTangentAndDifferentTangent();
+         TestClassForProfiles.fixedBug2012011_1();
       }
 
       private static void testCogoProfile()

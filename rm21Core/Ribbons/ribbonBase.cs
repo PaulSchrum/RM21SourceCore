@@ -16,10 +16,33 @@ namespace rm21Core
    public abstract class ribbonBase : IRibbonLike, INotifyPropertyChanged
    {
       private int myIndex_ { get; set; }
+      protected rm21Side myProgressionDirection { get; set; }
+      private bool progressionDirectionHasBeenSet=false;
 
       //private Profile width_;
       public Profile Widths { get; private set; }
-      
+      internal Profile myOffsets { get; set; }
+
+      private IRibbonLike nextRibbonInward_;
+      protected IRibbonLike nextRibbonInward
+      {
+         get { return nextRibbonInward_; }
+         private set 
+         {
+            if (null != nextRibbonInward_)
+               nextRibbonInward_.onOffsetsChanged -= computeOffsetsProfile;
+
+            nextRibbonInward_ = value;
+            if (null != nextRibbonInward_)
+            {
+               nextRibbonInward_.onOffsetsChanged += computeOffsetsProfile;
+            }
+
+            computeOffsetsProfile_();
+         } 
+      }
+      public event EventHandler onOffsetsChanged;
+
       internal Profile interpretWidths { get; set; }
       public Profile CrossSlopes { get; private set; }
       internal Profile interpretCrossSlopes { get; set; }
@@ -51,6 +74,7 @@ namespace rm21Core
          Widths.addStationAndElevation(beginCloseTaperStation, newTotalWidth);
          Widths.addStationAndElevation(endCloseTaperStation, endWidth);
 
+         computeOffsetsProfile_();
       }
 
       public virtual void addCrossSlopeChangedSegment(CogoStation beginOpenTaperStation, CogoStation endOpenTaperStation, double crossSlope,
@@ -146,6 +170,25 @@ namespace rm21Core
 
       protected double LiederLineHeight { get; set; }
       protected bool SuppressSlopeText { get; set; }
+
+      protected void computeOffsetsProfile(Object sender, EventArgs e)
+      {
+         computeOffsetsProfile_();
+      }
+
+      protected void computeOffsetsProfile_()
+      {
+         Profile innerOffsetsProfile = null;
+         if (nextRibbonInward is ribbonBase)
+         {
+            innerOffsetsProfile = (nextRibbonInward as ribbonBase).myOffsets;
+         }
+         myOffsets = Profile.arithmaticAddProfile(innerOffsetsProfile, Widths, getMyScaleFactor());
+         // later optimization: do not fire event if Offsets does not really change
+         var tempOnOffsetsChange = onOffsetsChanged;
+         if (tempOnOffsetsChange != null)
+            tempOnOffsetsChange(this, new EventArgs());
+      }
 
       public void setupCrossSectionDrawing(IRM21cad2dDrawingContext cadContext)
       {
@@ -245,6 +288,20 @@ namespace rm21Core
          private set { }
       }
 
+      public void setMyProgressionDirection(rm21Side side) 
+      { 
+         myProgressionDirection = side;
+         progressionDirectionHasBeenSet = true;
+      }
+
+      public virtual int getMyScaleFactor() 
+      {
+         if (progressionDirectionHasBeenSet == false)
+            return 1;
+
+         return (int) myProgressionDirection;
+      }
+
       public int getMyIndex() { return MyIndex; }
       public void setMyIndex(int index) { MyIndex = index; }
       public int MyIndex { get { return myIndex_; } set { myIndex_ = value; } }
@@ -256,7 +313,12 @@ namespace rm21Core
             myIndex_++;
       }
 
-      public virtual string getHashName(){return "not implemented: Class = ribbonBase";}
+      public void setInsideRibbon(IRibbonLike insideRibbon)
+      {
+         nextRibbonInward = insideRibbon;
+      }
+
+      public virtual string getHashName() { return "getHashName() is not implemented for Class = ribbonBase"; }
       public ObservableCollection<Irm21TreeViewItemable> getChildren() { return null; }
 
       /// <summary>

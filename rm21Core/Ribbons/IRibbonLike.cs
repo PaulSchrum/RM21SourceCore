@@ -19,10 +19,16 @@ namespace rm21Core
 
       void moveToOuterEdge(ref StationOffsetElevation aSOE, int whichSide);
 
+      event EventHandler onOffsetsChanged;
+      void setInsideRibbon(IRibbonLike insideRibbon);
+
+      int getMyScaleFactor();
       int getMyIndex();
       void setMyIndex(int index);
+      void setMyProgressionDirection(rm21Side side);
       void incrementMyIndex();
    }
+
 }
 
 

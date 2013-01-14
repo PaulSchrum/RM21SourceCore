@@ -274,14 +274,6 @@ namespace ptsCogo
          List<CogoStation> mergedStationList = mergeStationLists(prof1, prof2);
          CogoStation begSta = new CogoStation();
 
-         // temp code.  delete before commiting
-         int a = 0;
-         if (prof1.allVCs.Count == 1 || prof2.allVCs.Count == 1)
-         {
-            generateProfileInstatingCodeToAidTesting(prof1);
-            generateProfileInstatingCodeToAidTesting(prof2);
-         }
-
          verticalCurve prevVC = new verticalCurve();
          long count = -1;
          foreach (var endSta in mergedStationList)
@@ -929,6 +921,9 @@ namespace ptsCogo
             double theSlope;
             double lenSquared; double lenIntoVC;
 
+            if (aVC.IsTangent == true)
+               return aVC.BeginSlope;
+
             lenIntoVC = station - aVC.BeginStation;
             lenSquared = lenIntoVC * lenIntoVC;
 
@@ -971,6 +966,9 @@ namespace ptsCogo
          double beginSlope, double endSlope, double length, bool isBeginPINC,
          bool isEndPINC, bool isAProfileGap)
       {
+         this.BeginProfTrueStation = Math.Min(this.BeginProfTrueStation, beginStation.trueStation);
+         this.EndProfTrueStation = Math.Max(this.EndProfTrueStation, beginStation.trueStation + length);
+
          verticalCurve aVC = new verticalCurve();
          aVC.IsaProfileGap = isAProfileGap;
          if (false == isAProfileGap)
@@ -1003,8 +1001,8 @@ namespace ptsCogo
             instantiationCode.AppendLine("      ");
             instantiationCode.Append("      // Add a Segment: No ");
             instantiationCode.AppendLine(index.ToString());
-            instantiationCode.AppendLine("      aPfl.AddSegment(");
-            instantiationCode.Append("            ");
+            instantiationCode.AppendLine("      aPfl.addSegment(");
+            instantiationCode.Append("            (CogoStation) ");
             instantiationCode.Append(aVC.BeginStation.trueStation.ToString());
             instantiationCode.AppendLine(",  // BeginStation");
 
@@ -1027,15 +1025,15 @@ namespace ptsCogo
             instantiationCode.AppendLine(",  // Length");
 
             instantiationCode.Append("            ");
-            instantiationCode.Append(aVC.IsBeginPINC.ToString());
+            instantiationCode.Append(lowerCaseToString(aVC.IsBeginPINC));
             instantiationCode.AppendLine(",  // IsBeginPINC");
 
             instantiationCode.Append("            ");
-            instantiationCode.Append(aVC.IsEndPINC.ToString());
+            instantiationCode.Append(lowerCaseToString(aVC.IsEndPINC));
             instantiationCode.AppendLine(",  // IsEndPINC");
 
             instantiationCode.Append("            ");
-            instantiationCode.Append(aVC.IsaProfileGap.ToString());
+            instantiationCode.Append(lowerCaseToString(aVC.IsaProfileGap));
             instantiationCode.AppendLine(");  // IsaProfileGap");
 
             index++;
@@ -1044,8 +1042,21 @@ namespace ptsCogo
 
          instantiationCode.AppendLine("   }");
 
-         System.Windows.Forms.Clipboard.SetText(instantiationCode.ToString());
+         try
+         {
+            System.Windows.Forms.Clipboard.SetText(instantiationCode.ToString());
+         }
+         catch (Exception e) { }
       }
+
+      private static String lowerCaseToString(bool trueFalse)
+      {
+         if (trueFalse == true)
+            return "true";
+         else
+            return "false";
+      }
+
    }
 
    public class vpiList : INotifyPropertyChanged

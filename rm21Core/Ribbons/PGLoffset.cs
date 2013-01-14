@@ -32,5 +32,9 @@ namespace rm21Core.Ribbons
          base.DrawCrossSection(cadContext, ref aSOE, whichSide);
       }
 
+      public override int getMyScaleFactor()
+      {
+         return 1;
+      }
    }
 }
