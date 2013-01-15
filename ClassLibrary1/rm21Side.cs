@@ -17,7 +17,10 @@ namespace ptsCogo
 
       public override string ToString()
       {
-         return InOutside.GetType().ToString() + " " + RLside.GetType().ToString();
+         String InOut; String LeftRight;
+         InOut = InOutside == rm21InOutSide.Inside ? "Inside " : "Outside ";
+         LeftRight = RLside == rm21RightLeftSide.Left ? "Left" : "Right";
+         return InOut + LeftRight;
       }
    }
 
