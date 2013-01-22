@@ -7,6 +7,26 @@ namespace ptsCogo
 {
    public class rm21Side
    {
+      public rm21Side() { }
+      public rm21Side(rm21RightLeftSide rightLeftSide, rm21InOutSide inOutSide)
+      {
+         this.RLside = rightLeftSide;
+         this.InOutside = inOutSide;
+      }
+
+      public rm21Side(int leftOrRightSide, int inOrOutSide)
+      {
+         if (leftOrRightSide > 0)
+            this.RLside = rm21RightLeftSide.Right;
+         else
+            this.RLside = rm21RightLeftSide.Left;
+
+         if (inOrOutSide > 0)
+            this.InOutside = rm21InOutSide.Outside;
+         else
+            this.InOutside = rm21InOutSide.Inside;
+      }
+
       public rm21RightLeftSide RLside { get; set; }
       public rm21InOutSide InOutside { get; set; }
 
@@ -20,7 +40,7 @@ namespace ptsCogo
          String InOut; String LeftRight;
          InOut = InOutside == rm21InOutSide.Inside ? "Inside " : "Outside ";
          LeftRight = RLside == rm21RightLeftSide.Left ? "Left" : "Right";
-         return InOut + LeftRight;
+         return InOut + LeftRight + "(" + this.Sign() +")";
       }
    }
 
