@@ -1046,7 +1046,7 @@ namespace ptsCogo
          {
             System.Windows.Forms.Clipboard.SetText(instantiationCode.ToString());
          }
-         catch (Exception e) { }
+         catch (Exception e) { string ignoreExcepton = e.Message; }
       }
 
       private static String lowerCaseToString(bool trueFalse)
