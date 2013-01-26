@@ -299,7 +299,8 @@ namespace rm21Core
          if (progressionDirectionHasBeenSet == false)
             return 1;
 
-         return (int) myProgressionDirection;
+         return 1;
+         // return (int)myProgressionDirection;
       }
 
       public int getMyIndex() { return MyIndex; }
