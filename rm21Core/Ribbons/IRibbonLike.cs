@@ -27,6 +27,8 @@ namespace rm21Core
       void setMyIndex(int index);
       void setMyProgressionDirection(rm21Side side);
       void incrementMyIndex();
+
+      Profile getOffsetProfile();
    }
 
 }

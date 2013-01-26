@@ -6,6 +6,7 @@ using ptsCogo;
 using rm21Core;
 using ptsCogo.coordinates.CurvilinearCoordinates;
 using PaulsTestingFramework;
+using NUnitTestingLibrary;
 
 namespace ConsoleApplication1
 {
@@ -18,13 +19,16 @@ namespace ConsoleApplication1
 
       static void Main(string[] args)
       {
-         validateSimpleSingleRibbon();
-         validateSingleRibbonWithVaryingWidthsAndCrossSlopes();
+         TestClassForCorridors testClass = new TestClassForCorridors();
+         testClass.driveTestsFromConsole();
 
-         validateSimplePGLgrouping();
+         // validateSimpleSingleRibbon();
+         // validateSingleRibbonWithVaryingWidthsAndCrossSlopes();
+
+         // validateSimplePGLgrouping();
          
          Console.WriteLine();
-         Console.ReadLine();
+         // Console.ReadLine();
       }
 
       private static void validateSimplePGLgrouping()

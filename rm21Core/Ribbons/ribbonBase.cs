@@ -319,6 +319,11 @@ namespace rm21Core
          nextRibbonInward = insideRibbon;
       }
 
+      public Profile getOffsetProfile()
+      {
+         return myOffsets;
+      }
+
       public virtual string getHashName() { return "getHashName() is not implemented for Class = ribbonBase"; }
       public ObservableCollection<Irm21TreeViewItemable> getChildren() { return null; }
 

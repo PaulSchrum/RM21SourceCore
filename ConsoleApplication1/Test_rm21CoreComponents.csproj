@@ -54,6 +54,10 @@
       <Project>{C6210AA4-95EF-4065-8597-BDB50650BA2E}</Project>
       <Name>ptsCogo</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NUnitTestingLibrary\NUnitTestingLibrary.csproj">
+      <Project>{3FFF5916-9AB7-45BA-82D3-4C3D7A0D3EAB}</Project>
+      <Name>NUnitTestingLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ptsBoundingBox\ptsCadFoundations.csproj">
       <Project>{6D55252E-1D19-472A-A712-F7D8DC6A68CD}</Project>
       <Name>ptsCadFoundations</Name>
