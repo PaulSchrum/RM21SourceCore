@@ -181,7 +181,7 @@ namespace rm21Core
          Profile innerOffsetsProfile = null;
          if (nextRibbonInward is ribbonBase)
          {
-            innerOffsetsProfile = (nextRibbonInward as ribbonBase).myOffsets;
+            innerOffsetsProfile = nextRibbonInward.getOffsetProfile();
          }
          myOffsets = Profile.arithmaticAddProfile(innerOffsetsProfile, Widths, getMyScaleFactor());
          // later optimization: do not fire event if Offsets does not really change
@@ -299,8 +299,7 @@ namespace rm21Core
          if (progressionDirectionHasBeenSet == false)
             return 1;
 
-         return 1;
-         // return (int)myProgressionDirection;
+         return myProgressionDirection.Sign();
       }
 
       public int getMyIndex() { return MyIndex; }
@@ -319,7 +318,7 @@ namespace rm21Core
          nextRibbonInward = insideRibbon;
       }
 
-      public Profile getOffsetProfile()
+      public virtual Profile getOffsetProfile()
       {
          return myOffsets;
       }

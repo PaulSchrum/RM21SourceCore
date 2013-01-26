@@ -15,8 +15,16 @@ namespace rm21Core
    public class PGLGrouping : Irm21TreeViewItemable
    {
       // offset from 3d space curve to the Profile Grade Line
-      //private ribbonBase PGLoffsetRibbon_;
-      public PGLoffset thePGLoffsetRibbon { get; set; }
+      private PGLoffset PGLoffsetRibbon_;
+      public PGLoffset thePGLoffsetRibbon 
+      {
+         get { return PGLoffsetRibbon_; }
+         set
+         {
+            PGLoffsetRibbon_ = value;
+            PGLoffsetRibbon_.setMyProgressionDirection(new rm21Side(myIndex, 1));
+         }
+      }
 
       public LinkedList<IRibbonLike> outsideRibbons { get; set; }
       // All elements from the PGL toward the outside.  This is to the right
@@ -33,13 +41,14 @@ namespace rm21Core
 
       private LinkedList<Profile> outsideRibbonWidthsProfile { get; set; }
 
-      private LinkedList<Profile> inseRibbonWidthsProfile { get; set; }
+      private LinkedList<Profile> insideRibbonWidthsProfile { get; set; }
       //////////////////////////////////////////////////////////
 
       public PGLGrouping(int whichSide)
       {
          myIndex = whichSide;
          thePGLoffsetRibbon = new PGLoffset((CogoStation) 0, (CogoStation) 0, 0, 0);
+         thePGLoffsetRibbon.setMyProgressionDirection(new rm21Side(myIndex, 1));
       }
       // All element from the PGL toward the inside.  This is to the left
       // for the right PGLGrouping and to the right for the left PGLGrouping.
@@ -59,17 +68,25 @@ namespace rm21Core
          }
 
          newOutsideRibbon.setMyIndex(outsideRibbons.Count);
+         newOutsideRibbon.setMyProgressionDirection(new rm21Side(this.myIndex, 1));
          outsideRibbons.AddLast(newOutsideRibbon);
          newOutsideRibbon.setInsideRibbon(nextInnerRibbon);
       }
 
       public void addInsideRibbon(IRibbonLike newInsideRibbon)
       {
+         IRibbonLike nextInnerRibbon = this.thePGLoffsetRibbon;
          if (insideRibbons == null)
             insideRibbons = new LinkedList<IRibbonLike>();
+         else
+         {
+            nextInnerRibbon = insideRibbons.Last();
+         }
 
          newInsideRibbon.setMyIndex(-1*insideRibbons.Count);
+         newInsideRibbon.setMyProgressionDirection(new rm21Side(this.myIndex, -1));
          insideRibbons.AddLast(newInsideRibbon);
+         newInsideRibbon.setInsideRibbon(nextInnerRibbon);
       }
 
       public void setPGLoffsetRibbon(PGLoffset newPGLoffsetRibbon)

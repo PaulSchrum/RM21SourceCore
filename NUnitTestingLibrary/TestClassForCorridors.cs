@@ -21,8 +21,14 @@ namespace NUnitTestingLibrary
 
       public void driveTestsFromConsole()
       {
-         CorridorTestsSetup();
-         OffsetOutsideOfRibbon_RightPGLInside_plus9ft();
+         //CorridorTestsSetup();
+         int i = 0;
+         setupTest2();
+         //OffsetOutsideOfRibbon_RightPGLOutside_plus12ft();
+         //OffsetOutsideOfRibbon_RightPGLOutside_plus39ft();
+         //OffsetOutsideOfRibbon_RightPGLInside_plus9ft();
+         //OffsetOutsideOfRibbon_LeftPGLOutside_neg39ft();
+         //OffsetOutsideOfRibbon_LeftPGLInside_neg9ft();
       }
 
       [SetUp]
@@ -122,6 +128,38 @@ namespace NUnitTestingLibrary
 
       }
 
+      private void setupTest2()
+      {
+         testCorridor = new rm21RoadwayCorridor("L");
+
+         testCorridor.Alignment.BeginStation = 1000.0;
+         testCorridor.Alignment.EndStation = 10000.0;
+
+         PGLGrouping pglGrLT = new PGLGrouping(-1);
+ 
+         PGLoffset pgloLT = new PGLoffset((CogoStation)1000.0, (CogoStation)10000, 0.0, 0.0);  /* PGL LT */
+         pgloLT.addWidenedSegment((CogoStation)2555.0, (CogoStation)2955.0, 15.0,
+            (CogoStation)8050.0, (CogoStation)8050.001);
+         pglGrLT.thePGLoffsetRibbon = pgloLT;
+
+         /* Back Thru Lane, Inner */
+         RoadwayLane rdyLane = new RoadwayLane((CogoStation)1000, (CogoStation)10000, 0.0, -0.02);
+         rdyLane.addWidenedSegment((CogoStation)2235, (CogoStation)2555, 12.0,
+            (CogoStation)8050, (CogoStation)8050.001);
+         rdyLane.addCrossSlopeChangedSegment((CogoStation)2200, (CogoStation)2300, 0.08,
+            (CogoStation)2500, (CogoStation)2600);
+         pglGrLT.addOutsideRibbon(rdyLane);
+
+         /* Median Shoulder LT */
+         Shoulder aShldr = new Shoulder((CogoStation)1000, (CogoStation)10000, 0.0, -0.04);
+         aShldr.addWidenedSegment((CogoStation)2555.0, (CogoStation)2715.0, 6.0,
+            (CogoStation)8050.0, (CogoStation)8050.001);
+         pglGrLT.addInsideRibbon(aShldr);
+
+         testCorridor.addPGLgrouping(pglGrLT);
+
+      }
+
       [Test]
       public void OffsetOutsideOfRibbon_RightPGLOutside_plus12ft()
       {
@@ -149,7 +187,7 @@ namespace NUnitTestingLibrary
       [Test]
       public void OffsetOutsideOfRibbon_LeftPGLInside_neg9ft()
       {
-         testAribbonOffset(0, false, 0, 3200.0, -39.0);
+         testAribbonOffset(0, false, 0, 3200.0, -9.0);
       }
 
       private void testAribbonOffset(int pglGroupingIndex, bool outsideRibbonOrNot, int ribbonIndex, double station, double expectedValue)
@@ -166,14 +204,13 @@ namespace NUnitTestingLibrary
 
          offsetProfile = testRibbon.getOffsetProfile();
 
-         testDbl = offsetProfile.getElevation((CogoStation)1200.0);
+         testDbl = offsetProfile.getElevation((CogoStation) station);
 
          if (testDbl == null)
             throw new NullReferenceException();
          else
             actualValue = (double) testDbl;
 
-         expectedValue = 12.0;
          Assert.AreEqual(expectedValue, actualValue, 0.00001);
       }
    }

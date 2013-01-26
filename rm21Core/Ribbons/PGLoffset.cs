@@ -32,9 +32,12 @@ namespace rm21Core.Ribbons
          base.DrawCrossSection(cadContext, ref aSOE, whichSide);
       }
 
-      public override int getMyScaleFactor()
+      public override Profile getOffsetProfile()
       {
-         return 1;
+         if (this.getMyScaleFactor() < 0)
+            return Profile.arithmaticAddProfile(null, myOffsets, -1.0);
+
+         return myOffsets;
       }
    }
 }
