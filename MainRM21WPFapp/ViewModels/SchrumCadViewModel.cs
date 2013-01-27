@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Shapes;
 using System.Windows.Media;
+using ptsCogo;
 
 namespace MainRM21WPFapp.ViewModels
 {

@@ -944,6 +944,12 @@ namespace ptsCogo
             BeginSlope = BeginSlope * profileScaleFactor;
             EndSlope = EndSlope * profileScaleFactor;
          }
+
+         /* 
+         internal void draw(IRM21cad2dDrawingContext drawingContext)
+         {
+            throw new NotImplementedException();
+         } */
       }
 
       public static double intersect2SlopesInX(double sta1, double El1, double slope1, double sta2, double El2, double slope2)
@@ -987,6 +993,16 @@ namespace ptsCogo
 
          this.allVCs.Add(aVC);
       }
+
+      /* * /
+      public void draw(IRM21cad2dDrawingContext drawingContext)
+      {
+         if (null == drawingContext) return;
+         foreach (var seg in this.allVCs)
+         {
+            seg.draw(drawingContext);
+         }
+      } /* */
 
       public static void generateProfileInstatingCodeToAidTesting(Profile aProf)
       {

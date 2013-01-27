@@ -32,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,6 +44,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IRM21cad2dDrawingContext.cs" />
     <Compile Include="Profile.cs" />
     <Compile Include="CogoStation.cs" />
     <Compile Include="CogoStationUnbound.cs" />
