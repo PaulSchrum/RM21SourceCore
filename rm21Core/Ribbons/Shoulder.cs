@@ -25,5 +25,12 @@ namespace rm21Core.Ribbons
          base.DrawCrossSection(cadContext, ref aSOE, whichSide);
       }
 
+      public override void DrawPlanViewSchematic(IRM21cad2dDrawingContext cadContext, int whichSide)
+      {
+         cadContext.setElementColor(Color.FromArgb(255, 54, 215, 54));
+         cadContext.setElementWeight(1.1);
+         base.DrawPlanViewSchematic(cadContext, whichSide);
+      }
+
    }
 }

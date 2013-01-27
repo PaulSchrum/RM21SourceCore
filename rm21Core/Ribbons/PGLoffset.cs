@@ -34,6 +34,8 @@ namespace rm21Core.Ribbons
 
       public override void DrawPlanViewSchematic(IRM21cad2dDrawingContext cadContext, int whichSide)
       {
+         cadContext.setElementColor(Color.FromArgb(128, 128, 128, 128));
+         cadContext.setElementWeight(0.75);
          base.DrawPlanViewSchematic(cadContext, whichSide);
       }
 
