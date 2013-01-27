@@ -24,7 +24,7 @@ namespace MainRM21WPFapp.ViewModels
          startMovingPoint.X = startMovingPoint.Y = 0.0;
 
          currentCorridor_ = parentVM_.CurrentCorridor;
-         ViewScaleFeetPerInch = 10.0;
+         ViewScaleFeetPerInch = 50.0;
          currentCorridor_ = parentVM_.CurrentCorridor;
          AdvanceDistance = 20.0;
 
@@ -34,7 +34,7 @@ namespace MainRM21WPFapp.ViewModels
          AdvanceStationBackCmd = new RelayCommand(advanceStationBack, () => canAdvanceBack);
          canAdvanceBack = true;
 
-         WindowCenterY = 1020.0;
+         WindowCenterY = 1150.0;
       }
 
       public Canvas planCanvas{get; set;}
