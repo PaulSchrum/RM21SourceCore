@@ -237,7 +237,7 @@ namespace rm21Core
       public virtual void DrawPlanViewSchematic(IRM21cad2dDrawingContext cadContext,
          int whichSide)
       {
-         //this.myOffsets.draw(cadContext);
+         this.myOffsets.draw(cadContext);
       }
       
       public virtual double? getActualWidth(CogoStation aStation)

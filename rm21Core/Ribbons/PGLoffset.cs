@@ -32,6 +32,11 @@ namespace rm21Core.Ribbons
          base.DrawCrossSection(cadContext, ref aSOE, whichSide);
       }
 
+      public override void DrawPlanViewSchematic(IRM21cad2dDrawingContext cadContext, int whichSide)
+      {
+         base.DrawPlanViewSchematic(cadContext, whichSide);
+      }
+
       public override Profile getOffsetProfile()
       {
          if (this.getMyScaleFactor() < 0)
