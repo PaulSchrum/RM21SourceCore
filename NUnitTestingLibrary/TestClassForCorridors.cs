@@ -22,7 +22,6 @@ namespace NUnitTestingLibrary
       public void driveTestsFromConsole()
       {
          //CorridorTestsSetup();
-         int i = 0;
          setupTest2();
          //OffsetOutsideOfRibbon_RightPGLOutside_plus12ft();
          //OffsetOutsideOfRibbon_RightPGLOutside_plus39ft();
