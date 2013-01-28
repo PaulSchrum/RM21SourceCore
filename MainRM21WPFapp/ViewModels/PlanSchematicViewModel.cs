@@ -24,7 +24,7 @@ namespace MainRM21WPFapp.ViewModels
          startMovingPoint.X = startMovingPoint.Y = 0.0;
 
          currentCorridor_ = parentVM_.CurrentCorridor;
-         ViewScaleFeetPerInch = 50.0;
+         ViewScaleFeetPerInch = 100.0;
          currentCorridor_ = parentVM_.CurrentCorridor;
          AdvanceDistance = 20.0;
 
@@ -34,7 +34,7 @@ namespace MainRM21WPFapp.ViewModels
          AdvanceStationBackCmd = new RelayCommand(advanceStationBack, () => canAdvanceBack);
          canAdvanceBack = true;
 
-         WindowCenterY = 1150.0;
+         WindowCenterY = 2000.0;
       }
 
       public Canvas planCanvas{get; set;}
@@ -139,8 +139,9 @@ namespace MainRM21WPFapp.ViewModels
          if (e.LeftButton == MouseButtonState.Pressed)
          {
             Point newMousePoint = e.GetPosition(CanvasXfrmd.Canvas);
-            WindowCenterX = (startMovingPoint.X - newMousePoint.X) / ViewScaleFeetPerInch;
-            WindowCenterY = (startMovingPoint.Y - newMousePoint.Y) / ViewScaleFeetPerInch;
+            WindowCenterX += (startMovingPoint.X - newMousePoint.X) / ViewScaleFeetPerInch;
+            WindowCenterY += (startMovingPoint.Y - newMousePoint.Y) / ViewScaleFeetPerInch;
+            //System.Diagnostics.Debug.Print("PS WindowCenter X: {0}   Y: {1}", WindowCenterX, WindowCenterY);
          }
       }
 

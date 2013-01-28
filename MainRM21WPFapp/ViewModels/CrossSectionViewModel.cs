@@ -139,6 +139,7 @@ namespace MainRM21WPFapp.ViewModels
             Point newMousePoint = e.GetPosition(CanvasXfrmd.Canvas);
             WindowCenterX = (startMovingPoint.X - newMousePoint.X) / ViewScaleFeetPerInch;
             WindowCenterY = (startMovingPoint.Y - newMousePoint.Y) / ViewScaleFeetPerInch;
+            //System.Diagnostics.Debug.Print("XS WindowCenter X: {0}   Y: {1}", WindowCenterX, WindowCenterY);
          }
       }
 

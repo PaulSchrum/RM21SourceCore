@@ -92,5 +92,41 @@ namespace MainRM21WPFapp
          selectAllText(thisTextBox);
       }
 
+      private void psCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+      {
+         Canvas senderCanvas = (Canvas)sender;
+         if (!(senderCanvas.DataContext is RoadwayModel_TabVM)) return;
+
+         RoadwayModel_TabVM rvm = (RoadwayModel_TabVM)senderCanvas.DataContext;
+         rvm.PlanSchematicViewModel.MouseLeftButtonDown(senderCanvas, e);
+      }
+
+      private void psCanvas_MouseMove(object sender, MouseEventArgs e)
+      {
+         Canvas senderCanvas = (Canvas)sender;
+         if (!(senderCanvas.DataContext is RoadwayModel_TabVM)) return;
+
+         RoadwayModel_TabVM rvm = (RoadwayModel_TabVM)senderCanvas.DataContext;
+         rvm.PlanSchematicViewModel.MouseMove(senderCanvas, e);
+      }
+
+      private void psCanvas_MouseLeftButtonUp(object sender, MouseEventArgs e)
+      {
+         Canvas senderCanvas = (Canvas)sender;
+         if (!(senderCanvas.DataContext is RoadwayModel_TabVM)) return;
+
+         RoadwayModel_TabVM rvm = (RoadwayModel_TabVM)senderCanvas.DataContext;
+         rvm.PlanSchematicViewModel.MouseLeftButtonUp(senderCanvas, e);
+      }
+
+      private void psCanvas_MouseWheel(object sender, MouseWheelEventArgs e)
+      {
+         Canvas senderCanvas = (Canvas)sender;
+         if (!(senderCanvas.DataContext is RoadwayModel_TabVM)) return;
+
+         RoadwayModel_TabVM rvm = (RoadwayModel_TabVM)senderCanvas.DataContext;
+         rvm.PlanSchematicViewModel.MouseWheel(senderCanvas, e);
+      }
+
    }
 }

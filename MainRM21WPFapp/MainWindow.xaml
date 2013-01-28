@@ -63,6 +63,10 @@
                             Background="Black" Grid.RowSpan="3"
                             UseLayoutRounding="True" 
                             ClipToBounds="True" 
+                            MouseLeftButtonDown="psCanvas_MouseLeftButtonDown" 
+                            MouseMove="psCanvas_MouseMove" 
+                            MouseLeftButtonUp="psCanvas_MouseLeftButtonUp"
+                            MouseWheel="psCanvas_MouseWheel"
                             ></Canvas>
                     
                     <TextBlock Grid.Column="1" VerticalAlignment="Bottom" Margin="6,0">Corridor Tree</TextBlock>
