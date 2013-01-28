@@ -13,7 +13,7 @@ namespace ptsCogo.coordinates.CurvilinearCoordinates
 
       public override string ToString()
       {
-         return EL.ToString();
+         return String.Format(EL.ToString("0.000 FT"));
       }
 
       public static Elevation operator +(Elevation anEL, Double other){return new Elevation(anEL.EL + other);}

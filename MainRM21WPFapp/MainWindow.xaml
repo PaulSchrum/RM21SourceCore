@@ -59,8 +59,8 @@
                     <TextBlock Grid.Row="0" Grid.Column="0">Plan View Schematic</TextBlock>
                     
                     <Canvas Name="psCanvas"
-                        Grid.Row="1" Margin="4" 
-                            Background="Black" Grid.RowSpan="3"
+                        Grid.Row="1" Margin="4,3,4,5" 
+                            Background="Black" Grid.RowSpan="2"
                             UseLayoutRounding="True" 
                             ClipToBounds="True" 
                             MouseLeftButtonDown="psCanvas_MouseLeftButtonDown" 
@@ -68,6 +68,17 @@
                             MouseLeftButtonUp="psCanvas_MouseLeftButtonUp"
                             MouseWheel="psCanvas_MouseWheel"
                             ></Canvas>
+                    <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left">
+                        <TextBlock Background="Wheat" Text="{Binding Path=PlanSchematicViewModel.PlanStation}" 
+                                   Width="200" Height="40" FontSize="20">
+                        </TextBlock>
+                        <TextBlock Background="White" Text="{Binding Path=PlanSchematicViewModel.PlanOffset}" 
+                                   Width="200" Height="40" FontSize="20">
+                        </TextBlock>
+                        <TextBlock Background="Wheat" Text="{Binding Path=PlanSchematicViewModel.PlanElevation}" 
+                                   Width="200" Height="40" FontSize="20">
+                        </TextBlock>
+                    </StackPanel>
                     
                     <TextBlock Grid.Column="1" VerticalAlignment="Bottom" Margin="6,0">Corridor Tree</TextBlock>
                     <TextBlock Grid.Column="2" 

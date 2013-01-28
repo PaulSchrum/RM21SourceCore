@@ -36,6 +36,10 @@ namespace MainRM21WPFapp.ViewModels
          canAdvanceBack = true;
 
          WindowCenterY = 2000.0;
+
+         PlanStation = "";
+         PlanOffset = "";
+         PlanElevation = "";
       }
 
       public Canvas planCanvas{get; set;}
@@ -57,6 +61,54 @@ namespace MainRM21WPFapp.ViewModels
                RaisePropertyChanged("ViewScaleFeetPerInch");
 
                updateTransformedCanvas();
+            }
+         }
+      }
+
+      private string planStation_;
+      public string PlanStation
+      {
+         get { return planStation_; }
+         set
+         {
+            if (planStation_ != value)
+            {
+               planStation_ = value;
+               RaisePropertyChanged("PlanStation");
+
+               //updateTransformedCanvas();
+            }
+         }
+      }
+
+      private string planOffset_;
+      public string PlanOffset
+      {
+         get { return planOffset_; }
+         set
+         {
+            if (planOffset_ != value)
+            {
+               planOffset_ = value;
+               RaisePropertyChanged("PlanOffset");
+
+               //updateTransformedCanvas();
+            }
+         }
+      }
+
+      private string planElevation_;
+      public string PlanElevation
+      {
+         get { return planElevation_; }
+         set
+         {
+            if (planElevation_ != value)
+            {
+               planElevation_ = value;
+               RaisePropertyChanged("PlanElevation");
+
+               //updateTransformedCanvas();
             }
          }
       }
@@ -145,8 +197,13 @@ namespace MainRM21WPFapp.ViewModels
             mouseSOE.offset = (Offset) newWorldPoint.X;
             mouseSOE.elevation = 0.0;
             this.currentCorridor_.getElevation(ref mouseSOE_);
+            PlanStation = ((CogoStation)mouseSOE.station).ToString();
+            PlanOffset = mouseSOE.offset.ToString();
+            PlanElevation = mouseSOE.elevation.ToString();
 
-            System.Diagnostics.Debug.WriteLine("Station {0}, Offset {1}, Elevation {2}", (CogoStation)mouseSOE.station, mouseSOE.offset, mouseSOE.elevation);
+
+            //System.Diagnostics.Debug.WriteLine("Station {0}, Offset {1}, Elevation {2}", (CogoStation)mouseSOE.station, mouseSOE.offset, mouseSOE.elevation);
+            System.Diagnostics.Debug.WriteLine("Station {0}, Offset {1}, Elevation {2}", PlanStation, mouseSOE.offset, mouseSOE.elevation);
             System.Diagnostics.Debug.WriteLine(" ");
             e.Handled = false;
             return;
