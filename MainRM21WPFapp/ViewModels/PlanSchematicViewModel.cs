@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using rm21Core;
 using ptsCogo;
+using ptsCogo.coordinates.CurvilinearCoordinates;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -131,6 +132,25 @@ namespace MainRM21WPFapp.ViewModels
 
       public void MouseMove(object sender, MouseEventArgs e)
       {
+         if (e.LeftButton == MouseButtonState.Released)
+         {
+            Point newMousePoint = e.GetPosition(CanvasXfrmd.Canvas);
+            Point newWorldPoint=new Point();
+            newWorldPoint.X = CanvasXfrmd.TransformCanvasToWorldX(newMousePoint.X);
+            newWorldPoint.Y = CanvasXfrmd.TransformCanvasToWorldY(newMousePoint.Y);
+
+            //System.Diagnostics.Debug.WriteLine(newMousePoint.ToString());
+            //System.Diagnostics.Debug.WriteLine("Station {0}, Offset {1}", (CogoStation) newWorldPoint.Y, newWorldPoint.X);
+            mouseSOE.station = newWorldPoint.Y;
+            mouseSOE.offset = (Offset) newWorldPoint.X;
+            mouseSOE.elevation = 0.0;
+            this.currentCorridor_.getElevation(ref mouseSOE_);
+
+            System.Diagnostics.Debug.WriteLine("Station {0}, Offset {1}, Elevation {2}", (CogoStation)mouseSOE.station, mouseSOE.offset, mouseSOE.elevation);
+            System.Diagnostics.Debug.WriteLine(" ");
+            e.Handled = false;
+            return;
+         }
          if (isPortWindowMoving == false) return;
          if (null == CanvasXfrmd) return;
          if (!(sender is Canvas)) return;
@@ -141,7 +161,6 @@ namespace MainRM21WPFapp.ViewModels
             Point newMousePoint = e.GetPosition(CanvasXfrmd.Canvas);
             WindowCenterX += (startMovingPoint.X - newMousePoint.X) / ViewScaleFeetPerInch;
             WindowCenterY += (startMovingPoint.Y - newMousePoint.Y) / ViewScaleFeetPerInch;
-            //System.Diagnostics.Debug.Print("PS WindowCenter X: {0}   Y: {1}", WindowCenterX, WindowCenterY);
          }
       }
 

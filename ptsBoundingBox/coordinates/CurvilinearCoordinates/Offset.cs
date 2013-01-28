@@ -7,6 +7,7 @@ namespace ptsCogo.coordinates.CurvilinearCoordinates
 {
    public class Offset
    {
+      public Offset(Offset other) { OFST = other.OFST; }
       public Offset(double newVal) { OFST = newVal; }
 
       public double OFST { get; set; }
@@ -14,18 +15,18 @@ namespace ptsCogo.coordinates.CurvilinearCoordinates
       private static String formatString;
       public override string ToString()
       {
-         formatString = "0.00";
+         formatString = "0.###";
          if (OFST < 0.0)
          {
-            return String.Format(formatString + " LT", -OFST);
+            return String.Format((-OFST).ToString(formatString) + " LT");
          }
          else if (OFST > 0.0)
          {
-            return String.Format(formatString + " RT", OFST);
+            return String.Format(OFST.ToString(formatString) + " RT");
          }
          else
          {
-            return String.Format(formatString, OFST);
+            return String.Format((0.0).ToString(formatString));
          }
       }
 

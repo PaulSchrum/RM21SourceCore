@@ -165,6 +165,7 @@ namespace rm21Core
          }
 
          if (crossSlope == null) crossSlope = 0.0;
+         if (aSOE.elevation == null) aSOE.elevation = new Elevation(0.0);
          aSOE.elevation += traversedWidth * (double)crossSlope;
       }
 

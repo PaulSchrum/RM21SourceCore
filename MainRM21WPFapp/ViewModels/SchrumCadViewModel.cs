@@ -26,6 +26,15 @@ namespace MainRM21WPFapp.ViewModels
          if (this.PropertyChanged != null)
             this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
       }
+
+      protected ptsCogo.coordinates.CurvilinearCoordinates.StationOffsetElevation mouseSOE_=new ptsCogo.coordinates.CurvilinearCoordinates.StationOffsetElevation();
+      protected ptsCogo.coordinates.CurvilinearCoordinates.StationOffsetElevation mouseSOE
+      {
+         get { return mouseSOE_; }
+         set {mouseSOE_ = value;}
+      }
+
+      protected Point mouseXYworld { get; set; }
    }
 
    public class TransformedCanvas: IRM21cad2dDrawingContext
@@ -218,7 +227,21 @@ namespace MainRM21WPFapp.ViewModels
 
       }
 
+      public double TransformCanvasToWorldX(double X)
+      {
+         X -= translateX;
+         X /= realScale_;
+         X += WindowCenterX;
+         return X;
+      }
 
+      public double TransformCanvasToWorldY(double Y)
+      {
+         Y -= translateY;
+         Y /= (realScale_ * verticalExagg);
+         Y += WindowCenterY;
+         return Y;
+      }
    }
 
 
