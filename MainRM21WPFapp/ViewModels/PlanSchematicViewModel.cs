@@ -184,6 +184,9 @@ namespace MainRM21WPFapp.ViewModels
 
       public void MouseMove(object sender, MouseEventArgs e)
       {
+         if (CanvasXfrmd == null)
+            return;
+
          if (e.LeftButton == MouseButtonState.Released)
          {
             Point newMousePoint = e.GetPosition(CanvasXfrmd.Canvas);
