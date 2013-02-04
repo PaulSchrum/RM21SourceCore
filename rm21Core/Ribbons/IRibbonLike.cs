@@ -29,6 +29,8 @@ namespace rm21Core
       void incrementMyIndex();
 
       Profile getOffsetProfile();
+
+      void setPGLgroupingParent(PGLGrouping pglGrouping);
    }
 
 }

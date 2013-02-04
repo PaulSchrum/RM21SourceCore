@@ -15,6 +15,16 @@ namespace rm21Core
 {
    public abstract class ribbonBase : IRibbonLike, INotifyPropertyChanged
    {
+      private PGLGrouping myParentPGLgrouping_;
+      public PGLGrouping MyParentPGLgrouping
+      {
+         get { return myParentPGLgrouping_; }
+         set
+         {
+            myParentPGLgrouping_ = value;
+         }
+      }
+
       private int myIndex_ { get; set; }
       protected rm21Side myProgressionDirection { get; set; }
       private bool progressionDirectionHasBeenSet=false;
@@ -322,6 +332,11 @@ namespace rm21Core
       public virtual Profile getOffsetProfile()
       {
          return myOffsets;
+      }
+
+      public void setPGLgroupingParent(PGLGrouping pglGrouping)
+      {
+         MyParentPGLgrouping = pglGrouping;
       }
 
       public virtual string getHashName() { return "getHashName() is not implemented for Class = ribbonBase"; }

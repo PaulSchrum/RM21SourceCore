@@ -14,6 +14,14 @@ namespace rm21Core
 {
    public class PGLGrouping : Irm21TreeViewItemable
    {
+      private rm21Corridor parentCorridor_;
+      public rm21Corridor ParentCorridor
+      {
+         get { return parentCorridor_; }
+         set { parentCorridor_ = value; }
+      }
+
+
       // offset from 3d space curve to the Profile Grade Line
       private PGLoffset PGLoffsetRibbon_;
       public PGLoffset thePGLoffsetRibbon 
@@ -23,6 +31,7 @@ namespace rm21Core
          {
             PGLoffsetRibbon_ = value;
             PGLoffsetRibbon_.setMyProgressionDirection(new rm21Side(myIndex, 1));
+            thePGLoffsetRibbon.setPGLgroupingParent(this);
          }
       }
 
@@ -71,6 +80,7 @@ namespace rm21Core
          newOutsideRibbon.setMyProgressionDirection(new rm21Side(this.myIndex, 1));
          outsideRibbons.AddLast(newOutsideRibbon);
          newOutsideRibbon.setInsideRibbon(nextInnerRibbon);
+         newOutsideRibbon.setPGLgroupingParent(this);
       }
 
       public void addInsideRibbon(IRibbonLike newInsideRibbon)
@@ -87,6 +97,7 @@ namespace rm21Core
          newInsideRibbon.setMyProgressionDirection(new rm21Side(this.myIndex, -1));
          insideRibbons.AddLast(newInsideRibbon);
          newInsideRibbon.setInsideRibbon(nextInnerRibbon);
+         newInsideRibbon.setPGLgroupingParent(this);
       }
 
       public void setPGLoffsetRibbon(PGLoffset newPGLoffsetRibbon)

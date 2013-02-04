@@ -20,6 +20,13 @@ namespace rm21Core
    {
       public ObservableCollection<PGLGrouping> allPGLgroupings { get; private set; }
 
+      private List<Profile> targetSurfaceXSProfiles_;
+      public List<Profile> TargetSurfaceXSProfiles
+      {
+         get { return targetSurfaceXSProfiles_; }
+         set { targetSurfaceXSProfiles_ = value; }
+      }
+
       public rm21Corridor() { }
 
       public rm21Corridor(string name_)
@@ -35,6 +42,8 @@ namespace rm21Core
       {
          if (aPGLgrouping == null)
             throw new ArgumentNullException();
+
+         aPGLgrouping.ParentCorridor = this;
 
          if (allPGLgroupings == null)
             allPGLgroupings = new ObservableCollection<PGLGrouping>();

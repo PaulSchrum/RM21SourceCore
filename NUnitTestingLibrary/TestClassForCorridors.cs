@@ -80,6 +80,10 @@ namespace NUnitTestingLibrary
          /* Outside Cut Ditch, LT */
          pglGrLT.addOutsideRibbon(new FrontSlopeCutDitch((CogoStation)1000, (CogoStation)10000, 15.0, -1.0 / 4.0));
 
+         /* Final Ray Sheet, LT */
+         //var newCutSlope = new newCutSlope((CogoStation 1000, (CogoStation) 10000, null, 1.0 / 2.0));
+         //pglGrLT.addOutsideRibbon(newCutSlope);
+
          /* Median Shoulder LT */
          aShldr = new Shoulder((CogoStation)1000, (CogoStation)10000, 0.0, -0.04);
          aShldr.addWidenedSegment((CogoStation)2555.0, (CogoStation)2715.0, 6.0,
@@ -109,6 +113,10 @@ namespace NUnitTestingLibrary
          pglGrRT.addOutsideRibbon(new Shoulder((CogoStation)1000, (CogoStation)10000, 10.0, -0.08));
          pglGrRT.addOutsideRibbon(new FrontSlopeCutDitch((CogoStation)1000, (CogoStation)10000, 15.0, -1.0 / 4.0));
 
+         /* Final Ray Sheet, RT */
+         //newCutSlope = new newCutSlope((CogoStation 1000, (CogoStation) 10000, null, 1.0 / 2.0));
+         //pglGrRT.addOutsideRibbon(newCutSlope);
+
          /* Median Shoulder RT */
          aShldr = new Shoulder((CogoStation)1000, (CogoStation)10000, 0.0, -0.04);
          aShldr.addWidenedSegment((CogoStation)2555.0, (CogoStation)2715.0, 6.0,
@@ -124,6 +132,15 @@ namespace NUnitTestingLibrary
 
          testCorridor.addPGLgrouping(pglGrLT);
          testCorridor.addPGLgrouping(pglGrRT);
+
+         Profile existingGroundSurface = new Profile();
+         existingGroundSurface.addStationAndElevation((CogoStation) (-200.0), 1.0);
+         existingGroundSurface.addStationAndElevation((CogoStation) 200, 2.5);
+
+         List<Profile> targetSurfaceProfiles = new List<Profile>();
+         targetSurfaceProfiles.Insert(0, existingGroundSurface);
+
+         testCorridor.TargetSurfaceXSProfiles = targetSurfaceProfiles;
 
       }
 
