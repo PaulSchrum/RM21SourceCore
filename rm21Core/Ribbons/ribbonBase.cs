@@ -30,7 +30,7 @@ namespace rm21Core
       private bool progressionDirectionHasBeenSet=false;
 
       //private Profile width_;
-      public Profile Widths { get; private set; }
+      public Profile Widths { get; protected set; }
       internal Profile myOffsets { get; set; }
 
       private IRibbonLike nextRibbonInward_;
@@ -54,7 +54,7 @@ namespace rm21Core
       public event EventHandler onOffsetsChanged;
 
       internal Profile interpretWidths { get; set; }
-      public Profile CrossSlopes { get; private set; }
+      public Profile CrossSlopes { get; protected set; }
       internal Profile interpretCrossSlopes { get; set; }
 
       private tupleNullableDoubles resultScratchpad;

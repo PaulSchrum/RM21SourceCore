@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using ptsCogo;
+using ptsCogo.coordinates;
+using ptsCogo.Angle;
 
 
 namespace NUnitTestingLibrary
@@ -154,6 +156,19 @@ namespace NUnitTestingLibrary
          double expectedX = 950.0;
          Assert.AreEqual(expectedX, x, 0.000001);
       }
+
+      [Test]
+      public void intersectProfileOnVerticalTangentWithRayWithOneHit()
+      {
+         ptsRay aRay = new ptsRay();
+
+      }
+
+      //[Test] public void intersectProfileOnVerticalTangentWithRayWithOneHit()
+      //[Test] public void intersectProfilewithRayNoHits()
+      //[Test] public void intersectProfileOnVerticalCurveWithRayWithOneHit()
+      //[Test] public void intersectProfileWithRayWithTwoHits()
+      //[Test] public void intersectProfileWithRayWithTwoHits_andOneIsAColocatedLine()
 
       [Test]
       public void fixedBug2012011_1()

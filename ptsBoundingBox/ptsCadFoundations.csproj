@@ -48,6 +48,7 @@
     <Compile Include="coordinates\CurvilinearCoordinates\Offset.cs" />
     <Compile Include="coordinates\CurvilinearCoordinates\StationOffsetElevation.cs" />
     <Compile Include="coordinates\ptsBoundingBox2d.cs" />
+    <Compile Include="coordinates\ptsRay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ptsElement.cs" />
     <Compile Include="ptsFeature.cs" />
