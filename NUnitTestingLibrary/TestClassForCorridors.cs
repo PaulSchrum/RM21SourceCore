@@ -114,7 +114,7 @@ namespace NUnitTestingLibrary
          pglGrRT.addOutsideRibbon(new FrontSlopeCutDitch((CogoStation)1000, (CogoStation)10000, 15.0, -1.0 / 4.0));
 
          /* Final Ray Sheet, RT */
-         //newCutSlope = new newCutSlope((CogoStation 1000, (CogoStation) 10000, null, 1.0 / 2.0));
+         var newCutSlope = new RaySheet((CogoStation) 1000, (CogoStation) 10000, 1.0 / 2.0);
          //pglGrRT.addOutsideRibbon(newCutSlope);
 
          /* Median Shoulder RT */

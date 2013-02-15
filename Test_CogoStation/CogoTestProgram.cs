@@ -58,6 +58,9 @@ namespace Test_CogoStation
          TestClassForProfiles.arithmaticAdd_computesCorrectElevation_whenOnTangentAndTangent();
          TestClassForProfiles.arithmaticAdd_computesCorrectElevation_whenOnTangentAndDifferentTangent();
          TestClassForProfiles.fixedBug2012011_1();
+         TestClassForProfiles.rayGetElevationInRayDomain_IsCorrect();
+         TestClassForProfiles.rayIntersectProfileWithRayWithOneHit_ReturnsNotNull();
+         TestClassForProfiles.rayIntersectProfileOnVerticalTangentWithRayWithOneHit();
       }
 
       private static void testCogoProfile()

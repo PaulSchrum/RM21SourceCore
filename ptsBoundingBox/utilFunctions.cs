@@ -70,14 +70,19 @@ namespace ptsCogo
          else
          {
             if (val1 == 0.0)
-               return (double) val2;
+            {
+               if (val2 == 0.0)
+                  return Double.PositiveInfinity;
+               else
+                  return (double)val2;
+            }
             else if (val2 == 0.0)
-               return (double) val1;
+               return (double)val1;
             else
             {
                double? recip1 = 1 / val1;
                double? recip2 = 1 / val2;
-               return 1 / (double) (recip1 + recip2);
+               return 1 / (double)(recip1 + recip2);
             }
          }
       }

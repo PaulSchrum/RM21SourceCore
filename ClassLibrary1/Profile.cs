@@ -5,6 +5,7 @@ using System.Text;
 using System.Collections.ObjectModel;
 using ptsCogo;
 using System.ComponentModel;
+using ptsCogo.coordinates;
 
 namespace ptsCogo
 {
@@ -56,6 +57,16 @@ namespace ptsCogo
       public Profile(vpiList rawVPIlist)
       {
          buildThisFromRawVPIlist(rawVPIlist);
+      }
+
+      private Profile(List<verticalCurve> vcList)
+      {
+         if (null == vcList)
+            throw new NullReferenceException();
+         allVCs = vcList;
+         BeginProfTrueStation = allVCs.First<verticalCurve>().BeginStation.trueStation;
+         EndProfTrueStation = allVCs.Last<verticalCurve>().EndStation.trueStation;
+         iHaveOneOrMoreVerticalCurves = allVCs.Any<verticalCurve>(memberVC => (false == memberVC.IsTangent));
       }
 
       private void buildThisFromRawVPIlist(vpiList rawVPIlist)
@@ -736,6 +747,65 @@ namespace ptsCogo
          private set { }
       }
 
+      public List<Profile> getIntersections(ptsRay aRay)
+      {
+         if (true == aRay.Slope.isVertical())
+            return this.verticalRayGetIntersection(aRay);
+
+         int advanceDirection = Math.Sign(aRay.Slope.getAsSlope());
+         List<Profile> returnList = null;
+
+         if ((advanceDirection < 0) && (aRay.StartPoint.x < allVCs[0].BeginStation.trueStation))
+            return null;
+
+         if ((advanceDirection > 0) && (aRay.StartPoint.x > allVCs[allVCs.Count-1].EndStation.trueStation))
+            return null;
+
+         int i = -1;
+         while (++i < this.allVCs.Count)
+         {
+            var profSeg = allVCs[i];
+            
+            if (true == profSeg.shouldComputeThisIntersection(aRay.StartPoint.x, advanceDirection))
+            {
+               List<verticalCurve> resultingVCs = profSeg.getRayIntersections(aRay);
+               if (null != resultingVCs)
+               {
+                  if (null == returnList)
+                     returnList = new List<Profile>();
+                  returnList.Add(new Profile(resultingVCs));
+               }
+            }
+
+         }
+
+         return returnList;
+      }
+
+      private List<Profile> verticalRayGetIntersection(ptsRay aRay)
+      {
+         double? elevOnProfile = this.getElevation((CogoStation)(aRay.StartPoint.x));
+         if (elevOnProfile == null)
+            return null;
+
+         return null;
+         // ToDo: figure out what to do about vertical profile segments
+         /* * /
+         double elevDiff = aRay.StartPoint.z - (double)elevOnProfile;
+
+         Profile retPfl = null;
+         if (true == aRay.Slope.isSlopeUp())
+         {
+            if (elevDiff > 0.0)
+               return null;
+            retPfl = new Profile(;
+         }
+         else
+         {
+
+         }  /* */
+      }
+
       internal class verticalCurve
       {
          public verticalCurve()
@@ -869,6 +939,9 @@ namespace ptsCogo
                if (length_ > 0.0)
                {
                   endStation_ = BeginStation + length_;
+                  this.IsTangent = true;
+                  if (this.BeginSlope != this.EndSlope)
+                     this.IsTangent = false;
                   if (isTangent_ == false)
                   {
                      slopeRateOfChange_ = (EndSlope - BeginSlope) / length_;
@@ -938,6 +1011,72 @@ namespace ptsCogo
             return aVC.Kvalue;
          }
 
+         public List<verticalCurve> getRayIntersections(ptsRay aRay)
+         {
+            if (true == this.IsTangent)
+               return getRayIntersectionsOnTangentSegment(aRay);
+            else
+               return getRayIntersectionsOnParabolicSegment(aRay);
+         }
+
+         private List<verticalCurve> getRayIntersectionsOnTangentSegment(ptsRay aRay)
+         {
+            if (this.slopeRateOfChange_ != Double.PositiveInfinity)
+               throw new Exception("Parabolic profile segment encountered where tangent profile segment expected.");
+
+            if (aRay.get_m() == this.get_m())
+            {
+               if (this.get_b() == aRay.get_b())
+                  return null;
+               else
+                  throw new NotImplementedException();
+            }
+
+            double intersectionX = (this.get_b() - aRay.get_b()) /
+                                   (aRay.get_m() - this.get_m());
+
+            if (intersectionX < this.BeginStation.trueStation || intersectionX > this.EndStation.trueStation)
+               return null;
+
+            if (false == aRay.isWithinDomain(intersectionX))
+               return null;
+
+            int sign = 1;
+            verticalCurve newVC = null;
+            if (true == aRay.advanceForward)
+            {
+               newVC = new verticalCurve((CogoStation)aRay.StartPoint.x, aRay.StartPoint.z,
+                  aRay.Slope, intersectionX - aRay.StartPoint.x, Double.PositiveInfinity);
+            }
+            else
+            {
+               sign = -1;
+               newVC = new verticalCurve((CogoStation)intersectionX, getElevation(this, (CogoStation)intersectionX),
+                  sign * aRay.Slope, Math.Abs(intersectionX - aRay.StartPoint.x), Double.PositiveInfinity);
+            }
+            var returnList = new List<verticalCurve>();
+            returnList.Add(newVC);
+            return returnList;
+         }
+
+         // methods to compute m and b in 'y = mx + b'
+         private double get_m()
+         {
+            return BeginSlope;
+         }
+
+         private double get_b()
+         {
+            return this.BeginElevation - (this.BeginStation.trueStation * this.BeginSlope);
+         }
+         // end of "methods to compute m and b in 'y = mx + b'"
+
+         private List<verticalCurve> getRayIntersectionsOnParabolicSegment(ptsRay aRay)
+         {
+            //throw new NotImplementedException();
+            return null;
+         }
+
          internal void Scale(double profileScaleFactor)
          {
             BeginElevation = BeginElevation * profileScaleFactor;
@@ -949,6 +1088,24 @@ namespace ptsCogo
          {
             if (BeginElevation != 0.0 && EndElevation != 0.0)
                drawingContext.Draw(BeginElevation, BeginStation.trueStation, EndElevation,EndStation.trueStation);
+         }
+
+         internal bool shouldComputeThisIntersection(double RayXpoint, int advanceDirection)
+         {
+            if (advanceDirection > 0)
+            {
+               if (RayXpoint <= this.EndStation.trueStation)
+                  return true;
+               else
+                  return false;
+            }
+            else
+            {
+               if (RayXpoint >= this.BeginStation.trueStation)
+                  return true;
+               else
+                  return false;
+            }
          }
       }
 

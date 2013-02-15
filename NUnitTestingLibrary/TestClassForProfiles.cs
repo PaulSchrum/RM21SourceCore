@@ -17,6 +17,8 @@ namespace NUnitTestingLibrary
       private Profile profile1;
       private Profile profile2;
       private Profile resultingProfile;
+      private ptsRay ray1 = new ptsRay();
+      private ptsRay ray2 = new ptsRay();
 
       [SetUp]
       public void ProfilesTestSetup()
@@ -50,6 +52,13 @@ namespace NUnitTestingLibrary
 
          profile2 = new Profile(aVpiList);
 
+         ray1.StartPoint = new ptsPoint(1100.0, 0.0, 10.0);
+         ray1.Slope = new Slope(1.00);
+         ray1.HorizontalDirection = null;
+
+         ray2.StartPoint = new ptsPoint(1100.0, 0.0, 10.0);
+         ray2.Slope = new Slope(-1.0);
+         ray2.HorizontalDirection = null;
       }
 
       [Test]
@@ -157,14 +166,72 @@ namespace NUnitTestingLibrary
          Assert.AreEqual(expectedX, x, 0.000001);
       }
 
+      /* This test must be moved soon the CadFoundations test suite when it is ready */
       [Test]
-      public void intersectProfileOnVerticalTangentWithRayWithOneHit()
+      public void rayGetElevationInRayDomain_IsCorrect()
       {
-         ptsRay aRay = new ptsRay();
-
+         ptsRay localRay = new ptsRay();
+         localRay.StartPoint = new ptsPoint(25.0, 0.0, 25.0);
+         localRay.Slope = new Slope(1.0);
+         localRay.HorizontalDirection = null;
+         double? actual = localRay.getElevationAlong(35.0);
+         double? expected = 35.0;
+         Assert.AreEqual(expected.ToString(), actual.ToString());
+         //String act = actual.ToString();
+         //String exp = expected.ToString();
       }
 
-      //[Test] public void intersectProfileOnVerticalTangentWithRayWithOneHit()
+      /* This test must be moved soon the CadFoundations test suite when it is ready */
+      [Test]
+      public void rayGetElevationOutsideRayDomain_IsNull()
+      {
+         ptsRay localRay = new ptsRay();
+         localRay.StartPoint = new ptsPoint(25.0, 0.0, 25.0);
+         localRay.Slope = new Slope();
+         localRay.Slope.setFromXY(0, 1);
+         localRay.HorizontalDirection = null;
+         double? actual = localRay.getElevationAlong(25.0);
+         Assert.IsNull(actual);
+      }
+
+      /* This test must be moved soon the CadFoundations test suite when it is ready */
+      [Test]
+      public void rayGetElevationWhenRayIsVertical_IsNull()
+      {
+         ptsRay localRay = new ptsRay();
+         localRay.StartPoint = new ptsPoint(25.0, 0.0, 25.0);
+         localRay.Slope = new Slope(1.0);
+         localRay.HorizontalDirection = null;
+         double? actual = localRay.getElevationAlong(15.0);
+         Assert.IsNull(actual);
+      }
+
+      [Test]
+      public void rayIntersectProfileWithRayWithOneHit_ReturnsNotNull()
+      {
+
+         List<Profile> raySegments = profile1.getIntersections(ray1);
+         Assert.IsNotNull(raySegments);
+      }
+
+      [Test]
+      public void rayIntersectProfileOnVerticalTangentWithRayWithOneHit()
+      {
+         List<Profile> rayResults = profile1.getIntersections(ray1);
+         int actual = rayResults.Count;
+         int expected = 1;
+         Assert.AreEqual(expected: expected, actual: actual);
+      }
+
+      /* 
+      [Test]
+      public void intersectProfileOnVerticalTangentWithRayWithOneHit_ResultsInOneHit()
+      {
+         int expectedEquals1 = 1;
+         List<Profile> raySegments = profile1.getIntersections(ray1);
+         Assert.AreEqual(expected: expectedEquals1, actual: raySegments.Count);
+      } */
+
       //[Test] public void intersectProfilewithRayNoHits()
       //[Test] public void intersectProfileOnVerticalCurveWithRayWithOneHit()
       //[Test] public void intersectProfileWithRayWithTwoHits()

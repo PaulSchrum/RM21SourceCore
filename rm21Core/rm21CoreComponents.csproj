@@ -50,6 +50,8 @@
     <Compile Include="Ribbons\IRibbonLike.cs" />
     <Compile Include="PGLGrouping.cs" />
     <Compile Include="Ribbons\PGLoffset.cs" />
+    <Compile Include="Ribbons\RaySheet.cs" />
+    <Compile Include="Ribbons\RaySheetBase.cs" />
     <Compile Include="Ribbons\ribbonBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CorridorTypes\rm21Corridor.cs" />

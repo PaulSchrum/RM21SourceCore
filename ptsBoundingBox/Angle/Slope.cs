@@ -35,6 +35,12 @@ namespace ptsCogo.Angle
             return false;
       }
 
+      public bool isSlopeUp()
+      {
+         double asDegrees = this.getAsDegrees();
+         return ((asDegrees > 0.0) || (asDegrees < 180.0));
+      }
+
       public static implicit operator double(Slope aSlope)
       {
          double testForVerticality;
