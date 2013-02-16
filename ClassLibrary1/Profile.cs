@@ -752,7 +752,7 @@ namespace ptsCogo
          if (true == aRay.Slope.isVertical())
             return this.verticalRayGetIntersection(aRay);
 
-         int advanceDirection = Math.Sign(aRay.Slope.getAsSlope());
+         int advanceDirection = aRay.advanceDirection;
          List<Profile> returnList = null;
 
          if ((advanceDirection < 0) && (aRay.StartPoint.x < allVCs[0].BeginStation.trueStation))
@@ -768,18 +768,24 @@ namespace ptsCogo
             
             if (true == profSeg.shouldComputeThisIntersection(aRay.StartPoint.x, advanceDirection))
             {
-               List<verticalCurve> resultingVCs = profSeg.getRayIntersections(aRay);
+               List<List<verticalCurve>> resultingVCs = profSeg.getRayIntersections(aRay);
                if (null != resultingVCs)
                {
                   if (null == returnList)
                      returnList = new List<Profile>();
-                  returnList.Add(new Profile(resultingVCs));
+                  foreach (var resultingVC in resultingVCs)
+                     returnList.Add(new Profile(resultingVC));
                }
             }
 
          }
 
-         return returnList;
+         if (null != returnList)
+         {
+            return returnList.OrderBy<Profile, double>(pfl => Math.Abs(pfl.BeginProfTrueStation - pfl.EndProfTrueStation)).ToList<Profile>();
+         }
+
+         return null;
       }
 
       private List<Profile> verticalRayGetIntersection(ptsRay aRay)
@@ -1011,10 +1017,20 @@ namespace ptsCogo
             return aVC.Kvalue;
          }
 
-         public List<verticalCurve> getRayIntersections(ptsRay aRay)
+         public List<List<verticalCurve>> getRayIntersections(ptsRay aRay)
          {
             if (true == this.IsTangent)
-               return getRayIntersectionsOnTangentSegment(aRay);
+            {
+               List<verticalCurve> aList = getRayIntersectionsOnTangentSegment(aRay);
+               if (null == aList)
+                  return null;
+               else
+               {
+                  var returnListOfLists = new List<List<verticalCurve>>();
+                  returnListOfLists.Add(aList);
+                  return returnListOfLists;
+               }
+            }
             else
                return getRayIntersectionsOnParabolicSegment(aRay);
          }
@@ -1043,7 +1059,7 @@ namespace ptsCogo
 
             int sign = 1;
             verticalCurve newVC = null;
-            if (true == aRay.advanceForward)
+            if (1 == aRay.advanceDirection)
             {
                newVC = new verticalCurve((CogoStation)aRay.StartPoint.x, aRay.StartPoint.z,
                   aRay.Slope, intersectionX - aRay.StartPoint.x, Double.PositiveInfinity);
@@ -1071,10 +1087,113 @@ namespace ptsCogo
          }
          // end of "methods to compute m and b in 'y = mx + b'"
 
-         private List<verticalCurve> getRayIntersectionsOnParabolicSegment(ptsRay aRay)
+         private bool isWithinDomain(CogoStation x)
          {
-            //throw new NotImplementedException();
-            return null;
+            return ((x.trueStation >= this.BeginStation.trueStation) && (x.trueStation <= this.EndStation.trueStation));
+         }
+
+         private bool isWithinDomain(double x)
+         {
+            return ((x >= this.BeginStation.trueStation) && (x <= this.EndStation.trueStation));
+         }
+
+         private List<List<verticalCurve>> getRayIntersectionsOnParabolicSegment(ptsRay aRay)
+         {
+            List<List<verticalCurve>> returnListOfLists = null;
+            double xForZeroSlope = getXforSlopeZero();
+            var parabola0_0point = new { x = xForZeroSlope, elev = getElevation(this, (CogoStation) xForZeroSlope) };
+
+            /* in which m is slope of the ray, b is the y-intercept of the ray
+             * from y = mx + b
+             * k is the slope rate of change of the parabola 
+             * from y = kx^2
+             * Solved into a quadratic equation, it is in the form of
+             * -kx^2 + mx + b = 0
+             * 
+             * which then is solved by the quadratic formula:
+             *       -m +/- sqrt(m^2 + 4kb)
+             * x =   ----------------------
+             *              -2k
+             *                
+             * Finally, the part under the square root is called the discriminant.
+             * If the discriminant is negative, the roots are imaginary and 
+             * we have no interest in those for our application.  - Paul Schrum
+             * http://en.wikipedia.org/wiki/Quadratic_equation
+             * */
+
+            // Ray parts
+            double m = aRay.get_m();
+            double untransformedB = aRay.get_b();
+            double rayElevAtParabolaInflectionStation = (m * parabola0_0point.x) + untransformedB;
+            double b = rayElevAtParabolaInflectionStation - parabola0_0point.elev;
+
+            // parabola parts
+            double k = this.slopeRateOfChange_ / 2.0;
+
+            double discriminant = (m * m) + (4 * k * b);
+            if (discriminant < 0.0) 
+               return null;
+
+            double sqrtDisc = Math.Sqrt(discriminant);
+            double xIntercept1;
+            double xIntercept2;
+
+            int sign = 1;
+            verticalCurve newVC = null;
+
+            xIntercept1 = ((-m + sqrtDisc) / (-2 * k)) + parabola0_0point.x;
+            if (true == aRay.isWithinDomain(xIntercept1) && true == this.isWithinDomain(xIntercept1))
+            {
+               if (1 == aRay.advanceDirection)
+                  newVC = new verticalCurve((CogoStation)aRay.StartPoint.x, aRay.StartPoint.z,
+                     aRay.Slope, xIntercept1 - aRay.StartPoint.x, Double.PositiveInfinity);
+               else
+               {
+                  sign = -1;
+                  newVC = new verticalCurve((CogoStation) xIntercept1, getElevation(this, (CogoStation)xIntercept1),
+                     sign * aRay.Slope, Math.Abs(xIntercept1 - aRay.StartPoint.x), Double.PositiveInfinity);
+               }
+               if (null == returnListOfLists)
+                  returnListOfLists = new List<List<verticalCurve>>();
+               
+               List<verticalCurve> listOfVerticalCurves = new List<verticalCurve>();
+               listOfVerticalCurves.Add(newVC);
+               returnListOfLists.Add(listOfVerticalCurves);
+            }
+
+            if (discriminant > 0)
+            {
+               xIntercept2 = ((-m - sqrtDisc) / (-2 * k)) + parabola0_0point.x;
+               if (true == aRay.isWithinDomain(xIntercept2) && true == this.isWithinDomain(xIntercept2))
+               {
+                  if (1 == aRay.advanceDirection)
+                  {
+                     sign = 1;
+                     newVC = new verticalCurve((CogoStation)aRay.StartPoint.x, aRay.StartPoint.z,
+                        aRay.Slope, xIntercept2 - aRay.StartPoint.x, Double.PositiveInfinity);
+                  }
+                  else
+                  {
+                     sign = -1;
+                     newVC = new verticalCurve((CogoStation)xIntercept2, getElevation(this, (CogoStation)xIntercept2),
+                        sign * aRay.Slope, Math.Abs(xIntercept2 - aRay.StartPoint.x), Double.PositiveInfinity);
+                  }
+                  if (null == returnListOfLists)
+                     returnListOfLists = new List<List<verticalCurve>>();
+
+                  List<verticalCurve> listOfVerticalCurves = new List<verticalCurve>();
+                  listOfVerticalCurves.Add(newVC);
+                  returnListOfLists.Add(listOfVerticalCurves);
+               }
+            }
+
+            return returnListOfLists;
+         }
+
+         private double getXforSlopeZero()
+         {
+            double deltaX = -1.0 * this.BeginSlope / this.slopeRateOfChange_;
+            return this.BeginStation.trueStation + deltaX;
          }
 
          internal void Scale(double profileScaleFactor)

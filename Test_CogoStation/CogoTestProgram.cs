@@ -57,10 +57,14 @@ namespace Test_CogoStation
          TestClassForProfiles.Intersect2SlopesInX_1();
          TestClassForProfiles.arithmaticAdd_computesCorrectElevation_whenOnTangentAndTangent();
          TestClassForProfiles.arithmaticAdd_computesCorrectElevation_whenOnTangentAndDifferentTangent();
-         TestClassForProfiles.fixedBug2012011_1();
-         TestClassForProfiles.rayGetElevationInRayDomain_IsCorrect();
-         TestClassForProfiles.rayIntersectProfileWithRayWithOneHit_ReturnsNotNull();
-         TestClassForProfiles.rayIntersectProfileOnVerticalTangentWithRayWithOneHit();
+         //TestClassForProfiles.fixedBug2012011_1();
+         //TestClassForProfiles.rayGetElevationInRayDomain_IsCorrect();
+         //TestClassForProfiles.rayIntersectProfileWithRayWithOneHit_ReturnsNotNull();
+         //TestClassForProfiles.rayIntersectProfileOnVerticalTangentWithOneHit();
+         //TestClassForProfiles.rayIntersectProfileOnVerticalTangentWithThreeHits();
+         //TestClassForProfiles.rayIntersectProfileWithNoHits_returnsNull();
+         //TestClassForProfiles.rayIntersectProfileOnParabola_WithTwoHits();
+         TestClassForProfiles.rayIntersectProfileOnParabola_WithThreeHits_AtCorrectStations();
       }
 
       private static void testCogoProfile()

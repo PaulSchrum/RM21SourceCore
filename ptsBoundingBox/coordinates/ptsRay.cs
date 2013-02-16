@@ -10,8 +10,15 @@ namespace ptsCogo.coordinates
    {
       public ptsPoint StartPoint { get; set; }
       public Slope Slope { get; set; }
-      private bool advanceForward_  = true;
-      public bool advanceForward { get { return advanceForward_; } set { advanceForward_ = value; } }
+      private int advanceDirection_  = 1;
+      public int advanceDirection 
+      { get { return advanceDirection_; } 
+         set 
+         {
+            advanceDirection_ = Math.Sign(value);
+            if (0 == value) advanceDirection_ = 1;
+         } 
+      }
       public Azimuth HorizontalDirection { get; set; }
 
       public double? getElevationAlong(double X)
@@ -29,13 +36,13 @@ namespace ptsCogo.coordinates
 
       }
 
-      public double get_m() { return this.Slope; }
+      public double get_m() { return this.Slope * this.advanceDirection; }
       public double get_b()
       {
          if (true == Slope.isVertical())
             return Double.NaN;
 
-         return this.StartPoint.z - (StartPoint.x * Slope.getAsSlope());
+         return this.StartPoint.z - (StartPoint.x * Slope.getAsSlope() * this.advanceDirection);
       }
 
       public bool isWithinDomain(double testX)
@@ -43,7 +50,9 @@ namespace ptsCogo.coordinates
          if (true == Slope.isVertical())
             return (testX == this.StartPoint.x);
 
-         if (Math.Sign(testX - this.StartPoint.x) == Math.Sign(this.Slope.getAsSlope()))
+         int sign = Math.Sign(testX - this.StartPoint.x);
+
+         if (Math.Sign(testX - this.StartPoint.x) == this.advanceDirection )
             return true;
 
          return false;
