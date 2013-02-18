@@ -6,6 +6,7 @@ using NUnit.Framework;
 using ptsCogo;
 using ptsCogo.coordinates;
 using ptsCogo.Angle;
+using NUnitTestingLibrary.Mocks;
 
 
 namespace NUnitTestingLibrary
@@ -403,6 +404,56 @@ namespace NUnitTestingLibrary
 
          Assert.AreEqual(expectedElevation, actualElevation, 0.000001);
       
+      }
+
+      [Test]
+      public void getProfileFromMockSurface_DefaultProfile_isNotNull()
+      {
+         rm21MockSurface aSurface = new rm21MockSurface();
+         Profile profileFromSurface = aSurface.getSectionProfile(null, -200.0, null);
+
+         Assert.NotNull(profileFromSurface);
+      }
+
+      [Test]
+      public void getProfileFromMockSurface_DefaultProfile_hasCorrectElevation()
+      {
+         rm21MockSurface aSurface = new rm21MockSurface();
+         Profile profileFromSurface = aSurface.getSectionProfile(null, -200.0, null);
+
+         double actual = (double) profileFromSurface.getElevation((CogoStation) (- 10.0));
+         double expected = 10.0;
+
+         Assert.AreEqual(expected: expected, actual: actual, delta: 0.00001);
+      }
+
+      [Test]
+      public void getProfileFromMockSurface_DefaultProfile_hasCorrectEndStation()
+      {
+         rm21MockSurface aSurface = new rm21MockSurface();
+         Profile profileFromSurface = aSurface.getSectionProfile(null, -200.0, null);
+
+         double actual = profileFromSurface.EndProfTrueStation;
+         double expected = 200.0;
+
+         Assert.AreEqual(expected: expected, actual: actual, delta: 0.00001);
+      }
+
+      [Test]
+      public void getProfileFromMockSurface_CustomProfile_hasCorrectElevation()
+      {
+         rm21MockSurface aSurface = new rm21MockSurface();
+         aSurface.theProfile = new Profile(-190.0, -100.0, 10.0);
+         aSurface.theProfile.addStationAndElevation((CogoStation)(-20.0), 12.0);
+         aSurface.theProfile.addStationAndElevation((CogoStation)20.0, 8.0);
+         aSurface.theProfile.addStationAndElevation((CogoStation)200, 16.0);
+
+         Profile profileFromSurface = aSurface.getSectionProfile(null, 0.0, null);
+
+         double actual = (double)profileFromSurface.getElevation((CogoStation)(-10.0));
+         double expected = 11.0;
+
+         Assert.AreEqual(expected: expected, actual: actual, delta: 0.00001);
       }
 
    }

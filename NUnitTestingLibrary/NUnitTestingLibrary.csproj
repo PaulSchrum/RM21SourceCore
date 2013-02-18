@@ -44,6 +44,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mocks\rm21MockSurface.cs" />
     <Compile Include="TestClassForCorridors.cs" />
     <Compile Include="TestClassForProfiles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

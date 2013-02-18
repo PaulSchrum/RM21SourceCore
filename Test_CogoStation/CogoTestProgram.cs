@@ -73,6 +73,7 @@ namespace Test_CogoStation
          //TestClassForProfiles.rayIntersectProfileWithNoHits_returnsNull();
          //TestClassForProfiles.rayIntersectProfileOnParabola_WithTwoHits();
          TestClassForProfiles.rayIntersectProfileOnParabola_WithThreeHits_AtCorrectStations();
+         TestClassForProfiles.getProfileFromMockSurface_DefaultProfile_hasCorrectEndStation();
       }
 
       private static void testCogoProfile()

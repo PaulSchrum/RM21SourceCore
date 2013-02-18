@@ -19,6 +19,12 @@ namespace rm21Core.Ribbons
          LiederLineHeight = 5.0;
       }
 
+      /* * /
+      public override double? getActualWidth(CogoStation aStation, out tupleNullableDoubles result)
+      {
+
+      }
+      /* */
 
       /* * /
       public override void moveToOuterEdge(ref StationOffsetElevation aSOE, int whichSide)
