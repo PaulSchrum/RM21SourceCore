@@ -28,6 +28,7 @@ namespace Test_CogoStation
       {
          /* Do not delete commented-out code in this method without first discussing with Paul Schrum */
          /* */
+         testCorridors();
          testProfiles();
          testStations();
 
@@ -39,6 +40,13 @@ namespace Test_CogoStation
          testCogoProfileArithmatic();  /* */
          Console.WriteLine("Testing Concluded.");
          Console.Read();
+      }
+
+      private static void testCorridors()
+      {
+         TestClassForCorridors tcc = new TestClassForCorridors();
+         tcc.CorridorTestsSetup();
+         tcc.OffsetOutsideOfRibbon_LeftPGLInside_neg9ft();
       }
 
       private static void testStations()

@@ -133,8 +133,7 @@ namespace NUnitTestingLibrary
          testCorridor.addPGLgrouping(pglGrLT);
          testCorridor.addPGLgrouping(pglGrRT);
 
-         Profile existingGroundSurface = new Profile();
-         existingGroundSurface.addStationAndElevation((CogoStation) (-200.0), 1.0);
+         Profile existingGroundSurface = new Profile(-201.0, -200.0, 1.0);
          existingGroundSurface.addStationAndElevation((CogoStation) 200, 2.5);
 
          List<Profile> targetSurfaceProfiles = new List<Profile>();
