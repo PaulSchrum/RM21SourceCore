@@ -6,7 +6,7 @@ using NUnit.Framework;
 using ptsCogo;
 using ptsCogo.coordinates;
 using ptsCogo.Angle;
-using NUnitTestingLibrary.Mocks;
+using rm21Core.Mocks;
 
 
 namespace NUnitTestingLibrary

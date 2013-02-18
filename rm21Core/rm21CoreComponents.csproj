@@ -47,6 +47,7 @@
     <Compile Include="ExternalClasses\ViewModelBase.cs" />
     <Compile Include="Irm21surface.cs" />
     <Compile Include="Irm21TreeViewItemable.cs" />
+    <Compile Include="Mocks\rm21MockSurface.cs" />
     <Compile Include="Ribbons\FrontSlopeCutDitch.cs" />
     <Compile Include="Ribbons\IRibbonLike.cs" />
     <Compile Include="PGLGrouping.cs" />

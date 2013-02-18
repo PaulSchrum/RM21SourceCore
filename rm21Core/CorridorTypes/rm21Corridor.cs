@@ -8,6 +8,7 @@ using ptsCogo.Angle;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
 
+
 namespace rm21Core
 {
    /// <summary>
