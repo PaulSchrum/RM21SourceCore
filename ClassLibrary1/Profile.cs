@@ -1206,7 +1206,17 @@ namespace ptsCogo
          internal void draw(IRM21cad2dDrawingContext drawingContext)
          {
             if (BeginElevation != 0.0 && EndElevation != 0.0)
-               drawingContext.Draw(BeginElevation, BeginStation.trueStation, EndElevation,EndStation.trueStation);
+            {
+               double x1, y1, x2, y2;
+               x1 = BeginStation.trueStation; y1 = BeginElevation;
+               x2 = EndStation.trueStation; y2 = EndElevation;
+               if (drawingContext.getAheadOrientationAngle() == 90.0)
+               {
+                  x1 = BeginElevation; y1 = BeginStation.trueStation;
+                  x2 = EndElevation; y2 = EndStation.trueStation;
+               }
+               drawingContext.Draw(x1, y1, x2, y2);
+            }
          }
 
          internal bool shouldComputeThisIntersection(double RayXpoint, int advanceDirection)

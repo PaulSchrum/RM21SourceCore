@@ -205,7 +205,7 @@ namespace rm21Core
          return children;
       }
 
-      internal void DrawCrossSection(IRM21cad2dDrawingContext cadContext, 
+      internal void DrawCrossSection(IRM21cad2dDrawingContext cadContext, Profile existingGroundProfile,
          CogoStation station, int whichSide_)
       {
          int whichSide = Math.Sign(whichSide_);

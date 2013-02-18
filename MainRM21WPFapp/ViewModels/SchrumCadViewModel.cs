@@ -58,10 +58,15 @@ namespace MainRM21WPFapp.ViewModels
          StrokeThickness_ = 1.0;
          Stroke_ = Brushes.White;
          strokeDashArray_ = new DoubleCollection();
-         
+
+         aheadOrientation_ = 0.0;
       }
 
       public Canvas Canvas { get; set; }
+
+      private double aheadOrientation_;
+      public double aheadOrientation { get{return aheadOrientation_;} set{aheadOrientation_ = value;} }
+      public double getAheadOrientationAngle() { return aheadOrientation; }
 
       public void setElementLevel(string LevelName)
       { }

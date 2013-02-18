@@ -122,6 +122,7 @@ namespace MainRM21WPFapp.ViewModels
          aCorridor.addPGLgrouping(pglGrLT);
          aCorridor.addPGLgrouping(pglGrRT);
 
+         aCorridor.existingGroundSurface = new rm21Core.Mocks.rm21MockSurface();
       }
 
       private MainWindow myViewReference_;

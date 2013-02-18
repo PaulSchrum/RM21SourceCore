@@ -310,6 +310,7 @@ namespace MainRM21WPFapp.ViewModels
          CanvasXfrmd.verticalExagg = 1.0;
          CanvasXfrmd.WindowCenterX = WindowCenterX;
          CanvasXfrmd.WindowCenterY = WindowCenterY;
+         CanvasXfrmd.aheadOrientation = 90.0;
 
          CanvasXfrmd.Canvas.Children.Clear();
 

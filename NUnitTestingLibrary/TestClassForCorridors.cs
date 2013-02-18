@@ -133,13 +133,7 @@ namespace NUnitTestingLibrary
          testCorridor.addPGLgrouping(pglGrLT);
          testCorridor.addPGLgrouping(pglGrRT);
 
-         Profile existingGroundSurface = new Profile(-201.0, -200.0, 1.0);
-         existingGroundSurface.addStationAndElevation((CogoStation) 200, 2.5);
-
-         List<Profile> targetSurfaceProfiles = new List<Profile>();
-         targetSurfaceProfiles.Insert(0, existingGroundSurface);
-
-         testCorridor.TargetSurfaceXSProfiles = targetSurfaceProfiles;
+         testCorridor.existingGroundSurface = new rm21Core.Mocks.rm21MockSurface();
 
       }
 

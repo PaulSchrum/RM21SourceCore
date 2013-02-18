@@ -16,6 +16,7 @@ namespace ptsCogo
       void setElementWeight(double Weight);
       void Draw(double X1, double Y1, double X2, double Y2);
       void Draw(string TextContent, double X1, double Y1, double rotationAngle);
+      double getAheadOrientationAngle();
    }
 
 }

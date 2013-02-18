@@ -21,12 +21,7 @@ namespace rm21Core
    {
       public ObservableCollection<PGLGrouping> allPGLgroupings { get; private set; }
 
-      private List<Profile> targetSurfaceXSProfiles_;
-      public List<Profile> TargetSurfaceXSProfiles
-      {
-         get { return targetSurfaceXSProfiles_; }
-         set { targetSurfaceXSProfiles_ = value; }
-      }
+      public Irm21surface existingGroundSurface { get; set; }
 
       public rm21Corridor() { }
 
@@ -78,14 +73,39 @@ namespace rm21Core
          cadContext.Draw("L", -0.2, 8.3, 0.0);
       }
 
+      private void DrawExistingGroundLine(IRM21cad2dDrawingContext cadContext, Profile existingGroundProfile)
+      {
+         if (null == existingGroundProfile) return;
+         cadContext.setElementColor(Color.FromArgb(128, 255, 255, 255));
+         cadContext.setElementWeight(2.0);
+         cadContext.addToDashArray(12);
+         cadContext.addToDashArray(2);
+         existingGroundProfile.draw(cadContext);
+      }
+
       public void DrawCrossSection(IRM21cad2dDrawingContext cadContext, CogoStation station)
       {
          if (allPGLgroupings != null)
          {
+            Profile existingGroundProfile = null;
+            if (null != existingGroundSurface)
+            {
+               ptsPoint leftEndPt = null;
+               ptsPoint rightEndPt = null;
+               double distancetoLeftPoint = -200.0;
+               if (Alignment.GetType is ptsCogo.Horizontal.rm21HorizontalAlignment)
+               {
+                  ((ptsCogo.Horizontal.rm21HorizontalAlignment)Alignment).getCrossSectionEndPoints(station,
+                     out leftEndPt, distancetoLeftPoint, out rightEndPt, Math.Abs(distancetoLeftPoint));
+               }
+               existingGroundProfile = existingGroundSurface.getSectionProfile(leftEndPt, distancetoLeftPoint, rightEndPt);
+            }
+
+            DrawExistingGroundLine(cadContext, existingGroundProfile);
             DrawCenterLineAnnotationelementsForXS(cadContext, station);
             foreach (var pglGrouping in allPGLgroupings)
             {
-               pglGrouping.DrawCrossSection(cadContext, station, pglGrouping.myIndex);
+               pglGrouping.DrawCrossSection(cadContext, existingGroundProfile, station, pglGrouping.myIndex);
             }
          }
       }
