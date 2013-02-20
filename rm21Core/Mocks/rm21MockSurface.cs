@@ -25,5 +25,10 @@ namespace rm21Core.Mocks
 
          return theProfile;
       }
+
+      public void setSectionProfileForMocking(Profile aProfileForMocking)
+      {
+         theProfile = aProfileForMocking;
+      }
    }
 }

@@ -22,6 +22,7 @@ namespace rm21Core
       public ObservableCollection<PGLGrouping> allPGLgroupings { get; private set; }
 
       public Irm21surface existingGroundSurface { get; set; }
+      internal Profile existingGroundProfile = null;
 
       public rm21Corridor() { }
 
@@ -87,7 +88,6 @@ namespace rm21Core
       {
          if (allPGLgroupings != null)
          {
-            Profile existingGroundProfile = null;
             if (null != existingGroundSurface)
             {
                ptsPoint leftEndPt = null;

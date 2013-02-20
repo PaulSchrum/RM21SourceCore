@@ -18,11 +18,17 @@ namespace MainRM21WPFapp.ViewModels
       {
          theRibbon_ = newRibbon;
 
-         if (theRibbon_.Widths.SegmentCount > 0)
-            WidthsVM = new ProfileVPI_VM(theRibbon_.Widths);
+         if (null != theRibbon_.Widths)
+         {
+            if (theRibbon_.Widths.SegmentCount > 0)
+               WidthsVM = new ProfileVPI_VM(theRibbon_.Widths);
+         }
 
-         if (theRibbon_.CrossSlopes.SegmentCount > 0)
-            CrossSlopesVM = new ProfileVPI_VM(theRibbon_.CrossSlopes);
+         if (null != theRibbon_.CrossSlopes)
+         {
+            if (theRibbon_.CrossSlopes.SegmentCount > 0)
+               CrossSlopesVM = new ProfileVPI_VM(theRibbon_.CrossSlopes);
+         }
       }
 
       private ribbonBase theRibbon_;

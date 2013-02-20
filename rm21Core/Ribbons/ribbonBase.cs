@@ -189,6 +189,8 @@ namespace rm21Core
 
       protected void computeOffsetsProfile_()
       {
+         if (this is ribbonBase)
+            return;
          Profile innerOffsetsProfile = null;
          if (nextRibbonInward is ribbonBase)
          {
@@ -248,7 +250,8 @@ namespace rm21Core
       public virtual void DrawPlanViewSchematic(IRM21cad2dDrawingContext cadContext,
          int whichSide)
       {
-         this.myOffsets.draw(cadContext);
+         if (null != this.myOffsets) 
+            this.myOffsets.draw(cadContext);
       }
       
       public virtual double? getActualWidth(CogoStation aStation)

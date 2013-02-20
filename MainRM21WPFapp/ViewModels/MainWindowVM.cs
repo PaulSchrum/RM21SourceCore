@@ -77,6 +77,9 @@ namespace MainRM21WPFapp.ViewModels
          /* Outside Cut Ditch, LT */
          pglGrLT.addOutsideRibbon(new FrontSlopeCutDitch((CogoStation)1000, (CogoStation)10000, 15.0,  -1.0 / 4.0));
 
+         /* Outside Cut Ditch Backslope, LT */
+         pglGrLT.addOutsideRibbon(new BackSlopeCutDitch((CogoStation)1000, (CogoStation)10000, 1.0 / 2.0));
+
          /* Median Shoulder LT */
          aShldr = new Shoulder((CogoStation)1000, (CogoStation)10000, 0.0, -0.04);
          aShldr.addWidenedSegment((CogoStation)2555.0, (CogoStation)2715.0, 6.0,
@@ -106,6 +109,12 @@ namespace MainRM21WPFapp.ViewModels
          pglGrRT.addOutsideRibbon(new Shoulder((CogoStation)1000, (CogoStation)10000, 10.0, -0.08));
          pglGrRT.addOutsideRibbon(new FrontSlopeCutDitch((CogoStation)1000, (CogoStation)10000, 15.0, -1.0 / 4.0));
 
+         /* Outside Cut Ditch Backslope, LT */
+         var ditchBackSlope = new BackSlopeCutDitch((CogoStation)1000, (CogoStation)10000, 1.0 / 2.0);
+         ditchBackSlope.addCrossSlopeChangedSegment((CogoStation)3100, (CogoStation)3200,
+            1.0 / 4.0, (CogoStation)3300, (CogoStation)3400);
+         pglGrRT.addOutsideRibbon(ditchBackSlope);
+
          /* Median Shoulder RT */
          aShldr = new Shoulder((CogoStation)1000, (CogoStation)10000, 0.0, -0.04);  
          aShldr.addWidenedSegment((CogoStation)2555.0, (CogoStation)2715.0, 6.0,
@@ -123,6 +132,11 @@ namespace MainRM21WPFapp.ViewModels
          aCorridor.addPGLgrouping(pglGrRT);
 
          aCorridor.existingGroundSurface = new rm21Core.Mocks.rm21MockSurface();
+         vpiList vpiList = new vpiList();
+         vpiList.add(-200.0, 3.0); vpiList.add(-150.0, -3.0); vpiList.add(-130.0, 6.0);
+         vpiList.add(-40.0, 3.5); vpiList.add(38.0, 6.2); vpiList.add(55.0, 2.8);
+         vpiList.add(70.0, 7.2); vpiList.add(100.0, 5.5); vpiList.add(200.0, 2.8);
+         aCorridor.existingGroundSurface.setSectionProfileForMocking(new Profile(vpiList));
       }
 
       private MainWindow myViewReference_;
