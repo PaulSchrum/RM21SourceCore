@@ -134,8 +134,8 @@ namespace MainRM21WPFapp.ViewModels
          aCorridor.existingGroundSurface = new rm21Core.Mocks.rm21MockSurface();
          vpiList vpiList = new vpiList();
          vpiList.add(-200.0, 3.0); vpiList.add(-150.0, -3.0); vpiList.add(-130.0, 6.0);
-         vpiList.add(-40.0, 3.5); vpiList.add(38.0, 6.2); vpiList.add(55.0, 2.8);
-         vpiList.add(70.0, 7.2); vpiList.add(100.0, 5.5); vpiList.add(200.0, 2.8);
+         vpiList.add(-40.0, 3.5); vpiList.add(38.0, 6.2); vpiList.add(65.0, 2.8);
+         vpiList.add(68.0, 7.2); vpiList.add(100.0, 5.5); vpiList.add(200.0, 2.8);
          aCorridor.existingGroundSurface.setSectionProfileForMocking(new Profile(vpiList));
       }
 
