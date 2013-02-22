@@ -15,7 +15,7 @@ namespace rm21Core.Ribbons
       public BackSlopeCutDitch(CogoStation beginStation, CogoStation endStation, Slope initialSlope)
          : base(beginStation, endStation, initialSlope) { }
 
-      public override string getHashName() { return "Ditch Front Slope"; }
+      public override string getHashName() { return "Ditch Back Slope"; }
 
       public override void DrawCrossSection(IRM21cad2dDrawingContext cadContext,
          ref StationOffsetElevation aSOE, int whichSide)
