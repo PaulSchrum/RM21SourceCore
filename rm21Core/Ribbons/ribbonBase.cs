@@ -189,7 +189,7 @@ namespace rm21Core
 
       protected void computeOffsetsProfile_()
       {
-         if (this is ribbonBase)
+         if (this is rm21Core.Ribbons.RaySheetBase)
             return;
          Profile innerOffsetsProfile = null;
          if (nextRibbonInward is ribbonBase)

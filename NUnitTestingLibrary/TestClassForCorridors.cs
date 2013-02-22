@@ -21,9 +21,9 @@ namespace NUnitTestingLibrary
 
       public void driveTestsFromConsole()
       {
-         //CorridorTestsSetup();
-         setupTest2();
-         //OffsetOutsideOfRibbon_RightPGLOutside_plus12ft();
+         CorridorTestsSetup();
+         //setupTest2();
+         OffsetOutsideOfRibbon_RightPGLOutside_plus12ft();
          //OffsetOutsideOfRibbon_RightPGLOutside_plus39ft();
          //OffsetOutsideOfRibbon_RightPGLInside_plus9ft();
          //OffsetOutsideOfRibbon_LeftPGLOutside_neg39ft();
