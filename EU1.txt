@@ -1,0 +1,12 @@
+User Story
+EU1
+As an End User I should be able to
+promote a Microstation Selection Set to a RM21 Horizontal Alignment.
+
+Comments:
+The end user may start a new project at this point.  If a project does not exist in the current directory, the next one up is searched, up to two levels up.
+
+If no project is found, a default project is created in the current directory.  This is silent in that the user is notified with a message in the ustn message field.
+
+
+
