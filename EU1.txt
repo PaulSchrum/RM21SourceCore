@@ -8,5 +8,24 @@ The end user may start a new project at this point.  If a project does not exist
 
 If no project is found, a default project is created in the current directory.  This is silent in that the user is notified with a message in the ustn message field.
 
+Implementation Details:
+The user selects one or more contiguous elements.  If these are not end to end, an error is reported.  If they are not lines, arcs, point curves, or b-splines, an error is reported.  point curves and b-splines are only allowed to include euler spirals.  So these elements non-conformity to euler spiral constraints also causes an error report.
+
+The tool settings box has a text item for Alignment Name and one for Begin Station.  These are seeded with default values.  There is a toggle button (default=checked) labeled "Create Corridor".  It also has an instruction string: "Data Point to Promote", which is also in the Prompt area.  This string is only present if there are no errors to report.
+
+If the selected elements are already promoted, a message appears stating so, and the user is not allowed to do it again.
+
+When the user is allowed to promote the elements, 
+1) rm21UstnSide composes them into a List<> and sends them through the interface to the project on the Model Side (rm21Core.dll).
+
+2) rm21Core composes the raw data into a Horizontal Alignment.
+
+3) If Create Corridor was checked on, rm21Core creates a Corridor for the HA and adds it to the projects list of allHorizontalAlignments.  If Create Corridor was checked off, rm21Core adds the HA to the Project's List<> of allUnassociatedHorizontalAlignments.
+
+(The UnassociatedHorizontalAlignments List<> is a store of HAs that may later be promoted to Corridor or serve as an definingHA under a Corridor.  This will not be developed under EU1.)
+
+4) The newly instantiated Corridor and its associated newly created HorizontalAlignment are stored in persistance, which is the dgn file, through an interface.  
+
+Later, an approach will be developed to allow persistance to any dgn file.  So the currently active dgn file has to identify itself to the Core so that the dgn file path and name can be part of what is stored (not persistently) as part of a Corridor id.  When a file is opened anew, the Core model is reinstantiated anew.  (This may be optimized later to be less work and less time).  It is instantiated by populating all of the previously persisted corridors in the current dgn, and all persisted corridors in all reference files and nested reference files.
 
 
