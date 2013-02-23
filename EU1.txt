@@ -1,22 +1,25 @@
 User Story
 EU1
+Last Update: 2/22/2013
+
 As an End User I should be able to
 promote a Microstation Selection Set to a RM21 Horizontal Alignment.
 
 Comments:
-The end user may start a new project at this point.  If a project does not exist in the current directory, the next one up is searched, up to two levels up.
+The end user may start a new project at this point.  If a project does not exist in the current directory, the next one up is searched, up to two levels up.  A project found up to that level will be used.
 
 If no project is found, a default project is created in the current directory.  This is silent in that the user is notified with a message in the ustn message field.
 
 Implementation Details:
-The user selects one or more contiguous elements.  If these are not end to end, an error is reported.  If they are not lines, arcs, point curves, or b-splines, an error is reported.  point curves and b-splines are only allowed to include euler spirals.  So these elements non-conformity to euler spiral constraints also causes an error report.
+The user selects one or more contiguous elements.  If these are not end to end, an error is reported.  If they are not lines, arcs, point curves, or b-splines, an error is reported.  Point curves and b-splines are only allowed to include euler spirals.  So these elements' non-conformity to euler spiral constraints also causes an error report.
 
-The tool settings box has a text item for Alignment Name and one for Begin Station.  These are seeded with default values.  There is a toggle button (default=checked) labeled "Create Corridor".  It also has an instruction string: "Data Point to Promote", which is also in the Prompt area.  This string is only present if there are no errors to report.
+The tool settings box has a text item for Alignment Name and one for Begin Station.  These are seeded with default values.  There is a toggle button (default=checked) labeled "Create Corridor".  It also has an Instruction Prompt text field.
+If there is no legal selection set, the Instruction Prompt field says, "No Selection Set active." and DP'ing has no effect.  If a Selection Set is active and passes preliminary tests (by types of selected elements), then the Instruction Prompt text field states, "Data Point to Promote", which is also in the Prompt area.  This string is only present if there are no errors to report and the Promote action is allowed to proceed.
 
 If the selected elements are already promoted, a message appears stating so, and the user is not allowed to do it again.
 
 When the user is allowed to promote the elements, 
-1) rm21UstnSide composes them into a List<> and sends them through the interface to the project on the Model Side (rm21Core.dll).
+1) Upon user Data Point action (instructing the Promote action), rm21UstnSide composes the selected elements into a List<> and sends them through the interface to the project on the Model Side (rm21Core.dll).
 
 2) rm21Core composes the raw data into a Horizontal Alignment.
 
