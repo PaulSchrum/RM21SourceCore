@@ -23,7 +23,12 @@ namespace ptsCogo
       {
          angle_ = Math.PI * degrees / 180.0;
       }
-      
+
+      public static double radiansFromDegree(double degrees)
+      {
+         return Math.PI * degrees / 180.0;
+      }
+
       public virtual void setFromDegreesMinutesSeconds(int degrees, int minutes, double seconds)
       {
          setFromDegrees(
