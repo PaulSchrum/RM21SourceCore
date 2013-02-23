@@ -38,6 +38,13 @@ namespace ptsCogo
          return new ptsVector(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
       }
 
+      public Double GetHorizontalDistanceTo(ptsPoint other)
+      {
+         Double dx = other.x - this.x;
+         Double dy = other.y - this.y;
+         return Math.Sqrt(dx * dx + dy * dy);
+      }
+
       public int compareByXthenY(ptsPoint other)
       {
          int xComp; int yComp;
