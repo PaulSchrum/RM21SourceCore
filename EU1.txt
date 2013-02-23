@@ -31,4 +31,15 @@ When the user is allowed to promote the elements,
 
 Later, an approach will be developed to allow persistance to any dgn file.  So the currently active dgn file has to identify itself to the Core so that the dgn file path and name can be part of what is stored (not persistently) as part of a Corridor id.  When a file is opened anew, the Core model is reinstantiated anew.  (This may be optimized later to be less work and less time).  It is instantiated by populating all of the previously persisted corridors in the current dgn, and all persisted corridors in all reference files and nested reference files.
 
+EU1_1 Promote a single Microstation Line to a RM21 Horizontal Alignment.
+1.  User selects Line element.
+2.  User activates PromoteToHorizontalAlignment command.
+3.  rm21Ustn validates the selection set according to rules listed above.
+4.  rm21Ustn composes instance of List<ustnFundamentalGeometry> from the selection set.
+        (ustnFundamentalGeometry implements IRM21fundamentalGeometry) 
+5.  rm21Ustn instantiates a rm21HorizontalAlignment by calling the constructor which uses List<IRM21fundamentalGeometry>.
+6.  rm21Ustn persists the new instance in the current dgn model as part of the current rm21Project.
+7.  rm21Ustn validates that the instance was persisted correctly and writes the persistance target dgnElement to the dgn file.
+8.  rm21Ustn indicates to the end user that the elements have been promoted to an RM21 Horizontal Alignment.
+
 
