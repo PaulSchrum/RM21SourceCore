@@ -96,7 +96,7 @@ namespace NUnitTestingLibrary
          double actualLength = HA.EndStation - HA.BeginStation;
          double expectedLength = 100.0;
 
-         //Assert.AreEqual(expected: expectedLength, actual: actualLength, delta: 0.00001);
+         Assert.AreEqual(expected: expectedLength, actual: actualLength, delta: 0.00001);
          
       }
 

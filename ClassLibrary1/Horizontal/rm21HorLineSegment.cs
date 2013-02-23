@@ -16,13 +16,13 @@ namespace ptsCogo.Horizontal
          EndPoint = endPt;
       }
 
-      public Double Length
+      public override Double Length
       {
          get
          {
-            return BeginPoint.GetHorizontalDistanceTo(EndPoint);  //next: add list and list management to rm21HorizontalAlignment class
+            return BeginPoint.GetHorizontalDistanceTo(EndPoint);
          }
-         private set { }
+         protected set { }
       }
    }
 }

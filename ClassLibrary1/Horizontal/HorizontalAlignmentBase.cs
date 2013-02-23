@@ -13,5 +13,7 @@ namespace ptsCogo.Horizontal
       {
 
       }
+
+      public virtual Double Length { get; protected set; }
    }
 }
