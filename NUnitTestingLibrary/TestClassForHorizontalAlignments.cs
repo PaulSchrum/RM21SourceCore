@@ -93,11 +93,11 @@ namespace NUnitTestingLibrary
             fundamentalGeometryList: fundmtlGeoms,
             Name: null, stationEquationing: null);
 
-         double actualLength = HA.EndStation - HA.EndStation;
+         double actualLength = HA.EndStation - HA.BeginStation;
          double expectedLength = 100.0;
 
          //Assert.AreEqual(expected: expectedLength, actual: actualLength, delta: 0.00001);
-         Assert.AreNotEqual(expected: expectedLength, actual: actualLength);
+         
       }
 
    }

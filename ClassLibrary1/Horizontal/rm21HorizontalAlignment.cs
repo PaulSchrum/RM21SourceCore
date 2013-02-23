@@ -5,8 +5,10 @@ using System.Text;
 
 namespace ptsCogo.Horizontal
 {
-   public class rm21HorizontalAlignment : GenericAlignment
+   public class rm21HorizontalAlignment : HorizontalAlignmentBase
    {
+      
+
       public rm21HorizontalAlignment(List<IRM21fundamentalGeometry> fundamentalGeometryList,
          String Name, List<Double> stationEquationing)
          : base(stationEquationing)
