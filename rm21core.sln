@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C# Express 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ptsDigitalTerrainModel", "ptsDigitalTerrainModel\ptsDigitalTerrainModel.csproj", "{F878D5A9-26C0-452C-8209-CCD24B41BA02}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_ptsDTM1", "ptsDtmTest1\Test_ptsDTM1.csproj", "{9992374B-AE60-49E6-A8AC-C1103CE8F6DC}"
@@ -25,6 +25,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainRM21WPFapp", "MainRM21WPFapp\MainRM21WPFapp.csproj", "{1192FF69-2C9B-4606-8716-7A1F2FA82B49}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTestingLibrary", "NUnitTestingLibrary\NUnitTestingLibrary.csproj", "{3FFF5916-9AB7-45BA-82D3-4C3D7A0D3EAB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserStories", "UserStories", "{1D2A1024-42DC-44D1-92F0-03CDC06F626B}"
+	ProjectSection(SolutionItems) = preProject
+		EU1.txt = EU1.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

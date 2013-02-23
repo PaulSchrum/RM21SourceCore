@@ -44,6 +44,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Horizontal\IRM21fundamentalGeometry.cs" />
     <Compile Include="Horizontal\rm21HorizontalAlignment.cs" />
     <Compile Include="IRM21cad2dDrawingContext.cs" />
     <Compile Include="Profile.cs" />

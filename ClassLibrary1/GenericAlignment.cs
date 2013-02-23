@@ -46,6 +46,35 @@ namespace ptsCogo
          Parent = anAlignment;
       }
 
+      public GenericAlignment(List<Double> stationEquationingList)
+         : this()
+      {
+         if (null == stationEquationingList)
+         {
+            BeginStation = 0.0;
+            EndStation = Double.NegativeInfinity;
+            return;
+         }
+
+         allRegions = new List<Region>();
+         BeginStation = stationEquationingList[0];
+         EndStation = Double.PositiveInfinity;
+
+         if (stationEquationingList.Count > 1)
+            EndStation = stationEquationingList[1];
+
+         if (stationEquationingList.Count > 2)
+         {
+            throw new NotImplementedException();
+         }
+
+         int i;
+         for (i = 0; i < stationEquationingList.Count; i++)
+         {
+
+         }
+      }
+
       public void addRegion(double beginSta, double endSta)
       {
          if (Parent != null)

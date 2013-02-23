@@ -27,10 +27,11 @@ namespace Test_CogoStation
       static void Main(string[] args)
       {
          /* Do not delete commented-out code in this method without first discussing with Paul Schrum */
-         /* */
+         /* * /
          testCorridors();
          testProfiles();
-         testStations();
+         testStations(); /* */
+         testHorizontalAlignments();
 
          /* * /
          testBuildAgenericAlignment();
@@ -40,6 +41,13 @@ namespace Test_CogoStation
          testCogoProfileArithmatic();  /* */
          Console.WriteLine("Testing Concluded.");
          Console.Read();
+      }
+
+      private static void testHorizontalAlignments()
+      {
+         TestClassForHorizontalAlignments tcfha = new TestClassForHorizontalAlignments();
+         tcfha.HAtestSetup();
+         tcfha.HorizontalAlignment_instantiateSingleLine_fromFundamentalGeometry();
       }
 
       private static void testCorridors()
