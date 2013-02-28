@@ -221,6 +221,7 @@ namespace NUnitTestingLibrary
             actualValue = (double) testDbl;
 
          Assert.AreEqual(expectedValue, actualValue, 0.00001);
+         //Assert.AreNotEqual(expectedValue, actualValue, 0.00001);
       }
    }
 }

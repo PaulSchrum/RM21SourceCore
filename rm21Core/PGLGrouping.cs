@@ -183,6 +183,58 @@ namespace rm21Core
          return 0;
       }
 
+      public int getCrossSlope(StationOffsetElevation soePoint, ref Slope theCrossSlope)
+      {
+         StationOffsetElevation workingSOE = new StationOffsetElevation(soePoint);
+         workingSOE.offset *= myIndex;
+         IRibbonLike bingoRibbon=null;
+
+         // seek the correct ribbon
+         if (thePGLoffsetRibbon != null)
+         {
+            double? pglOffset = thePGLoffsetRibbon.getActualWidth((CogoStation)workingSOE.station);
+            if (pglOffset != null)
+               workingSOE.offset -= pglOffset;
+         }
+         if (workingSOE.offset > 0.0)
+         {
+            if (outsideRibbons == null) return 1;
+
+            foreach (var aRibbon in outsideRibbons)
+            {
+               aRibbon.accumulateRibbonTraversal(ref workingSOE);
+               bingoRibbon = aRibbon;
+               if (workingSOE.offset <= 0.0) break;
+            }
+            if (workingSOE.offset > 0.0)
+               return 1;
+         }
+         else if (workingSOE.offset < 0.0)
+         {
+            if (insideRibbons == null) return -1;
+
+            workingSOE.offset *= -1.0;
+            foreach (var aRibbon in insideRibbons)
+            {
+               aRibbon.accumulateRibbonTraversal(ref workingSOE);
+               bingoRibbon = aRibbon;
+               if (workingSOE.offset <= 0.0) break;
+            }
+            if (workingSOE.offset > 0.0)
+               return -1;
+         }
+         else
+            workingSOE.elevation = 0.0;
+
+         theCrossSlope = null;
+         if (bingoRibbon != null)
+         {
+            theCrossSlope = bingoRibbon.getCrossSlope((CogoStation) (soePoint.station));
+         }
+
+         return 0;
+      }
+
       public override string ToString()
       {
          if (myIndex > 0)

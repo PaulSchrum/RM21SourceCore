@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ptsCogo.coordinates.CurvilinearCoordinates;
 using ptsCogo;
+using ptsCogo.Angle;
 
 namespace rm21Core
 {
@@ -28,6 +29,7 @@ namespace rm21Core
       void setMyProgressionDirection(rm21Side side);
       void incrementMyIndex();
 
+      Slope getCrossSlope(CogoStation aStation);
       Profile getOffsetProfile();
 
       void setPGLgroupingParent(PGLGrouping pglGrouping);

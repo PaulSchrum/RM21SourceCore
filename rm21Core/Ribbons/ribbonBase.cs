@@ -280,6 +280,14 @@ namespace rm21Core
          return result.back;
       }
 
+      public virtual Slope getCrossSlope(CogoStation aStation) 
+      {
+         tupleNullableDoubles rslt = new tupleNullableDoubles();
+         Double? xSlope = getCrossSlope(aStation, out rslt);
+         if (xSlope == null) return null;
+         else return new Slope((Double)xSlope);
+      }
+
       public virtual int getChildRibbonCount()
       {
          return 1;

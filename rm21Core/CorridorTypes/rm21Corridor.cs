@@ -60,6 +60,18 @@ namespace rm21Core
          return false;
       }
 
+      public bool getCrossSlope(StationOffsetElevation soePoint, ref Slope xSlope)
+      {
+         foreach (var pglGr in allPGLgroupings)
+         {
+            int isOnThisPGLgrp = pglGr.getCrossSlope(soePoint, ref xSlope);
+            if (isOnThisPGLgrp == 0)
+               return true;
+         }
+
+         return false;
+      }
+
       public override string ToString()
       {
          return Name;

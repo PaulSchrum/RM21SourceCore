@@ -6,6 +6,7 @@ using System.Windows;
 using rm21Core;
 using ptsCogo;
 using ptsCogo.coordinates.CurvilinearCoordinates;
+using ptsCogo.Angle;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -40,6 +41,7 @@ namespace MainRM21WPFapp.ViewModels
          PlanStation = "";
          PlanOffset = "";
          PlanElevation = "";
+         PlanCrossSlope = "";
       }
 
       public Canvas planCanvas{get; set;}
@@ -75,6 +77,22 @@ namespace MainRM21WPFapp.ViewModels
             {
                planStation_ = value;
                RaisePropertyChanged("PlanStation");
+
+               //updateTransformedCanvas();
+            }
+         }
+      }
+
+      private string planCrossSlope_;
+      public string PlanCrossSlope
+      {
+         get { return planCrossSlope_; }
+         set
+         {
+            if (planCrossSlope_ != value)
+            {
+               planCrossSlope_ = value;
+               RaisePropertyChanged("PlanCrossSlope");
 
                //updateTransformedCanvas();
             }
@@ -203,6 +221,10 @@ namespace MainRM21WPFapp.ViewModels
             PlanStation = ((CogoStation)mouseSOE.station).ToString();
             PlanOffset = mouseSOE.offset.ToString();
             PlanElevation = mouseSOE.elevation.ToString();
+
+            Slope xSlope = new Slope();
+            this.currentCorridor_.getCrossSlope(mouseSOE_, ref xSlope);
+            PlanCrossSlope = xSlope.ToString();
 
 
             //System.Diagnostics.Debug.WriteLine("Station {0}, Offset {1}, Elevation {2}", (CogoStation)mouseSOE.station, mouseSOE.offset, mouseSOE.elevation);
