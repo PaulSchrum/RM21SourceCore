@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ptsCogo.Angle;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,6 +28,27 @@ namespace ptsCogo
          }
 
          return new ptsPoint(aPoint.x + this.x, aPoint.y + this.y, aPoint.z + this.z);
+      }
+
+      public Azimuth Azimuth
+      {
+         get
+         {
+            return new Azimuth(Math.Atan2(y, x));
+         }
+         private set { }
+      }
+
+      public Double Length
+      {
+         get { return Math.Sqrt(x * x + y * y + z * z); }
+         private set { }
+      }
+
+      public Azimuth DirectionHorizontal
+      {
+         get { return new Azimuth(Math.Atan2(y, x)); }
+         private set { }
       }
 
       public double dotProduct(ptsVector otherVec)

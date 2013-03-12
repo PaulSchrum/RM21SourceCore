@@ -8,7 +8,14 @@ namespace ptsCogo
    [Serializable]
    public class ptsAngle
    {
-      private double angle__;
+      protected double angle__;
+
+      public ptsAngle() { }
+
+      public ptsAngle(double radius, double degreeOfCurveLength)
+      {
+         angle__ = degreeOfCurveLength / radius;
+      }
       internal double angle_ { get { return angle__; } set { normalize(value); } }
       //private static double angleScratchPad;
 

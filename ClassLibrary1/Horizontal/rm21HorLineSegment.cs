@@ -7,13 +7,13 @@ namespace ptsCogo.Horizontal
 {
    public class rm21HorLineSegment : HorizontalAlignmentBase
    {
-      public ptsPoint BeginPoint { get; set; }
-      public ptsPoint EndPoint { get; set; }
-
-      public rm21HorLineSegment(ptsPoint begPt, ptsPoint endPt) : base()
+      public rm21HorLineSegment(ptsPoint begPt, ptsPoint endPt)
+         : base(begPt, endPt)
       {
-         BeginPoint = begPt;
-         EndPoint = endPt;
+         //this.BeginBearing = do this later
+         //this.EndBearing = do this later
+         this.BeginDegreeOfCurve = 0.0;
+         this.EndDegreeOfCurve = 0.0;
       }
 
       public override Double Length

@@ -17,10 +17,11 @@ namespace ptsCogo.Horizontal
 
    public enum expectedType 
    { 
-      LineSegment, 
-      ArcSegmentInsideSolution, 
-      ArcSegmentOutsideSoluion,
-      ArcHalfCircle,
-      EulerSpiral 
+      LineSegment=0, 
+      ArcSegmentInsideSolution=1, 
+      ArcSegmentOutsideSoluion=2,
+      ArcHalfCircleDeflectingLeft=3,
+      ArcHalfCircleDeflectingRight=4,
+      EulerSpiral=5 
    };
 }

@@ -27,7 +27,7 @@ namespace NUnitTestingLibrary.Mocks
                { expectedType_ = ptsCogo.Horizontal.expectedType.EulerSpiral; }
                else
                {
-                  if (true == isArc())
+                  if (true == isArc(value))
                   {
                      expectedType_ = value;
                   }
@@ -71,7 +71,7 @@ namespace NUnitTestingLibrary.Mocks
 
       private Double getDegreeOfCurveNotAspiral()
       {
-         if (true == this.isArc())
+         if (true == this.isArc(this.expectedType_))
          {
             return 100.0 / ptsCogo.ptsAngle.radiansFromDegree(pointList[0].GetHorizontalDistanceTo(pointList[1]));
          }
@@ -80,6 +80,8 @@ namespace NUnitTestingLibrary.Mocks
          
          return 0.0;
       }
+
+      // start here: Do I need to set "isClockwise"?  //
 
       public Double getEndingDegreeOfCurve()
       {
@@ -96,11 +98,12 @@ namespace NUnitTestingLibrary.Mocks
          return expectedType;
       }
 
-      public bool isArc()
+      public bool isArc(expectedType ExpectType)
       {
-         return (this.expectedType == ptsCogo.Horizontal.expectedType.ArcSegmentInsideSolution ||
-                 this.expectedType == ptsCogo.Horizontal.expectedType.ArcSegmentOutsideSoluion ||
-                 this.expectedType == ptsCogo.Horizontal.expectedType.ArcHalfCircle);
+         return (ExpectType == ptsCogo.Horizontal.expectedType.ArcSegmentInsideSolution ||
+                 ExpectType == ptsCogo.Horizontal.expectedType.ArcSegmentOutsideSoluion ||
+                 ExpectType == ptsCogo.Horizontal.expectedType.ArcHalfCircleDeflectingLeft ||
+                 ExpectType == ptsCogo.Horizontal.expectedType.ArcHalfCircleDeflectingRight);
       }
    }
 }

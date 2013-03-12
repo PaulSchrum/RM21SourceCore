@@ -64,8 +64,13 @@ namespace ptsCogo.Horizontal
          if (3 != ptList.Count)
             throw new Exception("Arc Segment fundamental geometry must have three and only three points.");
 
-         throw new NotImplementedException("RM21 Horizontal Alignment Arc Segment");
+         rm21HorArc anArg = new rm21HorArc(ptList[0], ptList[1], ptList[2], fundGeomArcSeg.getExpectedType());
+
+         if (null == allChildSegments) allChildSegments = new List<HorizontalAlignmentBase>();
+
+         allChildSegments.Add(anArg);
       }
+
 
       private void createAddEulerSpiralSegment(IRM21fundamentalGeometry fundGeomEulerSpiralSeg)
       {

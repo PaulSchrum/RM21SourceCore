@@ -83,5 +83,12 @@ namespace ptsCogo.Angle
       {
          return new Azimuth(anAz.getAsRadians() - anAngle.getAsRadians());  // Note: Subtraction is intentional since azimuths are clockwise
       }
+
+      public static ptsAngle operator -(Azimuth Az1, Azimuth Az2)
+      {
+         ptsAngle returnAngle = new ptsAngle();
+         returnAngle.angle_ = Az1.angle_ - Az2.angle_;
+         return returnAngle;
+      }
    }
 }

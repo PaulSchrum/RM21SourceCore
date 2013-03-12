@@ -49,6 +49,7 @@ namespace Test_CogoStation
          tcfha.HAtestSetup();
          tcfha.HorizontalAlignment_instantiateSingleLine_fromFundamentalGeometry();
          tcfha.HorizontalAlignment_instantiateSingleLine_fromFundamentalGeometry_HAlengthIs100();
+         tcfha.HorizontalAlignment_instantiateSingleArcExterior_fromFundamentalGeometry_HAlengthIs5235();
       }
 
       private static void testCorridors()
