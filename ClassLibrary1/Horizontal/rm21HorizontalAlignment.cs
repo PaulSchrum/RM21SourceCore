@@ -83,6 +83,7 @@ namespace ptsCogo.Horizontal
 
       private void restationAlignment()
       {
+         if (null == allChildSegments) return;
          Double runningTrueStation = this.BeginStation;
          foreach (var segment in allChildSegments)
          {
