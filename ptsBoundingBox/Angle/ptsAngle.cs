@@ -36,6 +36,11 @@ namespace ptsCogo
          return Math.PI * degrees / 180.0;
       }
 
+      public static double degreesFromRadians(double radians)
+      {
+         return 180.0 * radians / Math.PI;
+      }
+
       public virtual void setFromDegreesMinutesSeconds(int degrees, int minutes, double seconds)
       {
          setFromDegrees(
