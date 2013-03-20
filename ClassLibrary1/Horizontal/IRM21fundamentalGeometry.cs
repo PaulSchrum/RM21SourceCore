@@ -12,7 +12,7 @@ namespace ptsCogo.Horizontal
       Double getBeginningDegreeOfCurve();
       Double getEndingDegreeOfCurve();
       expectedType getExpectedType();
-
+      int getDeflectionSign();
    }
 
    public enum expectedType 
@@ -20,8 +20,7 @@ namespace ptsCogo.Horizontal
       LineSegment=0, 
       ArcSegmentInsideSolution=1, 
       ArcSegmentOutsideSoluion=2,
-      ArcHalfCircleDeflectingLeft=3,
-      ArcHalfCircleDeflectingRight=4,
-      EulerSpiral=5 
+      ArcHalfCircle=3,
+      EulerSpiral=4 
    };
 }

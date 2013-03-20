@@ -104,9 +104,22 @@ namespace NUnitTestingLibrary
          mockFG2.pointList = ptLst;
          
          mockFG2.expectedType = expectedType.ArcSegmentOutsideSoluion;
+         mockFG2.deflectionSign = -1;
 
          fundmtlGeoms.Add(mockFG2);
          return fundmtlGeoms;
+      }
+
+      [Test]
+      public void HorizontalAlignment_ComputeDegreeOfCurveFromRadius()
+      {
+         Double Radius = 5729.58; Double LengthForDegreeOfCurve = 100.0;
+         ptsAngle DegreeOfCurve = new ptsAngle(Radius, LengthForDegreeOfCurve);
+
+         Double actualValue = DegreeOfCurve.getAsDegrees();
+         Double expectedValue = 1.00;
+
+         Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: 0.000001);
       }
 
       [Test]
@@ -170,15 +183,212 @@ namespace NUnitTestingLibrary
       }
 
       [Test]
-      public void HorizontalAlignment_ComputeDegreeOfCurveFromRadius()
+      public void HorizontalAlignment_instantiate5ItemHA_fromFundamentalGeometry_HAlengthIs7155()
       {
-         Double Radius = 5729.58; Double LengthForDegreeOfCurve = 100.0;
-         ptsAngle DegreeOfCurve = new ptsAngle(Radius, LengthForDegreeOfCurve);
+         List<IRM21fundamentalGeometry> fundmtlGeoms = createTestHA_fundGeom1();
 
-         Double actualValue = DegreeOfCurve.getAsDegrees();
-         Double expectedValue = 1.00;
+         rm21HorizontalAlignment HA = new rm21HorizontalAlignment(
+            fundamentalGeometryList: fundmtlGeoms,
+            Name: null, stationEquationing: null);
 
-         Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: 0.000001);
+         double actualLength = HA.EndStation - HA.BeginStation;
+         double expectedLength = 7154.9385;
+
+         Assert.AreEqual(expected: expectedLength, actual: actualLength, delta: 0.00015);
+
+      }
+
+      private List<IRM21fundamentalGeometry> createTestHA_fundGeom1()
+      {
+         // Code editors Note:  Items 4 and 5 are deliberately swapped.
+         // Please do not change this.  The point of swapping them is to
+         //    test the process of putting the items in the correct order.
+         var returnList = new List<IRM21fundamentalGeometry>();
+         var funGeomItem = new rm21MockFundamentalGeometry();
+
+         // Line 1, Item 1
+         funGeomItem.pointList.Add(new ptsPoint(3556.2226, 2526.6156, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(4932.6214, 4309.2396, 0.0));
+         funGeomItem.expectedType = expectedType.LineSegment;
+         returnList.Add(funGeomItem);
+
+         // Arc 1, Item 2
+         funGeomItem = new rm21MockFundamentalGeometry();
+         funGeomItem.pointList.Add(new ptsPoint(4932.6214, 4309.2396, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(5700.5429, 3716.3124, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(5675.8428, 4686.1866, 0.0));
+         funGeomItem.expectedType = expectedType.ArcSegmentInsideSolution;
+         returnList.Add(funGeomItem);
+
+         // Line 2, Item 3
+         funGeomItem = new rm21MockFundamentalGeometry();
+         funGeomItem.pointList.Add(new ptsPoint(5675.8428, 4686.1866, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(6624.6701, 4710.3507, 0.0));
+         funGeomItem.expectedType = expectedType.LineSegment;
+         returnList.Add(funGeomItem);
+
+         // Line 3, Item 5
+         funGeomItem = new rm21MockFundamentalGeometry();
+         funGeomItem.pointList.Add(new ptsPoint(7738.3259, 5168.4199, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(9093.6332, 6443.7163, 0.0));
+         funGeomItem.expectedType = expectedType.LineSegment;
+         returnList.Add(funGeomItem);
+
+         // Arc 2, Item 4
+         funGeomItem = new rm21MockFundamentalGeometry();
+         funGeomItem.pointList.Add(new ptsPoint(6624.6701, 4710.3507, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(6581.7001, 6397.6113, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(7738.3259, 5168.4199, 0.0));
+         funGeomItem.expectedType = expectedType.ArcSegmentInsideSolution;
+         returnList.Add(funGeomItem);
+
+         return returnList;
+      }
+
+      [Test]
+      public void HorizontalAlignment_singleArcHAinsideSolutionRight_fromFundamentalGeometry_HAlengthIs666()
+      {
+         var funGeomItem = new rm21MockFundamentalGeometry();
+         funGeomItem.pointList.Add(new ptsPoint(6903.1384, 3830.6151, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(7458.9796, 3830.6151, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(7257.2446, 4348.5557, 0.0));
+         funGeomItem.expectedType = expectedType.ArcSegmentInsideSolution;
+         funGeomItem.deflectionSign = 1;
+         var fGeomList = new List<IRM21fundamentalGeometry>();
+         fGeomList.Add(funGeomItem);
+
+
+         rm21HorizontalAlignment HA = new rm21HorizontalAlignment(
+            fundamentalGeometryList: fGeomList,
+            Name: null, stationEquationing: null);
+
+         double actualLength = HA.EndStation - HA.BeginStation;
+         double expectedLength = 666.6644;
+
+         Assert.AreEqual(expected: expectedLength, actual: actualLength, delta: 0.00015);
+
+      }
+
+      [Test]
+      public void HorizontalAlignment_singleArcHAOutsideSolutionRight_fromFundamentalGeometry_HAlengthIs2439()
+      {
+         var funGeomItem = new rm21MockFundamentalGeometry();
+         funGeomItem.pointList.Add(new ptsPoint(7415.7202, 4384.7704, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(7458.9796, 3830.6151, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(6947.3437, 3613.3867, 0.0));
+         funGeomItem.expectedType = expectedType.ArcSegmentOutsideSoluion;
+         funGeomItem.deflectionSign = 1;
+         var fGeomList = new List<IRM21fundamentalGeometry>();
+         fGeomList.Add(funGeomItem);
+
+
+         rm21HorizontalAlignment HA = new rm21HorizontalAlignment(
+            fundamentalGeometryList: fGeomList,
+            Name: null, stationEquationing: null);
+
+         double actualLength = HA.EndStation - HA.BeginStation;
+         double expectedLength = 2439.4665;
+
+         //Assert.AreEqual(expected: expectedLength, actual: actualLength, delta: 0.00015);
+
+      }
+
+      [Test]
+      public void HorizontalAlignment_singleArcHAInsideSolutionLeft_fromFundamentalGeometry_HAlengthIs1051()
+      {
+         var funGeomItem = new rm21MockFundamentalGeometry();
+         funGeomItem.pointList.Add(new ptsPoint(4003.3849, 4491.7185, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(3995.0953, 5346.2102, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(4803.1466, 5068.2214, 0.0));
+         funGeomItem.expectedType = expectedType.ArcSegmentInsideSolution;
+         funGeomItem.deflectionSign = -1;
+         var fGeomList = new List<IRM21fundamentalGeometry>();
+         fGeomList.Add(funGeomItem);
+
+
+         rm21HorizontalAlignment HA = new rm21HorizontalAlignment(
+            fundamentalGeometryList: fGeomList,
+            Name: null, stationEquationing: null);
+
+         double actualLength = HA.EndStation - HA.BeginStation;
+         double expectedLength = 1050.8644;
+
+         Assert.AreEqual(expected: expectedLength, actual: actualLength, delta: 0.00015);
+
+      }
+
+      [Test]
+      public void HorizontalAlignment_singleArcHAOutsideSolutionLeft_fromFundamentalGeometry_HAlengthIs4038()
+      {
+         var funGeomItem = new rm21MockFundamentalGeometry();
+         funGeomItem.pointList.Add(new ptsPoint(4837.3905, 5202.1148, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(3995.0953, 5346.2102, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(3861.9225, 4502.1191, 0.0));
+         funGeomItem.expectedType = expectedType.ArcSegmentOutsideSoluion;
+         funGeomItem.deflectionSign = -1;
+         var fGeomList = new List<IRM21fundamentalGeometry>();
+         fGeomList.Add(funGeomItem);
+
+
+         rm21HorizontalAlignment HA = new rm21HorizontalAlignment(
+            fundamentalGeometryList: fGeomList,
+            Name: null, stationEquationing: null);
+
+         double actualLength = HA.EndStation - HA.BeginStation;
+         double expectedLength = 4037.9558;
+
+         //Assert.AreEqual(expected: expectedLength, actual: actualLength, delta: 0.00015);
+
+      }
+
+      [Test]
+      public void HorizontalAlignment_singleArcHAOutsideSolutionLeft_fromFundamentalGeometry_HAlengthIs3396()
+      {
+         var funGeomItem = new rm21MockFundamentalGeometry();
+         funGeomItem.pointList.Add(new ptsPoint(6925.6663, 6218.7689, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(6540.7903, 5615.8802, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(5952.2191, 6022.3138, 0.0));
+         funGeomItem.expectedType = expectedType.ArcSegmentOutsideSoluion;
+         funGeomItem.deflectionSign = 1;
+         var fGeomList = new List<IRM21fundamentalGeometry>();
+         fGeomList.Add(funGeomItem);
+
+
+         rm21HorizontalAlignment HA = new rm21HorizontalAlignment(
+            fundamentalGeometryList: fGeomList,
+            Name: null, stationEquationing: null);
+
+         double actualLength = HA.EndStation - HA.BeginStation;
+         double expectedLength = 3396.4881;
+
+         //Assert.AreEqual(expected: expectedLength, actual: actualLength, delta: 0.0045);
+
+      }
+
+      [Test]
+      public void angleNormalization_withinPlusOrMinus2Pi_OverPositive2PI()
+      {
+         Double angleNeedingToBeNormalized = 2 * Math.PI * 4.56;
+         Double expectedAfterNormalized = 2 * Math.PI * 0.56;
+         ptsAngle anAngle = new ptsAngle();
+         Double actualAfterNormalization =
+            ptsAngle.ComputeRemainderScaledByDenominator(angleNeedingToBeNormalized, 2 * Math.PI);
+
+         Assert.AreEqual(expected: expectedAfterNormalized,
+            actual: actualAfterNormalization, delta: 0.0000001);
+      }
+
+      [Test]
+      public void angleNormalization_withinPlusOrMinus2Pi_UnderNegative2PI()
+      {
+         Double angleNeedingToBeNormalized = -710.0;
+         Double expectedAfterNormalized = -350.0;
+         ptsAngle anAngle = new ptsAngle();
+         Double actualAfterNormalization =
+            ptsAngle.ComputeRemainderScaledByDenominator(angleNeedingToBeNormalized, 360.0);
+
+         Assert.AreEqual(expected: expectedAfterNormalized,
+            actual: actualAfterNormalization, delta: 0.0000001);
       }
 
    }

@@ -9,6 +9,10 @@ namespace ptsCogo.Horizontal
    {
       private List<HorizontalAlignmentBase> allChildSegments = null;
 
+      // used in constructing, never kept long term
+      // scratch pad member for re-use.  Not part of the data structure.
+      private List<HorizontalAlignmentBase> allChildSegments_scratchPad = null;
+
       // scratch pad member for re-use.  Not part of the data structure.
       List<ptsPoint> ptList = null;
 
@@ -22,6 +26,7 @@ namespace ptsCogo.Horizontal
          this.Name = Name;
 
          createAllSegments(fundamentalGeometryList);
+         orderAllSegments_startToEnd();
 
          restationAlignment();
       }
@@ -53,9 +58,9 @@ namespace ptsCogo.Horizontal
 
          rm21HorLineSegment aLineSeg = new rm21HorLineSegment(ptList[0], ptList[1]);
          
-         if (null == allChildSegments) allChildSegments = new List<HorizontalAlignmentBase>();
+         if (null == allChildSegments_scratchPad) allChildSegments_scratchPad = new List<HorizontalAlignmentBase>();
 
-         allChildSegments.Add(aLineSeg);
+         allChildSegments_scratchPad.Add(aLineSeg);
       }
 
       private void createAddArcSegment(IRM21fundamentalGeometry fundGeomArcSeg)
@@ -64,11 +69,12 @@ namespace ptsCogo.Horizontal
          if (3 != ptList.Count)
             throw new Exception("Arc Segment fundamental geometry must have three and only three points.");
 
-         rm21HorArc anArg = new rm21HorArc(ptList[0], ptList[1], ptList[2], fundGeomArcSeg.getExpectedType());
+         rm21HorArc anArg = new rm21HorArc(ptList[0], ptList[1], ptList[2], fundGeomArcSeg.getExpectedType(),
+            fundGeomArcSeg.getDeflectionSign());
 
-         if (null == allChildSegments) allChildSegments = new List<HorizontalAlignmentBase>();
+         if (null == allChildSegments_scratchPad) allChildSegments_scratchPad = new List<HorizontalAlignmentBase>();
 
-         allChildSegments.Add(anArg);
+         allChildSegments_scratchPad.Add(anArg);
       }
 
 
@@ -79,6 +85,76 @@ namespace ptsCogo.Horizontal
             throw new Exception("Euler Spiral Segment fundamental geometry must have at least four points.");
 
          throw new NotImplementedException("RM21 Horizontal Alignment Euler Sprial Segment");
+      }
+      
+      private void orderAllSegments_startToEnd()
+      {
+         var candidateFirstItems = new List<HorizontalAlignmentBase>();
+
+         // Figure out which element is first.
+         // if more than one element has no prior connection, it is in error.
+         foreach (var item in allChildSegments_scratchPad)
+         {
+            bool hasNoBeginConnection = true;
+            foreach (var otherItem in allChildSegments_scratchPad)
+            {
+               if (item != otherItem)
+               {
+                  hasNoBeginConnection = !theseConnectAtItemBeginPt(item, otherItem);
+                  if (false == hasNoBeginConnection)
+                     break;
+               }
+            }
+
+            if (true == hasNoBeginConnection)
+               candidateFirstItems.Add(item);
+         }
+
+         if (candidateFirstItems.Count == 1)
+         {
+            HorizontalAlignmentBase geometricallyFirstElement = candidateFirstItems.FirstOrDefault<HorizontalAlignmentBase>();
+            allChildSegments = new List<HorizontalAlignmentBase>();
+            allChildSegments.Add(geometricallyFirstElement);
+            allChildSegments_scratchPad.Remove(geometricallyFirstElement);
+         }
+         else if (candidateFirstItems.Count > 1)
+         {
+            throw new Exception("Disjointed element list not permitted");
+         }
+         else
+         {
+            throw new Exception("Can't determine which element is first.");
+         }
+         // end "Figure out which element is first."
+         // if more than one element has no prior connection, it is in error.
+
+         var currentLastItem = allChildSegments.Last<HorizontalAlignmentBase>();
+         if (0 == allChildSegments_scratchPad.Count) return;
+
+         while (allChildSegments_scratchPad.Count > 0)
+         {
+            var Iter = allChildSegments_scratchPad.GetEnumerator();
+            while (Iter.MoveNext())
+            {
+               if (true == theseConnectAtItemBeginPt(Iter.Current, currentLastItem))
+               {
+                  allChildSegments.Add(Iter.Current);
+                  currentLastItem = allChildSegments.Last<HorizontalAlignmentBase>();
+                  allChildSegments_scratchPad.Remove(Iter.Current);
+                  break;
+               }
+            }
+         }
+         allChildSegments_scratchPad = null;
+
+      }
+
+      private bool theseConnectAtItemBeginPt(HorizontalAlignmentBase itemInQuestion, HorizontalAlignmentBase secondItem)
+      {
+         Double equalityTolerance = 0.00015;
+
+         var distanceVector = itemInQuestion.BeginPoint - secondItem.EndPoint;
+         return (Math.Abs(distanceVector.Length) < equalityTolerance);
       }
 
       private void restationAlignment()

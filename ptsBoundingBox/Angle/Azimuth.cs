@@ -56,6 +56,12 @@ namespace ptsCogo.Angle
                (double)degrees + (double)minutes / 60.0 + seconds / 3600.0
                         );
       }
+
+      public static int getQuadrant(double angleDegrees)
+      {
+         return (int)Math.Round((angleDegrees / 90.0) + 0.5);
+      }
+
       //to do:
       //setAsAzimuth
       //getAsDegreeMinuteSecond
@@ -84,11 +90,14 @@ namespace ptsCogo.Angle
          return new Azimuth(anAz.getAsRadians() - anAngle.getAsRadians());  // Note: Subtraction is intentional since azimuths are clockwise
       }
 
-      public static ptsAngle operator -(Azimuth Az1, Azimuth Az2)
+      public static double operator -(Azimuth Az1, Azimuth Az2)
       {
-         ptsAngle returnAngle = new ptsAngle();
-         returnAngle.angle_ = Az1.angle_ - Az2.angle_;
-         return returnAngle;
+         //Double returnDeflection = ptsAngle.normalizeToPlusOrMinus2PiStatic(Az1.angle_ - Az2.angle_);
+         Double returnDeflection = (Az1.angle_ - Az2.angle_);
+         if (returnDeflection < 0.0)
+            returnDeflection += 2*Math.PI;
+
+         return ptsAngle.normalizeToPlusOrMinus2PiStatic(returnDeflection);
       }
    }
 }

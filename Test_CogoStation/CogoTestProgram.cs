@@ -47,9 +47,16 @@ namespace Test_CogoStation
       {
          TestClassForHorizontalAlignments tcfha = new TestClassForHorizontalAlignments();
          tcfha.HAtestSetup();
-         tcfha.HorizontalAlignment_instantiateSingleLine_fromFundamentalGeometry();
-         tcfha.HorizontalAlignment_instantiateSingleLine_fromFundamentalGeometry_HAlengthIs100();
-         tcfha.HorizontalAlignment_instantiateSingleArcExterior_fromFundamentalGeometry_HAlengthIs5235();
+         //tcfha.HorizontalAlignment_instantiateSingleLine_fromFundamentalGeometry();
+         //tcfha.HorizontalAlignment_instantiateSingleLine_fromFundamentalGeometry_HAlengthIs100();
+         //tcfha.HorizontalAlignment_instantiateSingleArcExterior_fromFundamentalGeometry_HAlengthIs5235();
+         //tcfha.HorizontalAlignment_instantiate5ItemHA_fromFundamentalGeometry_HAlengthIs7155();
+         //tcfha.HorizontalAlignment_singleArcHAInsideSolutionLeft_fromFundamentalGeometry_HAlengthIs1051();
+         //tcfha.HorizontalAlignment_singleArcHAinsideSolutionRight_fromFundamentalGeometry_HAlengthIs666();
+         //tcfha.HorizontalAlignment_singleArcHAOutsideSolutionLeft_fromFundamentalGeometry_HAlengthIs4038();
+         //tcfha.HorizontalAlignment_singleArcHAOutsideSolutionLeft_fromFundamentalGeometry_HAlengthIs3396();
+         //tcfha.HorizontalAlignment_singleArcHAOutsideSolutionRight_fromFundamentalGeometry_HAlengthIs2439();
+         tcfha.angleNormalization_withinPlusOrMinus2Pi_UnderNegative2PI();
       }
 
       private static void testCorridors()

@@ -9,6 +9,15 @@ namespace NUnitTestingLibrary.Mocks
 {
    public class rm21MockFundamentalGeometry : ptsCogo.Horizontal.IRM21fundamentalGeometry
    {
+      public rm21MockFundamentalGeometry()
+      {
+         this.pointList_ = new List<ptsPoint>();
+      }
+
+      public int deflectionSign { get; set; }
+
+      public int getDeflectionSign() { return deflectionSign; }
+
       private expectedType expectedType_;
       public expectedType expectedType 
       {
@@ -102,8 +111,7 @@ namespace NUnitTestingLibrary.Mocks
       {
          return (ExpectType == ptsCogo.Horizontal.expectedType.ArcSegmentInsideSolution ||
                  ExpectType == ptsCogo.Horizontal.expectedType.ArcSegmentOutsideSoluion ||
-                 ExpectType == ptsCogo.Horizontal.expectedType.ArcHalfCircleDeflectingLeft ||
-                 ExpectType == ptsCogo.Horizontal.expectedType.ArcHalfCircleDeflectingRight);
+                 ExpectType == ptsCogo.Horizontal.expectedType.ArcHalfCircle);
       }
    }
 }

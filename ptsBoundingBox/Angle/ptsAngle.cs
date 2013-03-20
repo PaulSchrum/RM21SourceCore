@@ -83,7 +83,36 @@ namespace ptsCogo
          //int sign = Math.Sign(anAngle);
          //angleScratchPad = (anAngle * sign) / Math.PI;
          //angle__ = (fp(angleScratchPad) * sign) * Math.PI;
+      }
 
+      protected void normalizeToPlusOrMinus2Pi(Double anAngle)
+      {
+         Double TwoPi = Math.PI * 2.0;
+         angle__ = ptsAngle.ComputeRemainderScaledByDenominator(anAngle, TwoPi);
+      }
+
+      public static Double normalizeToPlusOrMinus2PiStatic(Double anAngle)
+      {
+         return ComputeRemainderScaledByDenominator(anAngle, 2 * Math.PI);
+      }
+
+      public static Double ComputeRemainderScaledByDenominator(Double numerator, double denominator)
+      {
+         Double sgn = Math.Sign(numerator);
+         Double ratio = numerator / denominator;
+         ratio = Math.Abs(ratio);
+         Double fractionPart;
+         fractionPart = 1.0 + ratio - Math.Round(ratio, MidpointRounding.AwayFromZero);
+         if (sgn < 0.0)
+         {
+            fractionPart = fractionPart - 2;
+            if (fractionPart < 1.0)
+               fractionPart = -1.0 * (fractionPart + 2);
+               //1.0 + ratio - Math.Round(ratio, MidpointRounding.AwayFromZero);
+         }
+
+         Double returnDouble = sgn * Math.Abs(fractionPart) * Math.Abs(denominator);
+         return returnDouble;
       }
 
       public override string ToString()
