@@ -170,6 +170,18 @@ namespace ptsCogo.Horizontal
          }
       }
 
+      public override StringBuilder createTestSetupOfFundamentalGeometry()
+      {
+         var sb = new StringBuilder();
+
+         foreach (var item in allChildSegments)
+         {
+            sb.Append(item.createTestSetupOfFundamentalGeometry());
+         }
+
+         return sb;
+      }
+
       public new Double Length
       {
          get { return this.EndStation - this.BeginStation; }

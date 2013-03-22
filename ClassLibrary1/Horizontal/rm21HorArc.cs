@@ -81,7 +81,11 @@ namespace ptsCogo.Horizontal
 
       }
 
-      
+      public override StringBuilder createTestSetupOfFundamentalGeometry()
+      {
+         throw new NotImplementedException();
+      }
+
 
    }
 }

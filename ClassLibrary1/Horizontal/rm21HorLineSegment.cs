@@ -24,5 +24,12 @@ namespace ptsCogo.Horizontal
          }
          protected set { }
       }
+
+      public override StringBuilder createTestSetupOfFundamentalGeometry()
+      {
+         StringBuilder returnSB = new StringBuilder();
+
+         return returnSB;
+      }
    }
 }

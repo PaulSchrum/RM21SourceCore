@@ -42,6 +42,8 @@ namespace ptsCogo.Horizontal
          return new ptsAngle(radius, degreeOfCurveLength);
       }
 
+      public virtual StringBuilder createTestSetupOfFundamentalGeometry() { return null; }
+
       /* * /
       public bool isUnitUSsurveyFoot { get { return thisUnit == Unit.SurveyFoot; } set { thisUnit = Unit.SurveyFoot; } }
       public bool isUnitFoot { get; set; }
