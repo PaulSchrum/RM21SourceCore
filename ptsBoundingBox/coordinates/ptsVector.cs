@@ -27,6 +27,13 @@ namespace ptsCogo
          z = endPoint.z - endPoint.z;
       }
 
+      public ptsVector(Azimuth direction, Double length)
+      {
+         x = length * Math.Cos(direction.angle_);
+         y = length * Math.Sin(direction.angle_);
+         z = 0.0;
+      }
+
       public void flattenThisZ()
       {
          this.z = 0.0;

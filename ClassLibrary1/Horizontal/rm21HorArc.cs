@@ -110,5 +110,9 @@ namespace ptsCogo.Horizontal
          return returnList;
       }
 
+      public override ptsPoint getXYZcoordinates(StationOffsetElevation anSOE)
+      {
+         throw new NotImplementedException();
+      }
    }
 }

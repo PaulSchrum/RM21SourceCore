@@ -69,5 +69,22 @@ namespace ptsCogo.Horizontal
          return returnList;
       }
 
+      public override ptsPoint getXYZcoordinates(StationOffsetElevation anSOE)
+      {
+         Double piOver2 = Math.PI / 2.0;
+         ptsVector alongVector = new ptsVector(this.BeginAzimuth, anSOE.station - this.BeginStation);
+         ptsPoint returnPoint = this.BeginPoint + alongVector;
+         returnPoint.z = anSOE.elevation.EL;
+
+         ptsVector perpandicularVector = new ptsVector();
+         Azimuth perpandicularAzimuth = this.BeginAzimuth + piOver2;
+         if (anSOE.offset.OFST < 0.0)
+         {
+            perpandicularAzimuth = this.BeginAzimuth - piOver2;
+         }
+         returnPoint = returnPoint + new ptsVector(perpandicularAzimuth, anSOE.offset.OFST);
+
+         return returnPoint;
+      }
    }
 }

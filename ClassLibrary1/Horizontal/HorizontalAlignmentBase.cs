@@ -53,6 +53,11 @@ namespace ptsCogo.Horizontal
          throw new NotImplementedException();
       }
 
+      public virtual ptsPoint getXYZcoordinates(StationOffsetElevation anSOE)
+      {
+         throw new NotImplementedException();
+      }
+
       public virtual List<StationOffsetElevation> getStationOffsetElevation(ptsPoint aPoint)
       {
          throw new NotImplementedException();

@@ -229,6 +229,20 @@ namespace ptsCogo.Horizontal
          return returnList;
       }
 
+      public override ptsPoint getXYZcoordinates(StationOffsetElevation anSOE)
+      {
+         if (anSOE.station < this.BeginStation || anSOE.station > this.EndStation)
+            return null;
 
+         ptsPoint returnPoint = new ptsPoint();
+         foreach (var segment in this.allChildSegments)
+         {
+            if (anSOE.station < segment.EndStation)
+            {
+               return segment.getXYZcoordinates(anSOE);
+            }
+         }
+         return null;
+      }
    }
 }

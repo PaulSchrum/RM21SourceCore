@@ -11,7 +11,7 @@ namespace ptsCogo.coordinates.CurvilinearCoordinates
    {
       //private StationOffsetElevation soePoint;
 
-      public StationOffsetElevation() { }
+      public StationOffsetElevation() { offset = new Offset(0.0); elevation = new Elevation(0.0); }
       public StationOffsetElevation(double aStation, Offset anOffset, Elevation anElevation)
       {
          station = aStation; offset = anOffset; elevation = anElevation;

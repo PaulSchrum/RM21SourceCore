@@ -393,6 +393,35 @@ namespace NUnitTestingLibrary
       }
 
       [Test]
+      public void HorizontalAlignment_givenStationOffsetValues_getXYvalues()
+      {
+         bool allValuesAgree = true;
+         List<IRM21fundamentalGeometry> fundmtlGeoms = createTestHA_fundGeom1();
+
+         rm21HorizontalAlignment HA = new rm21HorizontalAlignment(
+            fundamentalGeometryList: fundmtlGeoms,
+            Name: null, stationEquationing: null);
+
+         StationOffsetElevation anSOE = new StationOffsetElevation();
+
+         // test a point right of the second line segment (the third segment)
+         anSOE.station = 3611.75; anSOE.offset.OFST = 238.949;
+         ptsPoint anXYpoint = HA.getXYZcoordinates(anSOE);
+         if (anXYpoint != null)
+         {
+            allValuesAgree &= anXYpoint.x.tolerantEquals(6180.0, 0.014);
+            allValuesAgree &= anXYpoint.y.tolerantEquals(4460.0, 0.014);
+            allValuesAgree &= anXYpoint.z.tolerantEquals(0.0, 0.000001);
+         }
+         else
+         {
+            allValuesAgree = false;
+         }
+
+         Assert.IsTrue(allValuesAgree);
+      }
+
+      [Test]
       public void HorizontalAlignment_givenXYvalues_getStationOffsetValues()
       {
          List<IRM21fundamentalGeometry> fundmtlGeoms = createTestHA_fundGeom1();
@@ -401,7 +430,6 @@ namespace NUnitTestingLibrary
             fundamentalGeometryList: fundmtlGeoms,
             Name: null, stationEquationing: null);
 
-         StationOffsetElevation theSOE= new StationOffsetElevation(801.8849, 0.0, 0.0);
          StationOffsetElevation anSOE = null;
          bool allValuesAgree = true;
 
