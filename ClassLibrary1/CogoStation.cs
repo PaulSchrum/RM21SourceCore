@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using System.Windows.Data;
+using ptsCogo.coordinates.CurvilinearCoordinates;
 
 namespace ptsCogo
 {
@@ -195,6 +196,25 @@ namespace ptsCogo
          return base.GetHashCode();
       }
 
+      public static String stationToString(Double dblTrueStation)
+      {
+         Double station = dblTrueStation;
+         int leftOfPlus = (int)station / (int)(Math.Pow(10.0, plusOffset));
+         double leftOfPlusDbl = leftOfPlus * Math.Pow(10.0, plusOffset);
+         double rightOfPlusDbl = station - leftOfPlusDbl;
+         StringBuilder retString = new StringBuilder();
+         retString.AppendFormat("{0}+{1:00.00}", leftOfPlus, rightOfPlusDbl);
+         return retString.ToString();
+      }
+
+      public static String getStationOffsetElevationAsString(StationOffsetElevation soe)
+      {
+         if (null == soe) return "";
+         StringBuilder returnString = new StringBuilder(stationToString(soe.station));
+         returnString.Append("; " + soe.offset.ToString() + ";  (EL: " + soe.elevation.ToString() + ")");
+         return returnString.ToString();
+      }
+
       public override string ToString()
       {
          int leftOfPlus = (int) station / (int) (Math.Pow(10.0, plusOffset));
@@ -241,4 +261,5 @@ namespace ptsCogo
       /// public bool suppressBoundaryChecking {get;set;} -- used to increase performance
       /// 
    }
+
 }

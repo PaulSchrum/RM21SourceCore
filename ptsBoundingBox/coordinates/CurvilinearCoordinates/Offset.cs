@@ -26,7 +26,7 @@ namespace ptsCogo.coordinates.CurvilinearCoordinates
          }
          else
          {
-            return String.Format((0.0).ToString(formatString));
+            return "0.0";
          }
       }
 
