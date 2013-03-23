@@ -1,4 +1,5 @@
 ﻿using ptsCogo.Angle;
+using ptsCogo.coordinates.CurvilinearCoordinates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,9 @@ namespace ptsCogo.Horizontal
       public virtual Deflection Deflection { get; protected set; }
       public virtual Double Length { get; protected set; }
 
+      public virtual ptsVector LongChordVector
+      { get { return (new ptsVector(this.BeginPoint, this.EndPoint)).flattenZnew(); } }
+
       static HorizontalAlignmentBase(){degreeOfCurveLength = 100;}
       static public Double degreeOfCurveLength { get; set; }
       static public ptsAngle computeDegreeOfCurve(Double radius)
@@ -43,6 +47,16 @@ namespace ptsCogo.Horizontal
       }
 
       public virtual StringBuilder createTestSetupOfFundamentalGeometry() { return null; }
+
+      public virtual List<ptsPoint> getPoints(coordinates.CurvilinearCoordinates.StationOffsetElevation anSOE)
+      {
+         throw new NotImplementedException();
+      }
+
+      public virtual List<StationOffsetElevation> getStationOffsetElevation(ptsPoint aPoint)
+      {
+         throw new NotImplementedException();
+      }
 
       /* * /
       public bool isUnitUSsurveyFoot { get { return thisUnit == Unit.SurveyFoot; } set { thisUnit = Unit.SurveyFoot; } }

@@ -87,4 +87,12 @@ namespace ptsCogo
          }
       }
    }
+
+   public static class utilityExtensions
+   {
+      public static bool tolerantEquals(this Double first, Double second, Double toleration)
+      {
+         return Math.Abs(first - second) <= toleration;
+      }
+   }
 }

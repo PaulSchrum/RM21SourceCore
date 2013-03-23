@@ -1,7 +1,9 @@
-﻿using System;
+﻿using ptsCogo.coordinates.CurvilinearCoordinates;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ptsCogo.Angle;
 
 namespace ptsCogo.Horizontal
 {
@@ -14,6 +16,18 @@ namespace ptsCogo.Horizontal
          //this.EndBearing = do this later
          this.BeginDegreeOfCurve = 0.0;
          this.EndDegreeOfCurve = 0.0;
+      }
+
+      public override Azimuth BeginAzimuth 
+      {
+         get
+         {
+            return new Azimuth(this.BeginPoint, this.EndPoint);
+         }
+      }
+      public override Azimuth EndAzimuth
+      {
+         get { return this.BeginAzimuth; }
       }
 
       public override Double Length
@@ -31,5 +45,29 @@ namespace ptsCogo.Horizontal
 
          return returnSB;
       }
+
+      public override List<StationOffsetElevation> getStationOffsetElevation(ptsPoint interestPoint)
+      {
+         ptsVector BeginToInterestPtVector = new ptsVector(this.BeginPoint, interestPoint);
+         Deflection BeginToInterestDeflection = new Deflection(this.BeginAzimuth, BeginToInterestPtVector.Azimuth, true);
+         if (Math.Abs(BeginToInterestDeflection.getAsDegrees()) > 90.0)
+            return null;
+
+         ptsVector EndToInterestPtVector = new ptsVector(this.EndPoint, interestPoint);
+         Deflection EndToInterestDeflection = new Deflection(this.EndAzimuth, EndToInterestPtVector.Azimuth, true);
+         if (Math.Abs(EndToInterestDeflection.getAsDegrees()) < 90.0)
+            return null;
+
+         Double length = BeginToInterestPtVector.Length * Math.Cos(BeginToInterestDeflection.getAsRadians());
+         Double theStation = this.BeginStation + length;
+
+         Double offset = BeginToInterestPtVector.Length * Math.Sin(BeginToInterestDeflection.getAsRadians());
+
+         var soe = new StationOffsetElevation(this.BeginStation + length, offset, 0.0);
+         var returnList = new List<StationOffsetElevation>();
+         returnList.Add(soe);
+         return returnList;
+      }
+
    }
 }

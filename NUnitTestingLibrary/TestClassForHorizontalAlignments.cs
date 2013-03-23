@@ -6,6 +6,7 @@ using NUnit.Framework;
 using ptsCogo;
 using ptsCogo.Horizontal;
 using NUnitTestingLibrary.Mocks;
+using ptsCogo.coordinates.CurvilinearCoordinates;
 
 namespace NUnitTestingLibrary
 {
@@ -389,6 +390,122 @@ namespace NUnitTestingLibrary
 
          Assert.AreEqual(expected: expectedAfterNormalized,
             actual: actualAfterNormalization, delta: 0.0000001);
+      }
+
+      [Test]
+      public void HorizontalAlignment_givenXYvalues_getStationOffsetValues()
+      {
+         List<IRM21fundamentalGeometry> fundmtlGeoms = createTestHA_fundGeom1();
+
+         rm21HorizontalAlignment HA = new rm21HorizontalAlignment(
+            fundamentalGeometryList: fundmtlGeoms,
+            Name: null, stationEquationing: null);
+
+         StationOffsetElevation theSOE= new StationOffsetElevation(801.8849, 0.0, 0.0);
+         StationOffsetElevation anSOE = null;
+         bool allValuesAgree = true;
+
+         // test point on first tangent
+         ptsPoint somePoint = new ptsPoint(4046.2915, 3161.3216, 0.0);
+         var soePoints = HA.getStationOffsetElevation(somePoint);
+         if (soePoints != null && soePoints.Count > 0)
+         {
+            anSOE = soePoints.FirstOrDefault();
+            allValuesAgree &= anSOE.station.tolerantEquals(801.8849, 0.00014);
+            allValuesAgree &= anSOE.offset.OFST.tolerantEquals(0.0, 0.00014);
+            allValuesAgree &= anSOE.elevation.EL.tolerantEquals(0.0, 0.00000001);
+         }
+         else
+         {
+            allValuesAgree = false;
+         }
+
+         // test point which is before the beginning of the HA
+         somePoint = new ptsPoint(2500.0, 1000.0, 0.0);
+         soePoints = HA.getStationOffsetElevation(somePoint);
+         allValuesAgree &= soePoints.Count == 0;
+
+         // test point which is beyond the end of the HA
+         somePoint = new ptsPoint(9554.0, 9000.0, 0.0);
+         soePoints = HA.getStationOffsetElevation(somePoint);
+         allValuesAgree &= soePoints.Count == 0;
+
+         // test point offset from first tangent
+         somePoint.x = 4516.0; somePoint.y = 3404.0;
+         soePoints = HA.getStationOffsetElevation(somePoint);
+         if (soePoints != null && soePoints.Count > 0)
+         {
+            anSOE = soePoints.FirstOrDefault();
+            allValuesAgree &= anSOE.station.tolerantEquals(1281.0297, 0.00014);
+            allValuesAgree &= anSOE.offset.OFST.tolerantEquals(223.4706, 0.00014);
+            allValuesAgree &= anSOE.elevation.EL.tolerantEquals(0.0, 0.000001);
+         }
+         else
+         {
+            allValuesAgree = false;
+         }
+
+         // test point on first arc
+         somePoint.x = 5494.3772; somePoint.y = 4664.3429;
+         soePoints = HA.getStationOffsetElevation(somePoint);
+         if (soePoints != null && soePoints.Count > 0)
+         {
+            anSOE = soePoints.FirstOrDefault();
+            allValuesAgree &= anSOE.station.tolerantEquals(2930.4718, 0.00014);
+            allValuesAgree &= anSOE.offset.OFST.tolerantEquals(0.0, 0.00014);
+            allValuesAgree &= anSOE.elevation.EL.tolerantEquals(0.0, 0.000001);
+         }
+         else
+         {
+            allValuesAgree = false;
+         }
+
+         // test point offset right of second arc
+         somePoint.x = 6918.0; somePoint.y = 4557.0;
+         soePoints = HA.getStationOffsetElevation(somePoint);
+         if (soePoints != null && soePoints.Count > 0)
+         {
+            anSOE = soePoints.FirstOrDefault();
+            allValuesAgree &= anSOE.station.tolerantEquals(4324.6956, 0.00014);
+            allValuesAgree &= anSOE.offset.OFST.tolerantEquals(183.2743, 0.00014);
+            allValuesAgree &= anSOE.elevation.EL.tolerantEquals(0.0, 0.000001);
+         }
+         else
+         {
+            allValuesAgree = false;
+         }
+
+         // test point offset left of second arc
+         somePoint.x = 7103.0; somePoint.y = 4979.0;
+         soePoints = HA.getStationOffsetElevation(somePoint);
+         if (soePoints != null && soePoints.Count > 0)
+         {
+            anSOE = soePoints.FirstOrDefault();
+            allValuesAgree &= anSOE.station.tolerantEquals(4614.0481, 0.00014);
+            allValuesAgree &= anSOE.offset.OFST.tolerantEquals(-176.4468, 0.00014);
+            allValuesAgree &= anSOE.elevation.EL.tolerantEquals(0.0, 0.000001);
+         }
+         else
+         {
+            allValuesAgree = false;
+         }
+
+         // test point offset left of third line (fifth segment
+         somePoint.x = 8071.7032; somePoint.y = 5913.8278;
+         soePoints = HA.getStationOffsetElevation(somePoint);
+         if (soePoints != null && soePoints.Count > 0)
+         {
+            anSOE = soePoints.FirstOrDefault();
+            allValuesAgree &= anSOE.station.tolerantEquals(6047.5668, 0.00014);
+            allValuesAgree &= anSOE.offset.OFST.tolerantEquals(-314.4057, 0.00014);
+            allValuesAgree &= anSOE.elevation.EL.tolerantEquals(0.0, 0.000001);
+         }
+         else
+         {
+            allValuesAgree = false;
+         }
+         
+         Assert.IsTrue(allValuesAgree);
       }
 
    }

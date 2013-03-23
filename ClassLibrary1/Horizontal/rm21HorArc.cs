@@ -1,4 +1,5 @@
 ﻿using ptsCogo.Angle;
+using ptsCogo.coordinates.CurvilinearCoordinates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,6 +87,28 @@ namespace ptsCogo.Horizontal
          throw new NotImplementedException();
       }
 
+      public override List<StationOffsetElevation> getStationOffsetElevation(ptsPoint interestPoint)
+      {
+         ptsVector arcCenterToInterestPtVector = new ptsVector(this.ArcCenterPt, interestPoint);
+         Deflection deflToInterestPt = new Deflection(this.BeginRadiusVector.Azimuth, arcCenterToInterestPtVector.Azimuth, true);
+         int arcDeflDirection = Math.Sign(this.Deflection.getAsDegrees());
+         if (arcDeflDirection * deflToInterestPt.getAsDegrees() < 0.0)
+         {
+            return null;
+         }
+         else if (Math.Abs(this.Deflection.getAsDegrees()) - Math.Abs(deflToInterestPt.getAsDegrees()) < 0.0)
+         {
+            return null;
+         }
+
+         Double interestLength = this.Length * deflToInterestPt.getAsRadians() / this.Deflection.getAsRadians();
+         Offset offset =  new Offset(arcDeflDirection * (this.Radius - arcCenterToInterestPtVector.Length));
+
+         var soe = new StationOffsetElevation(this.BeginStation + interestLength, offset, 0.0);
+         var returnList = new List<StationOffsetElevation>();
+         returnList.Add(soe);
+         return returnList;
+      }
 
    }
 }

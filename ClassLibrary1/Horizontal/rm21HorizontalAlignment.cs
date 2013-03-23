@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ptsCogo.coordinates.CurvilinearCoordinates;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -172,6 +173,7 @@ namespace ptsCogo.Horizontal
 
       public override StringBuilder createTestSetupOfFundamentalGeometry()
       {
+         throw new NotImplementedException();
          var sb = new StringBuilder();
 
          foreach (var item in allChildSegments)
@@ -198,5 +200,35 @@ namespace ptsCogo.Horizontal
          leftPt = null;
          rightPt = null;
       }
+
+      public override List<ptsPoint> getPoints(coordinates.CurvilinearCoordinates.StationOffsetElevation anSOE)
+      {
+         var returnList = new List<ptsPoint>();
+
+         foreach (var segment in allChildSegments)
+         {
+            returnList.AddRange(segment.getPoints(anSOE));
+         }
+
+         return returnList;
+      }
+
+      public override List<StationOffsetElevation> getStationOffsetElevation(ptsPoint aPoint)
+      {
+         var returnList = new List<StationOffsetElevation>();
+
+         foreach (var segment in allChildSegments)
+         {
+            var SOEforThisSegment = segment.getStationOffsetElevation(aPoint);
+            if (null != SOEforThisSegment)
+               returnList.AddRange(SOEforThisSegment);
+         }
+
+         returnList = returnList.OrderBy(soe => Math.Abs(soe.offset)).ToList<StationOffsetElevation>();
+
+         return returnList;
+      }
+
+
    }
 }

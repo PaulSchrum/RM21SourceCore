@@ -20,6 +20,23 @@ namespace ptsCogo
          x = x_; y = y_; z = z_;
       }
 
+      public ptsVector(ptsPoint beginPt, ptsPoint endPoint)
+      {
+         x = endPoint.x - beginPt.x;
+         y = endPoint.y - beginPt.y;
+         z = endPoint.z - endPoint.z;
+      }
+
+      public void flattenThisZ()
+      {
+         this.z = 0.0;
+      }
+
+      public ptsVector flattenZnew()
+      {
+         return new ptsVector(this.x, this.y, 0.0);
+      }
+
       public ptsPoint plus(ptsPoint aPoint)
       {
          if (aPoint.isEmpty)

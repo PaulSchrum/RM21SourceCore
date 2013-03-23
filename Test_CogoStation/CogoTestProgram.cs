@@ -57,6 +57,7 @@ namespace Test_CogoStation
          //tcfha.HorizontalAlignment_singleArcHAOutsideSolutionLeft_fromFundamentalGeometry_HAlengthIs3396();
          //tcfha.HorizontalAlignment_singleArcHAOutsideSolutionRight_fromFundamentalGeometry_HAlengthIs2439();
          tcfha.angleNormalization_withinPlusOrMinus2Pi_UnderNegative2PI();
+         tcfha.HorizontalAlignment_givenXYvalues_getStationOffsetValues();
       }
 
       private static void testCorridors()

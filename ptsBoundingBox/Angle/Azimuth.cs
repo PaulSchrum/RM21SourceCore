@@ -14,6 +14,11 @@ namespace ptsCogo.Angle
          angle_ = anAngleDbl;
       }
 
+      public Azimuth(ptsPoint beginPt, ptsPoint endPt)
+      {
+         this.angle__ = Math.Atan2(endPt.y - beginPt.y, endPt.x - beginPt.x);
+      }
+
       public new double angle_ { get { return getAsAzimuth(); } set { base.normalize(value); } }
       
       //public override void setFromXY(double x, double y)
