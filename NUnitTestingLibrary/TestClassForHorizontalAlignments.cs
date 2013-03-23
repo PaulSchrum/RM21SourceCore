@@ -504,7 +504,38 @@ namespace NUnitTestingLibrary
          {
             allValuesAgree = false;
          }
-         
+
+         // test point offset at center of first arc
+         somePoint.x = 5700.5429; somePoint.y = 3716.3124;
+         soePoints = HA.getStationOffsetElevation(somePoint);
+         if (soePoints != null && soePoints.Count > 0)
+         {
+            anSOE = soePoints.FirstOrDefault();
+            allValuesAgree &= anSOE.station.tolerantEquals(2252.1594, 0.00014);
+            allValuesAgree &= anSOE.offset.OFST.tolerantEquals(970.1887, 0.00014);
+            allValuesAgree &= anSOE.elevation.EL.tolerantEquals(0.0, 0.000001);
+         }
+         else
+         {
+            allValuesAgree = false;
+         }
+
+         // test point offset right that returns 2 SOE instances for the same point
+         somePoint.x = 5940.0; somePoint.y = 3310.0;
+         soePoints = HA.getStationOffsetElevation(somePoint);
+         if (soePoints != null && soePoints.Count > 0)
+         {
+            allValuesAgree &= (soePoints.Count == 2);
+            anSOE = soePoints.FirstOrDefault();
+            allValuesAgree &= anSOE.station.tolerantEquals(3342.5539, 0.00014);
+            allValuesAgree &= anSOE.offset.OFST.tolerantEquals(1382.4657, 0.00014);
+            allValuesAgree &= anSOE.elevation.EL.tolerantEquals(0.0, 0.000001);
+         }
+         else
+         {
+            allValuesAgree = false;
+         }
+
          Assert.IsTrue(allValuesAgree);
       }
 
