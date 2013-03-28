@@ -40,7 +40,7 @@ namespace Test_CogoStation
          testCogoProfile();
          testCogoProfileArithmatic();  /* */
          Console.WriteLine("Testing Concluded.");
-         Console.Read();
+         //Console.Read();
       }
 
       private static void testHorizontalAlignments()
@@ -59,6 +59,8 @@ namespace Test_CogoStation
          //tcfha.angleNormalization_withinPlusOrMinus2Pi_UnderNegative2PI();
          //tcfha.HorizontalAlignment_givenXYvalues_getStationOffsetValues();
          tcfha.HorizontalAlignment_givenStationOffsetValues_getXYvalues();
+         //tcfha.Deflection_negativeGreaterThan180_getAsRadians();
+         //tcfha.Deflection_negativeGreaterThan180();
       }
 
       private static void testCorridors()

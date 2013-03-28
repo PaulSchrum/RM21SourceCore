@@ -29,15 +29,10 @@ namespace ptsCogo.Horizontal
          if (Math.Abs(this.Radius - validationRadius) > 0.00014)
             throw new Exception("Given points do not represent a circle.");
 
-         Double degreesToAdd;
-         if ((ExpectedType == expectedType.ArcSegmentInsideSolution) ||
-             (ExpectedType == expectedType.ArcHalfCircle && deflectionDirection > 0))
-         {
-            degreesToAdd = 90;
-         }
-         else
-            degreesToAdd = -90;
-         
+         Double degreesToAdd = 90 * deflectionDirection;
+         if (ExpectedType == expectedType.ArcSegmentOutsideSoluion)
+            deflectionDirection *= -1;
+
          this.BeginAzimuth = this.BeginRadiusVector.Azimuth + ptsAngle.radiansFromDegree(degreesToAdd);
          this.EndAzimuth = this.EndRadiusVector.Azimuth + ptsAngle.radiansFromDegree(degreesToAdd);
 
@@ -54,6 +49,9 @@ namespace ptsCogo.Horizontal
          else
          {
             Deflection = new Deflection(this.BeginAzimuth, this.EndAzimuth, true);
+            Double deflAsRadians = this.Deflection.getAsRadians();
+            Double DcAsRadians = this.BeginDegreeOfCurve.getAsRadians();
+            this.Length = 100.0 * deflAsRadians / DcAsRadians;
             this.Length = 100.0 * this.Deflection.getAsRadians() / this.BeginDegreeOfCurve.getAsRadians();
             this.Length = Math.Abs(this.Length);
          }
@@ -78,7 +76,7 @@ namespace ptsCogo.Horizontal
             defl = defl - 360.0;
          }
 
-         Deflection = Deflection.ctorDeflectionFromAngle(defl);
+         Deflection = Deflection.ctorDeflectionFromAngle(defl, this.deflDirection);
 
       }
 
@@ -112,7 +110,19 @@ namespace ptsCogo.Horizontal
 
       public override ptsPoint getXYZcoordinates(StationOffsetElevation anSOE)
       {
-         throw new NotImplementedException();
+         if (anSOE.station < this.BeginStation || anSOE.station > this.EndStation)
+            return null;
+
+         Double lengthIntoCurve = anSOE.station - this.BeginStation;
+
+         Deflection deflToSOEpoint = new Deflection(this.BeginDegreeOfCurve.getAsRadians() * lengthIntoCurve / 100.0, this.deflDirection);
+         Azimuth ccToSOEpointAzimuth = this.BeginRadiusVector.Azimuth + deflToSOEpoint;
+
+         Double ccToSOEpointDistance = this.Radius - this.deflDirection * anSOE.offset.OFST;
+
+         ptsVector ccToSOEpoint = new ptsVector(ccToSOEpointAzimuth, ccToSOEpointDistance);
+
+         return this.ArcCenterPt + ccToSOEpoint;
       }
    }
 }

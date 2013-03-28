@@ -7,6 +7,7 @@ using ptsCogo;
 using ptsCogo.Horizontal;
 using NUnitTestingLibrary.Mocks;
 using ptsCogo.coordinates.CurvilinearCoordinates;
+using ptsCogo.Angle;
 
 namespace NUnitTestingLibrary
 {
@@ -19,6 +20,82 @@ namespace NUnitTestingLibrary
       public void HAtestSetup()
       {
 
+      }
+
+      [Test]
+      public void Deflection_positiveLessThan180_getAsDegrees()
+      {
+         Double expectedValue = 45.0;
+         Deflection defl = new Deflection(0.785398164, 1);
+         Double actualValue = defl.getAsDegrees();
+         Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: 0.00001);
+      }
+
+      [Test]
+      public void Deflection_positiveGreaterThan180_getAsDegrees()
+      {
+         Double expectedValue = 310.0;
+         Deflection defl = new Deflection(5.41052068118, 1);
+         Double actualValue = defl.getAsDegrees();
+         Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: 0.00001);
+      }
+
+      [Test]
+      public void Deflection_negativeLessThan180_getAsDegrees()
+      {
+         Double expectedValue = -45.0;
+         Deflection defl = new Deflection(0.785398164, -1);
+         Double actualValue = defl.getAsDegrees();
+         Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: 0.00001);
+      }
+
+      [Test]
+      public void Deflection_negativeGreaterThan180_getAsDegrees()
+      {
+         Double expectedValue = -310.0;
+         Deflection defl = new Deflection(5.41052068118, -1);
+         Double actualValue = defl.getAsDegrees();
+         Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: 0.00001);
+      }
+
+      [Test]
+      public void Deflection_positiveLessThan180_getAsRadians()
+      {
+         Double expectedValue = 0.785398164;
+         Deflection defl = new Deflection(0.785398164, 1);
+         Double actualValue = defl.getAsRadians();
+         Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: 0.00001);
+      }
+
+      [Test]
+      public void Deflection_positiveGreaterThan180_getAsRadians()
+      {
+         Double expectedValue = 5.41052068118;
+         Deflection defl = new Deflection(5.41052068118, 1);
+         Double actualValue = defl.getAsRadians();
+         Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: 0.00001);
+      }
+
+      [Test]
+      public void Deflection_negativeLessThan180_getAsRadians()
+      {
+         Double expectedValue = -0.39479111970;
+         Azimuth begAz = new Azimuth(new ptsPoint(0.0, 0.0, 0.0), new ptsPoint(10.0, 50.0, 0.0));
+         Azimuth endAz = new Azimuth(new ptsPoint(10.0, 50.0, 0.0), new ptsPoint(0.0, 100.0, 0.0));
+         Deflection defl = new Deflection(begAz, endAz, true);
+         Double actualValue = defl.getAsRadians();
+         Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: 0.0000001);
+      }
+
+      [Test]
+      public void Deflection_negativeGreaterThan180_getAsRadians()
+      {
+         Double expectedValue = -5.88839418748;
+         Azimuth endAz = new Azimuth(new ptsPoint(0.0, 0.0, 0.0), new ptsPoint(10.0, 50.0, 0.0));
+         Azimuth begAz = new Azimuth(new ptsPoint(10.0, 50.0, 0.0), new ptsPoint(0.0, 100.0, 0.0));
+         Deflection defl = new Deflection(begAz, endAz, false);
+         Double actualValue = defl.getAsRadians();
+         Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: 0.00001);
       }
 
       [Test]
@@ -219,6 +296,7 @@ namespace NUnitTestingLibrary
          funGeomItem.pointList.Add(new ptsPoint(5700.5429, 3716.3124, 0.0));
          funGeomItem.pointList.Add(new ptsPoint(5675.8428, 4686.1866, 0.0));
          funGeomItem.expectedType = expectedType.ArcSegmentInsideSolution;
+         funGeomItem.deflectionSign = 1;
          returnList.Add(funGeomItem);
 
          // Line 2, Item 3
@@ -241,6 +319,7 @@ namespace NUnitTestingLibrary
          funGeomItem.pointList.Add(new ptsPoint(6581.7001, 6397.6113, 0.0));
          funGeomItem.pointList.Add(new ptsPoint(7738.3259, 5168.4199, 0.0));
          funGeomItem.expectedType = expectedType.ArcSegmentInsideSolution;
+         funGeomItem.deflectionSign = -1;
          returnList.Add(funGeomItem);
 
          return returnList;
@@ -305,7 +384,6 @@ namespace NUnitTestingLibrary
          funGeomItem.deflectionSign = -1;
          var fGeomList = new List<IRM21fundamentalGeometry>();
          fGeomList.Add(funGeomItem);
-
 
          rm21HorizontalAlignment HA = new rm21HorizontalAlignment(
             fundamentalGeometryList: fGeomList,
@@ -411,6 +489,20 @@ namespace NUnitTestingLibrary
          {
             allValuesAgree &= anXYpoint.x.tolerantEquals(6180.0, 0.014);
             allValuesAgree &= anXYpoint.y.tolerantEquals(4460.0, 0.014);
+            allValuesAgree &= anXYpoint.z.tolerantEquals(0.0, 0.000001);
+         }
+         else
+         {
+            allValuesAgree = false;
+         }
+
+         // test a point right of the second arc (the fourth segment)
+         anSOE.station = 4469.2978; anSOE.offset.OFST = 138.1336;
+         anXYpoint = HA.getXYZcoordinates(anSOE);
+         if (anXYpoint != null)
+         {
+            allValuesAgree &= anXYpoint.x.tolerantEquals(7062.3839, 0.014);
+            allValuesAgree &= anXYpoint.y.tolerantEquals(4636.0766, 0.014);
             allValuesAgree &= anXYpoint.z.tolerantEquals(0.0, 0.000001);
          }
          else

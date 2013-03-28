@@ -16,10 +16,10 @@ namespace ptsCogo
       {
          angle__ = degreeOfCurveLength / radius;
       }
-      internal double angle_ { get { return angle__; } set { normalize(value); } }
+      internal virtual double angle_ { get { return angle__; } set { normalize(value); } }
       //private static double angleScratchPad;
 
-      public double getAsRadians() { return angle_; }
+      public virtual double getAsRadians() { return angle_; }
 
       public virtual double getAsDegrees()
       {
@@ -96,7 +96,7 @@ namespace ptsCogo
          return ComputeRemainderScaledByDenominator(anAngle, 2 * Math.PI);
       }
 
-      public static Double ComputeRemainderScaledByDenominator(Double numerator, double denominator)
+      public static Double ComputeRemainderScaledByDenominator(Double numerator, double denominator)  
       {
          Double sgn = Math.Sign(numerator);
          Double ratio = numerator / denominator;

@@ -7,39 +7,107 @@ namespace ptsCogo.Angle
 {
    sealed public class Deflection : ptsAngle
    {
+      //protected double angle__;
+      private int deflectionDirection_;
+      public int deflectionDirection
+      {
+         get { return deflectionDirection_; }
+         set 
+         {
+            deflectionDirection_ = value >= 0 ? 1 : -1;
+         }
+      }
+
+      public bool isLessThanEqual_180degrees { get; set; }
+
       public Deflection() { }
 
       public Deflection(Azimuth BeginAzimuth, Azimuth EndAzimuth, bool assumeDeflectionIsLessThan180Degrees)
       {
-         if (true == assumeDeflectionIsLessThan180Degrees)
-         {
-            this.angle__ = EndAzimuth - BeginAzimuth;
-            if (this.angle__ > Math.PI)
-               this.angle__ -= 2 * Math.PI;
-            else if (this.angle__ < -Math.PI)
-               this.angle__ += 2 * Math.PI;
-         }
+         isLessThanEqual_180degrees = assumeDeflectionIsLessThan180Degrees;
+
+         if(false == isLessThanEqual_180degrees)
+            this.angle_ = BeginAzimuth - EndAzimuth;
          else
+            this.angle_ = EndAzimuth - BeginAzimuth;
+
+         this.deflectionDirection = 1;
+         if (this.angle_ < 0.0 || this.angle_ > Math.PI)
          {
-            throw new NotImplementedException();
+            this.deflectionDirection = -1;
          }
       }
 
-      public static Deflection ctorDeflectionFromAngle(double angleDegrees)
+      public static Deflection ctorDeflectionFromAngle(double angleDegrees, int deflectionDirection)
       {
-         return new Deflection(ptsAngle.radiansFromDegree(angleDegrees));
+         return new Deflection(ptsAngle.radiansFromDegree(angleDegrees), deflectionDirection);
       }
 
-      public Deflection(double anAngleDbl)
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="anAngleDbl">unit: Radians</param>
+      /// <param name="deflectionSign">+1 for Right, -1 for left</param>
+      public Deflection(double anAngleDbl, int deflectionDirection)
       {
-         base.angle__ = ptsAngle.normalizeToPlusOrMinus2PiStatic(anAngleDbl); // that last test -- problem is here.
+         base.angle_ = Math.Abs(anAngleDbl);
+         this.deflectionDirection = deflectionDirection;
+         //base.angle__ = ptsAngle.normalizeToPlusOrMinus2PiStatic(anAngleDbl);
          //angle_ = anAngleDbl;
       }
 
       public Deflection(ptsAngle anAngle)
       {
+         this.deflectionDirection = 1;
          angle_ = anAngle.angle_;
       }
 
+      internal override double angle_ 
+      { 
+         get 
+         {
+            Double retAngle = angle__;
+
+            if (deflectionDirection > 0)
+            {
+               if (retAngle < 0.0)
+                  retAngle += 2.0 * Math.PI;
+            }
+            else
+            {
+               if (retAngle < 0.0)
+                  retAngle += 2.0 * Math.PI;
+
+               retAngle *= -1.0;
+            }
+
+            return retAngle; 
+         } 
+         set { normalize(value); } 
+      }
+
+      public override double getAsRadians()
+      {
+         Double retVal = base.getAsRadians();
+         if (this.deflectionDirection < 0)
+         {
+            if (this.isLessThanEqual_180degrees == true)
+            {
+               retVal = retVal + 2.0 *Math.PI;
+               retVal *= -1.0;
+            }
+         }
+         return retVal;
+      }
+
+      public override double getAsDegrees()
+      {
+         return 180.0 * this.getAsRadians() / Math.PI;
+      }
+
+      public override string ToString()
+      {
+         return this.getAsDegrees().ToString();
+      }
    }
 }
