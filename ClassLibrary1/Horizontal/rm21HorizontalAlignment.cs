@@ -229,6 +229,12 @@ namespace ptsCogo.Horizontal
          return returnList;
       }
 
+      public ptsPoint getXYZcoordinates(double station, double offset, double elevation)
+      {
+         var anSOE = new StationOffsetElevation(station, new Offset(offset), new Elevation(elevation));
+         return getXYZcoordinates(anSOE);
+      }
+
       public override ptsPoint getXYZcoordinates(StationOffsetElevation anSOE)
       {
          if (anSOE.station < this.BeginStation || anSOE.station > this.EndStation)
