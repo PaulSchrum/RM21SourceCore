@@ -9,6 +9,6 @@ namespace ptsCogo
    public abstract class ptsElement
    {
       //internal ptsBoundingBox2d boundingBox_i;
-      public ptsFeature feature { get; set; }
+      public rm21Feature feature { get; set; }
    }
 }
