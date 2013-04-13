@@ -8,6 +8,7 @@ using ptsCogo;
 using ptsCogo.Angle;
 using System.ComponentModel;
 using System.Windows.Media;
+using ptsCogo.Horizontal;
 
 
 
@@ -25,13 +26,19 @@ namespace rm21Core
          }
       }
 
+      public rm21HorizontalAlignment GoverningAlignment
+      {
+         get
+         {
+            if (null == MyParentPGLgrouping) return null;
+            return MyParentPGLgrouping.GoverningAlignment;
+         }
+         private set { }
+      }
+
       private int myIndex_ { get; set; }
       protected rm21Side myProgressionDirection { get; set; }
       private bool progressionDirectionHasBeenSet=false;
-
-      //private Profile width_;
-      public Profile Widths { get; protected set; }
-      internal Profile myOffsets { get; set; }
 
       private IRibbonLike nextRibbonInward_;
       protected IRibbonLike nextRibbonInward
@@ -53,20 +60,55 @@ namespace rm21Core
       }
       public event EventHandler onOffsetsChanged;
 
-      internal Profile interpretWidths { get; set; }
+      public Slope NominalCrossSlope { get; set; }
       public Profile CrossSlopes { get; protected set; }
       internal Profile interpretCrossSlopes { get; set; }
+
+      public Double NominalWidth { get; set; }
+      public Profile Widths { get; protected set; }
+      internal Profile interpretWidths { get; set; }
+      internal Profile myOffsets { get; set; }
+
+      public void resetWidths()
+      {
+         Widths = new Profile(this.BeginStation, this.EndStation, NominalWidth);
+      }
+
+      public void resetCrossSlopes()
+      {
+         CrossSlopes = new Profile(this.BeginStation, this.EndStation, NominalCrossSlope);
+      }
 
       private tupleNullableDoubles resultScratchpad;
 
       public ribbonBase() { }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="parentPGLg">Required non-null</param>
+      /// <param name="initialWidth"></param>
+      /// <param name="initialSlope">Required non-null</param>
+      public ribbonBase(PGLGrouping parentPGLg, Double initialWidth, Slope initialSlope)
+      {
+         MyParentPGLgrouping = parentPGLg;
+         NominalWidth = initialWidth;
+         resetWidths();
+         NominalCrossSlope = initialSlope;
+         resetCrossSlopes();
+      }
+
       public ribbonBase(CogoStation beginStation, CogoStation endStation, double initialWidth, Slope initialSlope)
       {
+         if (null == beginStation) throw new ArgumentNullException("beginStation");
+         if (null == endStation) throw new ArgumentNullException("endStation");
+
          interpretWidths = new Profile(beginStation, endStation, (double) enmWidthInterpret.HorizontalOnly);
+         NominalWidth = initialWidth;
          Widths = new Profile(beginStation, endStation, initialWidth);
          interpretCrossSlopes = new Profile(beginStation, endStation, (double)enmCrossSlopeInterpret.xPercentage);
-         CrossSlopes = new Profile(beginStation, endStation, initialSlope);
+         NominalCrossSlope = initialSlope;
+         resetCrossSlopes();
          LiederLineHeight = 5.0;
       }
 
@@ -300,13 +342,25 @@ namespace rm21Core
 
       public CogoStation BeginStation
       {
-         get { return (CogoStation) Widths.BeginProfTrueStation; }
+         get 
+         { 
+            if (null == GoverningAlignment)
+               return (CogoStation) Widths.BeginProfTrueStation;
+
+            return (CogoStation) GoverningAlignment.BeginStation;
+         }
          private set { }
       }
 
       public CogoStation EndStation
       {
-         get { return (CogoStation)Widths.EndProfTrueStation; }
+         get
+         {
+            if (null == GoverningAlignment)
+               return (CogoStation) Widths.EndProfTrueStation;
+
+            return (CogoStation) GoverningAlignment.EndStation;
+         }
          private set { }
       }
 

@@ -7,6 +7,7 @@ using ptsCogo;
 using ptsCogo.Angle;
 using System.Collections.ObjectModel;
 using rm21Core.Ribbons;
+using ptsCogo.Horizontal;
 
 
 
@@ -21,6 +22,15 @@ namespace rm21Core
          set { parentCorridor_ = value; }
       }
 
+      public rm21HorizontalAlignment GoverningAlignment 
+      {
+         get
+         {
+            if (null == ParentCorridor) return null;
+            return ParentCorridor.GoverningAlignment;
+         }
+         private set { } 
+      }
 
       // offset from 3d space curve to the Profile Grade Line
       private PGLoffset PGLoffsetRibbon_;

@@ -7,6 +7,7 @@ using ptsCogo;
 using ptsCogo.Angle;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
+using ptsCogo.Horizontal;
 
 
 namespace rm21Core
@@ -31,7 +32,13 @@ namespace rm21Core
          Name = name_;
       }
 
+      /// <summary>
+      /// Deprecated.
+      /// Retained only for compatibility with the demo application.
+      /// </summary>
       public GenericAlignment Alignment = new GenericAlignment(1000.0, 10000.0);
+
+      public rm21HorizontalAlignment GoverningAlignment { get; set; }
 
       public string Name { get; set; }
 
