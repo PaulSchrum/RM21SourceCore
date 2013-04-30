@@ -25,7 +25,7 @@ namespace MainRM21WPFapp.ViewModels
          currentCorridor_ = parentVM_.CurrentCorridor;
          ViewScaleFeetPerInch = 10.0;
          currentCorridor_ = parentVM_.CurrentCorridor;
-         AdvanceDistance = 20.0;
+         AdvanceDistance = 4.25;
 
          AdvanceStationAheadCmd = new RelayCommand(advanceStationAhead, () => canAdvanceAhead);
          canAdvanceAhead = true;
