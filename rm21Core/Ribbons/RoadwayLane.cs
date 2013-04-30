@@ -15,6 +15,8 @@ namespace rm21Core
       public RoadwayLane(CogoStation beginStation, CogoStation endStation, double initialWidth, Slope initialSlope)
          : base(beginStation, endStation, initialWidth, initialSlope) { }
 
+      public RoadwayLane(PGLGrouping pglG, Double width, Slope slope) : base(pglG, width, slope) { }
+
       public override string getHashName() { return "Roadway Lane"; }
 
       public override void DrawCrossSection(IRM21cad2dDrawingContext cadContext, 

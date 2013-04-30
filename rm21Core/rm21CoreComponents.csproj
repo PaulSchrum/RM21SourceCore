@@ -42,6 +42,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CorridorTypes\rm21OpenChannelCorridor.cs" />
     <Compile Include="CorridorTypes\rm21RoadwayCorridor.cs" />
     <Compile Include="ExternalClasses\ObservableDictionary.cs" />
     <Compile Include="ExternalClasses\ViewModelBase.cs" />
@@ -76,6 +77,9 @@
       <Project>{F878D5A9-26C0-452C-8209-CCD24B41BA02}</Project>
       <Name>ptsDigitalTerrainModel</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram2.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

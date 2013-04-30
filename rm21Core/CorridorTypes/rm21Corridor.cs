@@ -32,6 +32,7 @@ namespace rm21Core
          Name = name_;
       }
 
+      [Obsolete("Use GoverningAlignment instead")]
       /// <summary>
       /// Deprecated.
       /// Retained only for compatibility with the demo application.
