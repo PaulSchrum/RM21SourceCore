@@ -8,6 +8,9 @@ using ptsCogo;
 using rm21Core;
 using rm21Core.CorridorTypes;
 using rm21Core.Ribbons;
+using ptsCogo.Horizontal;
+using NUnitTestingLibrary.Mocks;
+using ptsCogo.Angle;
 
 
 namespace NUnitTestingLibrary
@@ -23,11 +26,12 @@ namespace NUnitTestingLibrary
       {
          CorridorTestsSetup();
          //setupTest2();
-         OffsetOutsideOfRibbon_RightPGLOutside_plus12ft();
+         //OffsetOutsideOfRibbon_RightPGLOutside_plus12ft();
          //OffsetOutsideOfRibbon_RightPGLOutside_plus39ft();
          //OffsetOutsideOfRibbon_RightPGLInside_plus9ft();
          //OffsetOutsideOfRibbon_LeftPGLOutside_neg39ft();
          //OffsetOutsideOfRibbon_LeftPGLInside_neg9ft();
+         CreateCorridor_CreateHorizontalAlignmentFirst_BeginStation0();
       }
 
       [SetUp]
@@ -222,6 +226,42 @@ namespace NUnitTestingLibrary
 
          Assert.AreEqual(expectedValue, actualValue, 0.00001);
          //Assert.AreNotEqual(expectedValue, actualValue, 0.00001);
+      }
+
+      private rm21HorizontalAlignment setupHA1()
+      {
+         var funGeomItem = new rm21MockFundamentalGeometry();
+         funGeomItem.pointList.Add(new ptsPoint(6925.6663, 6218.7689, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(6540.7903, 5615.8802, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(5952.2191, 6022.3138, 0.0));
+         funGeomItem.expectedType = expectedType.ArcSegmentOutsideSoluion;
+         funGeomItem.deflectionSign = 1;
+         var fGeomList = new List<IRM21fundamentalGeometry>();
+         fGeomList.Add(funGeomItem);
+
+         return new rm21HorizontalAlignment(
+            fundamentalGeometryList: fGeomList,
+            Name: null, stationEquationing: null);
+
+      }
+
+      [Test]
+      public void CreateCorridor_CreateHorizontalAlignmentFirst_BeginStation0()
+      {
+         rm21HorizontalAlignment HA = setupHA1();
+         var newCorridor = new rm21Core.CorridorTypes.rm21OpenChannelCorridor("LowerCreek");
+         newCorridor.GoverningAlignment = HA;
+
+         PGLGrouping pglGrLT = new PGLGrouping(-1);
+         PGLGrouping pglGrRT = new PGLGrouping(1);
+
+         newCorridor.addPGLgrouping(pglGrLT);
+         newCorridor.addPGLgrouping(pglGrRT);
+
+         pglGrRT.addOutsideRibbon(new RoadwayLane(pglGrRT, 10.0, new Slope(0.02)));
+         pglGrLT.addOutsideRibbon(new RoadwayLane(pglGrLT, 20.0, new Slope(0.10)));
+
+         Assert.True(true);
       }
    }
 }
