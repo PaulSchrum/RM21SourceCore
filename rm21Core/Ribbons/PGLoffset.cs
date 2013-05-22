@@ -42,7 +42,14 @@ namespace rm21Core.Ribbons
       public override Profile getOffsetProfile()
       {
          if (this.getMyScaleFactor() < 0)
+         {
+            if (null!=myOffsets)
+               // start here: do I make myOffsets be a zero-elevation profile?
+               // maybe I make this method return a zero-elevation profile if 
+               //    both profiles are null?  What should myOffsets be in this situation?
+               // if GoverningAlignment != null, can I get at its station range from here?
             return Profile.arithmaticAddProfile(null, myOffsets, -1.0);
+         }
 
          return myOffsets;
       }
