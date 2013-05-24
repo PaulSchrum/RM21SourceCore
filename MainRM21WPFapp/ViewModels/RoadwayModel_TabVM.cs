@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using rm21Core.ExternalClasses;
-using rm21Core;
-using rm21Core.CorridorTypes;
-using rm21Core.Ribbons;
+using ptsCogo.ExternalClasses;
+using ptsCogo;
+using ptsCogo.CorridorTypes;
+using ptsCogo.Ribbons;
 using System.Windows.Input;
 using ptsCogo;
 

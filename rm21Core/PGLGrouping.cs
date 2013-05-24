@@ -6,12 +6,12 @@ using ptsCogo.coordinates.CurvilinearCoordinates;
 using ptsCogo;
 using ptsCogo.Angle;
 using System.Collections.ObjectModel;
-using rm21Core.Ribbons;
+using ptsCogo.Ribbons;
 using ptsCogo.Horizontal;
 
 
 
-namespace rm21Core
+namespace ptsCogo
 {
    public class PGLGrouping : Irm21TreeViewItemable
    {

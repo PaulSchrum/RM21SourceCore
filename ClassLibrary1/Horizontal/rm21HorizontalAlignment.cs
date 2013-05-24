@@ -250,5 +250,28 @@ namespace ptsCogo.Horizontal
          }
          return null;
       }
+
+      public List<CogoStation> getChangePoints()
+      {
+         List<CogoStation> returnList =
+            (from item in allChildSegments
+            select (CogoStation) item.BeginStation).ToList();
+         returnList.Add((CogoStation) this.EndStation);
+         return returnList;
+      }
+
+      public HorizontalAlignmentBase GetElementByStation(double testStation)
+      {
+         HorizontalAlignmentBase returnItem = null;
+         foreach (var item in allChildSegments)
+         {
+            if (testStation <= item.EndStation)
+            {
+               returnItem = item;
+               break;
+            }
+         }
+         return returnItem;
+      }
    }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 
-namespace rm21Core.ExternalClasses
+namespace ptsCogo.ExternalClasses
 {
    /// <summary>
    /// Written by Paul Schrum, but inspired by Joel Cochran in

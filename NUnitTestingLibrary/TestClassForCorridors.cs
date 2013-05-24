@@ -5,9 +5,9 @@ using System.Text;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using ptsCogo;
-using rm21Core;
-using rm21Core.CorridorTypes;
-using rm21Core.Ribbons;
+using ptsCogo;
+using ptsCogo.CorridorTypes;
+using ptsCogo.Ribbons;
 using ptsCogo.Horizontal;
 using NUnitTestingLibrary.Mocks;
 using ptsCogo.Angle;
@@ -137,7 +137,7 @@ namespace NUnitTestingLibrary
          testCorridor.addPGLgrouping(pglGrLT);
          testCorridor.addPGLgrouping(pglGrRT);
 
-         testCorridor.existingGroundSurface = new rm21Core.Mocks.rm21MockSurface();
+         testCorridor.existingGroundSurface = new ptsCogo.Mocks.rm21MockSurface();
 
       }
 
@@ -249,7 +249,7 @@ namespace NUnitTestingLibrary
       public void CreateCorridor_CreateHorizontalAlignmentFirst_BeginStation0()
       {
          rm21HorizontalAlignment HA = setupHA1();
-         var newCorridor = new rm21Core.CorridorTypes.rm21OpenChannelCorridor("LowerCreek");
+         var newCorridor = new ptsCogo.CorridorTypes.rm21OpenChannelCorridor("LowerCreek");
          newCorridor.GoverningAlignment = HA;
 
          PGLGrouping pglGrLT = new PGLGrouping(-1);

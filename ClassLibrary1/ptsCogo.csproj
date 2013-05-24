@@ -49,6 +49,7 @@
     <Compile Include="Horizontal\rm21HorArc.cs" />
     <Compile Include="Horizontal\rm21HorizontalAlignment.cs" />
     <Compile Include="Horizontal\rm21HorLineSegment.cs" />
+    <Compile Include="IPersistantDrawer.cs" />
     <Compile Include="IRM21cad2dDrawingContext.cs" />
     <Compile Include="Profile.cs" />
     <Compile Include="CogoStation.cs" />

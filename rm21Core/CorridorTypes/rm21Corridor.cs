@@ -10,7 +10,7 @@ using System.Windows.Media;
 using ptsCogo.Horizontal;
 
 
-namespace rm21Core
+namespace ptsCogo
 {
    /// <summary>
    /// This class represents all surfaces controlled by the same chain, 

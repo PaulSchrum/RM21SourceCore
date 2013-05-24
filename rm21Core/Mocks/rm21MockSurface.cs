@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using rm21Core;
+using ptsCogo;
 using ptsCogo;
 
-namespace rm21Core.Mocks
+namespace ptsCogo.Mocks
 {
    public class rm21MockSurface : Irm21surface
    {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ptsCogo;
 
-namespace rm21Core
+namespace ptsCogo
 {
    public interface Irm21surface
    {

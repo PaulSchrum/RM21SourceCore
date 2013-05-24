@@ -6,7 +6,7 @@ using ptsCogo.coordinates.CurvilinearCoordinates;
 using ptsCogo;
 using ptsCogo.Angle;
 
-namespace rm21Core
+namespace ptsCogo
 {
    public interface IRibbonLike : Irm21TreeViewItemable
    {

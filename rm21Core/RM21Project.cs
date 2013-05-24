@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ptsCogo.Horizontal;
 
-namespace rm21Core
+namespace ptsCogo
 {
    public class RM21Project
    {

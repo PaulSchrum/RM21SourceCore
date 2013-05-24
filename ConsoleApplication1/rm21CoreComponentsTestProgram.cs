@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ptsCogo;
-using rm21Core;
+using ptsCogo;
 using ptsCogo.coordinates.CurvilinearCoordinates;
 //using PaulsTestingFramework;
 using NUnitTestingLibrary;

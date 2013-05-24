@@ -8,7 +8,7 @@ using ptsCogo.Angle;
 using System.Windows.Media;
 
 
-namespace rm21Core
+namespace ptsCogo
 {
    public class RoadwayLane : ribbonBase
    {

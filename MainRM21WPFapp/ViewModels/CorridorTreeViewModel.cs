@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
-using rm21Core;
+using ptsCogo;
 
 namespace MainRM21WPFapp.ViewModels
 {
@@ -15,7 +15,7 @@ namespace MainRM21WPFapp.ViewModels
          Level1Items = new ObservableCollection<PglGroupingViewModel>();
       }
 
-      private rm21Core.rm21Corridor theCorridor_;
+      private ptsCogo.rm21Corridor theCorridor_;
       public rm21Corridor TheCorridor
       {
          get { return theCorridor_; }

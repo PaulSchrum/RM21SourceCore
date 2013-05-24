@@ -1358,6 +1358,15 @@ namespace ptsCogo
             return "false";
       }
 
+
+      public List<CogoStation> getChangePoints()
+      {
+         List<CogoStation> returnList = 
+                           (from seg in allVCs
+                           select seg.BeginStation).ToList();
+         returnList.Add((CogoStation)this.EndProfTrueStation);
+         return returnList;
+      }
    }
 
    public class vpiList : INotifyPropertyChanged

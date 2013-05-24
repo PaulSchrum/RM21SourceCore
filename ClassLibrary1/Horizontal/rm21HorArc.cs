@@ -124,5 +124,14 @@ namespace ptsCogo.Horizontal
 
          return this.ArcCenterPt + ccToSOEpoint;
       }
+
+      public override void drawHorizontalByOffset
+         (IPersistantDrawer drawer, StationOffsetElevation soe1, StationOffsetElevation soe2)
+      {
+         ptsPoint startPoint = this.getXYZcoordinates(soe1);
+         ptsPoint endPoint = this.getXYZcoordinates(soe2);
+         drawer.PlaceArc(this, startPoint, endPoint);
+      }
+
    }
 }

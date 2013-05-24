@@ -8,7 +8,7 @@
     <ProjectGuid>{B0A390F8-61B4-4155-8819-4D7BB65E2F9B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>rm21Core</RootNamespace>
+    <RootNamespace>ptsCogo</RootNamespace>
     <AssemblyName>rm21Core</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -46,7 +46,6 @@
     <Compile Include="CorridorTypes\rm21RoadwayCorridor.cs" />
     <Compile Include="ExternalClasses\ObservableDictionary.cs" />
     <Compile Include="ExternalClasses\ViewModelBase.cs" />
-    <Compile Include="IPersistantDrawer.cs" />
     <Compile Include="Irm21surface.cs" />
     <Compile Include="Irm21TreeViewItemable.cs" />
     <Compile Include="Mocks\rm21MockSurface.cs" />

@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Media;
 using ptsCogo.coordinates;
 
-namespace rm21Core.Ribbons
+namespace ptsCogo.Ribbons
 {
    public class RaySheet : RaySheetBase
    {

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using rm21Core.ExternalClasses;
-using rm21Core;
-using rm21Core.CorridorTypes;
-using rm21Core.Ribbons;
+using ptsCogo.ExternalClasses;
+using ptsCogo;
+using ptsCogo.CorridorTypes;
+using ptsCogo.Ribbons;
 using System.Windows.Input;
 using ptsCogo;
 using System.Windows;
@@ -131,7 +131,7 @@ namespace MainRM21WPFapp.ViewModels
          aCorridor.addPGLgrouping(pglGrLT);
          aCorridor.addPGLgrouping(pglGrRT);
 
-         aCorridor.existingGroundSurface = new rm21Core.Mocks.rm21MockSurface();
+         aCorridor.existingGroundSurface = new ptsCogo.Mocks.rm21MockSurface();
          vpiList vpiList = new vpiList();
          vpiList.add(-200.0, 3.0); vpiList.add(-150.0, -3.0); vpiList.add(-130.0, 6.0);
          vpiList.add(-40.0, 3.5); vpiList.add(38.0, 6.2); vpiList.add(65.0, 2.8);

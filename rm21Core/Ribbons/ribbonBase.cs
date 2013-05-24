@@ -12,7 +12,7 @@ using ptsCogo.Horizontal;
 
 
 
-namespace rm21Core
+namespace ptsCogo
 {
    public abstract class ribbonBase : IRibbonLike, INotifyPropertyChanged
    {
@@ -231,7 +231,7 @@ namespace rm21Core
 
       protected void computeOffsetsProfile_()
       {
-         if (this is rm21Core.Ribbons.RaySheetBase)
+         if (this is ptsCogo.Ribbons.RaySheetBase)
             return;
          Profile innerOffsetsProfile = null;
          if (nextRibbonInward is ribbonBase)
@@ -296,11 +296,45 @@ namespace rm21Core
             this.myOffsets.draw(cadContext);
       }
 
-      public virtual void PersistantDraw()
+      public virtual void PersistantDraw(IPersistantDrawer drawer)
       {
-
+         StationOffsetElevation soe1 = null;
+         StationOffsetElevation soe2 = new StationOffsetElevation();
+         var drawPoints = getOutsideEdgeDrawPoints();
+         foreach (var sta2 in drawPoints)
+         {
+            soe2 = this.getOutsideEdgeStationOffsetElevation(sta2);
+            if (soe1 != null)
+            {
+               Double aveStation = (sta2.trueStation + soe1.station) / 2.0;
+               HorizontalAlignmentBase HAelement = 
+                  this.GoverningAlignment.GetElementByStation(aveStation);
+               HAelement.drawHorizontalByOffset(drawer, soe1, soe2);
+            }
+            soe1 = soe2;
+         }
       }
-      
+
+      protected List<CogoStation> getOutsideEdgeDrawPoints()
+      {
+         var drawPointsPrelim = this.GoverningAlignment.getChangePoints();
+         drawPointsPrelim.AddRange(this.myOffsets.getChangePoints());
+
+         return (from sta in drawPointsPrelim
+                           orderby sta
+                           select sta).Distinct().ToList();
+      }
+
+      public StationOffsetElevation getOutsideEdgeStationOffsetElevation(CogoStation sta)
+      {
+         StationOffsetElevation returnItem = new StationOffsetElevation();
+         returnItem.station = sta.trueStation;
+         returnItem.offset = this.myOffsets.getElevation(sta);
+         returnItem.elevation = 0.0;
+
+         return returnItem;
+      }
+
       public virtual double? getActualWidth(CogoStation aStation)
       {
          tupleNullableDoubles rslt = new tupleNullableDoubles();

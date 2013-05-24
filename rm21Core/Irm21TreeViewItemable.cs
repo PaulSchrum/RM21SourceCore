@@ -5,7 +5,7 @@ using System.Text;
 using System.Collections.ObjectModel;
 
 
-namespace rm21Core
+namespace ptsCogo
 {
    public interface Irm21TreeViewItemable
    {

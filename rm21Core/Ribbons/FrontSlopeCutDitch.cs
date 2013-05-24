@@ -7,7 +7,7 @@ using ptsCogo;
 using ptsCogo.Angle;
 using System.Windows.Media;
 
-namespace rm21Core.Ribbons
+namespace ptsCogo.Ribbons
 {
    public class FrontSlopeCutDitch : ribbonBase
    {

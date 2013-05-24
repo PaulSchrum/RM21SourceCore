@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using rm21Core;
+using ptsCogo;
 using ptsCogo;
 
 namespace MainRM21WPFapp.ViewModels

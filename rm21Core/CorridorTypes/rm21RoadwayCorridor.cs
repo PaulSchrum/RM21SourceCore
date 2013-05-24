@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace rm21Core.CorridorTypes
+namespace ptsCogo.CorridorTypes
 {
    public class rm21RoadwayCorridor : rm21Corridor
    {

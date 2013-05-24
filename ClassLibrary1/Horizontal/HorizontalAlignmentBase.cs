@@ -55,7 +55,7 @@ namespace ptsCogo.Horizontal
 
       public virtual ptsPoint getXYZcoordinates(StationOffsetElevation anSOE)
       {
-         throw new NotImplementedException();
+         return null;
       }
 
       public virtual List<StationOffsetElevation> getStationOffsetElevation(ptsPoint aPoint)
@@ -70,5 +70,11 @@ namespace ptsCogo.Horizontal
 
       private enum Unit{Meter, Foot, SurveyFoot}
       private HorizontalAlignmentBase.Unit thisUnit { get; set; }  /*  */
+
+      public virtual void drawHorizontalByOffset
+         (IPersistantDrawer drawer, StationOffsetElevation soe1, StationOffsetElevation soe2)
+      {
+         
+      }
    }
 }
