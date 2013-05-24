@@ -5,10 +5,11 @@ using System.Text;
 
 namespace ptsCogo
 {
-   [Serializable]
+   
    public abstract class ptsElement
    {
-      //internal ptsBoundingBox2d boundingBox_i;
+      public ptsBoundingBox2d boundingBox {get; protected set;}
       public rm21Feature feature { get; set; }
+            
    }
 }

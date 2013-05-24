@@ -49,6 +49,9 @@
     <Compile Include="coordinates\CurvilinearCoordinates\StationOffsetElevation.cs" />
     <Compile Include="coordinates\ptsBoundingBox2d.cs" />
     <Compile Include="coordinates\ptsRay.cs" />
+    <Compile Include="Elements\Paths\ptsArc.cs" />
+    <Compile Include="Elements\Paths\ptsLineSegment.cs" />
+    <Compile Include="Elements\Paths\ptsPath.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Elements\ptsElement.cs" />
     <Compile Include="rm21Feature.cs" />

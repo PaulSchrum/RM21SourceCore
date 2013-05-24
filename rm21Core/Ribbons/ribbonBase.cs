@@ -295,6 +295,11 @@ namespace rm21Core
          if (null != this.myOffsets) 
             this.myOffsets.draw(cadContext);
       }
+
+      public virtual void PersistantDraw()
+      {
+
+      }
       
       public virtual double? getActualWidth(CogoStation aStation)
       {
