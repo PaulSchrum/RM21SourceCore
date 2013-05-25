@@ -586,7 +586,9 @@ namespace ptsCogo
       {
          var resultTND = new tupleNullableDoubles();
          getElevation(station, out resultTND);
-         return resultTND.back;
+         if(resultTND.back != null)
+            return resultTND.back;
+         return resultTND.ahead;
       }
 
       public void getElevation(CogoStation station, out tupleNullableDoubles theElevation)

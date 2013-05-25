@@ -146,6 +146,13 @@ namespace ptsCogo
          }
       }
 
+      public void PersistantDraw(IPersistantDrawer drawer)
+      {
+         foreach (var pglGrouping in allPGLgroupings)
+         {
+            pglGrouping.PersistantDraw(drawer);
+         }
+      }
    }
 
 }

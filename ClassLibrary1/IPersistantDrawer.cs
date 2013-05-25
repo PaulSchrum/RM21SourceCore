@@ -1,4 +1,5 @@
-﻿using ptsCogo.Horizontal;
+﻿using ptsCogo.coordinates.CurvilinearCoordinates;
+using ptsCogo.Horizontal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,13 @@ namespace ptsCogo
 {
    public interface IPersistantDrawer
    {
-      void PlaceLine(rm21HorLineSegment lineSegment, ptsPoint startPoint, ptsPoint endPoint);
-      void PlaceArc(rm21HorArc arc, ptsPoint startPoint, ptsPoint endPoint);
+      void PlaceLine(rm21HorLineSegment lineSegment, 
+         ptsPoint startPoint, StationOffsetElevation startSOE,
+         ptsPoint endPoint, StationOffsetElevation endSOE);
+
+      void PlaceArc(rm21HorArc arc,
+         ptsPoint startPoint, StationOffsetElevation startSOE,
+         ptsPoint endPoint, StationOffsetElevation endSOE);
+      
    }
 }

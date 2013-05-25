@@ -130,7 +130,7 @@ namespace ptsCogo.Horizontal
       {
          ptsPoint startPoint = this.getXYZcoordinates(soe1);
          ptsPoint endPoint = this.getXYZcoordinates(soe2);
-         drawer.PlaceArc(this, startPoint, endPoint);
+         drawer.PlaceArc(this, startPoint, soe1, endPoint, soe2);
       }
 
    }

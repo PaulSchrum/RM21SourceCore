@@ -328,6 +328,29 @@ namespace ptsCogo
             }
          }
       }
+
+      public void PersistantDraw(IPersistantDrawer drawer)
+      {
+         if (null != this.thePGLoffsetRibbon)
+            this.thePGLoffsetRibbon.PersistantDraw(drawer);
+
+         if (null != insideRibbons)
+         {
+            foreach (var aRibbon in insideRibbons)
+            {
+               aRibbon.PersistantDraw(drawer);
+            }
+         }
+
+         if (null != outsideRibbons)
+         {
+            foreach (var aRibbon in outsideRibbons)
+            {
+               aRibbon.PersistantDraw(drawer);
+            }
+         }
+
+      }
    }
 
 }

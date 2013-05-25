@@ -9,7 +9,8 @@ using ptsCogo.coordinates.CurvilinearCoordinates;
 namespace ptsCogo
 {
    [Serializable]
-   public class CogoStation : INotifyPropertyChanged, IComparable<CogoStation>
+   public class CogoStation : INotifyPropertyChanged, IComparable<CogoStation>, 
+      IEqualityComparer<CogoStation>
    {
       public GenericAlignment myAlignment { get; internal set; }
       public bool isOnMyAlignemnt { get; internal set; }
@@ -260,6 +261,17 @@ namespace ptsCogo
       /// public bool lastOperationWentPastEndStation {get;internal set;} (may be true after addition)
       /// public bool suppressBoundaryChecking {get;set;} -- used to increase performance
       /// 
+
+      public bool Equals(CogoStation x, CogoStation y)
+      {
+         return ((Math.Abs(x - y)) < 0.00001);
+      }
+
+      public int GetHashCode(CogoStation obj)
+      {
+         Double smallPart = Math.Truncate(obj.trueStation / 100.0);
+         return Convert.ToInt32(smallPart * 100 * 100000);
+      }
    }
 
 }

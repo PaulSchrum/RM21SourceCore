@@ -92,7 +92,7 @@ namespace ptsCogo.Horizontal
       {
          ptsPoint startPoint = this.getXYZcoordinates(soe1);
          ptsPoint endPoint = this.getXYZcoordinates(soe2);
-         drawer.PlaceLine(this, startPoint, endPoint);
+         drawer.PlaceLine(this, startPoint, soe1, endPoint, soe2);
       }
 
    }

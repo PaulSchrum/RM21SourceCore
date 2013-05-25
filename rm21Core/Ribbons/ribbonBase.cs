@@ -301,6 +301,7 @@ namespace ptsCogo
          StationOffsetElevation soe1 = null;
          StationOffsetElevation soe2 = new StationOffsetElevation();
          var drawPoints = getOutsideEdgeDrawPoints();
+         if (null == drawPoints) return;
          foreach (var sta2 in drawPoints)
          {
             soe2 = this.getOutsideEdgeStationOffsetElevation(sta2);
@@ -317,12 +318,23 @@ namespace ptsCogo
 
       protected List<CogoStation> getOutsideEdgeDrawPoints()
       {
+         if (null == this.GoverningAlignment) return null;
+         if (null == this.myOffsets) return null;
          var drawPointsPrelim = this.GoverningAlignment.getChangePoints();
          drawPointsPrelim.AddRange(this.myOffsets.getChangePoints());
 
-         return (from sta in drawPointsPrelim
-                           orderby sta
-                           select sta).Distinct().ToList();
+         var retList = drawPointsPrelim.OrderBy(sta => sta.trueStation).ToList();
+         for (int i = retList.Count - 2; i >= 0; i--)
+         {
+            if (0 ==
+                     utilFunctions.tolerantCompare(retList[i].trueStation,
+                     retList[i + 1].trueStation, 0.00001))
+            {
+               retList.RemoveAt(i + 1);
+            }
+         }
+
+         return retList;
       }
 
       public StationOffsetElevation getOutsideEdgeStationOffsetElevation(CogoStation sta)

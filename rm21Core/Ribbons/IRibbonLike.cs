@@ -17,6 +17,7 @@ namespace ptsCogo
          ref StationOffsetElevation aSOE, int whichSide);
       void DrawPlanViewSchematic(IRM21cad2dDrawingContext cadContext,
          int whichSide);
+      void PersistantDraw(IPersistantDrawer drawer);
 
       void moveToOuterEdge(ref StationOffsetElevation aSOE, int whichSide);
 
