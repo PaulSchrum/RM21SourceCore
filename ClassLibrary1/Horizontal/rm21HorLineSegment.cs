@@ -76,13 +76,9 @@ namespace ptsCogo.Horizontal
          ptsPoint returnPoint = this.BeginPoint + alongVector;
          returnPoint.z = anSOE.elevation.EL;
 
-         ptsVector perpandicularVector = new ptsVector();
          Azimuth perpandicularAzimuth = this.BeginAzimuth + piOver2;
-         if (anSOE.offset.OFST < 0.0)
-         {
-            perpandicularAzimuth = this.BeginAzimuth - piOver2;
-         }
-         returnPoint = returnPoint + new ptsVector(perpandicularAzimuth, anSOE.offset.OFST);
+         ptsVector perpandicularVector = new ptsVector(perpandicularAzimuth, anSOE.offset.OFST);
+         returnPoint = returnPoint + perpandicularVector;
 
          return returnPoint;
       }

@@ -514,6 +514,19 @@ namespace NUnitTestingLibrary
       }
 
       [Test]
+      public void HorizontalAlignment_givenBeginStationAndLeftOffset_getXYcoordinates()
+      {
+         var HA = new rm21HorizontalAlignment(
+            fundamentalGeometryList: createTestHA_fundGeom1(),
+            Name: null, stationEquationing: null);
+
+         var actual = HA.getXYZcoordinates(0.0, -20.0, 0.0);
+         Assert.AreEqual(expected: 3540.3922, actual: actual.x, delta: 0.00015);
+         Assert.AreEqual(expected: 2538.8385, actual: actual.y, delta: 0.00015);
+
+      }
+
+      [Test]
       public void HorizontalAlignment_givenXYvalues_getStationOffsetValues()
       {
          List<IRM21fundamentalGeometry> fundmtlGeoms = createTestHA_fundGeom1();
