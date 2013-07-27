@@ -426,7 +426,7 @@ namespace ptsCogo
          return returnList;
       }
 
-      public void addStationAndElevation(CogoStation newStation, double newElevation)
+      public void appendStationAndElevation(CogoStation newStation, double newElevation)
       {
          verticalCurve newVC, otherVC;
          if (iHaveOneOrMoreVerticalCurves == true)

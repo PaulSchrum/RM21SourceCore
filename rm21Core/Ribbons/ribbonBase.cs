@@ -121,10 +121,10 @@ namespace ptsCogo
          Widths.getElevation(endCloseTaperStation, out resultScratchpad);
          endWidth = (double)resultScratchpad.back;
 
-         Widths.addStationAndElevation(beginOpenTaperStation, startWidth);
-         Widths.addStationAndElevation(endOpenTaperStation, newTotalWidth);
-         Widths.addStationAndElevation(beginCloseTaperStation, newTotalWidth);
-         Widths.addStationAndElevation(endCloseTaperStation, endWidth);
+         Widths.appendStationAndElevation(beginOpenTaperStation, startWidth);
+         Widths.appendStationAndElevation(endOpenTaperStation, newTotalWidth);
+         Widths.appendStationAndElevation(beginCloseTaperStation, newTotalWidth);
+         Widths.appendStationAndElevation(endCloseTaperStation, endWidth);
 
          computeOffsetsProfile_();
       }
@@ -138,10 +138,10 @@ namespace ptsCogo
          CrossSlopes.getElevation(endCloseTaperStation, out resultScratchpad);
          endCrossSlope = (double)resultScratchpad.back;
 
-         CrossSlopes.addStationAndElevation(beginOpenTaperStation, startCrossSlope);
-         CrossSlopes.addStationAndElevation(endOpenTaperStation, crossSlope);
-         CrossSlopes.addStationAndElevation(beginCloseTaperStation, crossSlope);
-         CrossSlopes.addStationAndElevation(endCloseTaperStation, endCrossSlope);
+         CrossSlopes.appendStationAndElevation(beginOpenTaperStation, startCrossSlope);
+         CrossSlopes.appendStationAndElevation(endOpenTaperStation, crossSlope);
+         CrossSlopes.appendStationAndElevation(beginCloseTaperStation, crossSlope);
+         CrossSlopes.appendStationAndElevation(endCloseTaperStation, endCrossSlope);
 
       }
 

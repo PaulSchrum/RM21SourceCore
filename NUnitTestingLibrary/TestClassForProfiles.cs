@@ -444,9 +444,9 @@ namespace NUnitTestingLibrary
       {
          rm21MockSurface aSurface = new rm21MockSurface();
          aSurface.theProfile = new Profile(-190.0, -100.0, 10.0);
-         aSurface.theProfile.addStationAndElevation((CogoStation)(-20.0), 12.0);
-         aSurface.theProfile.addStationAndElevation((CogoStation)20.0, 8.0);
-         aSurface.theProfile.addStationAndElevation((CogoStation)200, 16.0);
+         aSurface.theProfile.appendStationAndElevation((CogoStation)(-20.0), 12.0);
+         aSurface.theProfile.appendStationAndElevation((CogoStation)20.0, 8.0);
+         aSurface.theProfile.appendStationAndElevation((CogoStation)200, 16.0);
 
          Profile profileFromSurface = aSurface.getSectionProfile(null, 0.0, null);
 
