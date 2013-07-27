@@ -20,7 +20,7 @@ namespace NUnitTestingLibrary
       }
 
       [Test]
-      public void createNewStation_doubleOnly_noAlignment()
+      public void createNewStation_doubleOnly_noAlignment()  //
       {
          expectedDouble1 = 1234.0;
          aStation = new CogoStation(1234.0);
@@ -28,7 +28,7 @@ namespace NUnitTestingLibrary
       }
 
       [Test]
-      public void createNewStation_stringNoPlus_noAlignment()
+      public void createNewStation_stringNoPlus_noAlignment() //
       {
          expectedDouble1 = 1235.0;
          aStation = new CogoStation("1235.0");
@@ -36,7 +36,7 @@ namespace NUnitTestingLibrary
       }
 
       [Test]
-      public void createNewStation_string_noAlignment()
+      public void createNewStation_string_noAlignment() //
       {
          expectedDouble1 = 1236.0;
          aStation = new CogoStation("12+36.00");

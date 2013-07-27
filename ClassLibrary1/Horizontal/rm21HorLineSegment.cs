@@ -84,7 +84,7 @@ namespace ptsCogo.Horizontal
       }
 
       public override void drawHorizontalByOffset
-         (IPersistantDrawer drawer, StationOffsetElevation soe1, StationOffsetElevation soe2)
+         (IPersistantDrawer_Cogo drawer, StationOffsetElevation soe1, StationOffsetElevation soe2)
       {
          ptsPoint startPoint = this.getXYZcoordinates(soe1);
          ptsPoint endPoint = this.getXYZcoordinates(soe2);

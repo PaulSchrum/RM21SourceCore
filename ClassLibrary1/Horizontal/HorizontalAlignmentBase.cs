@@ -72,7 +72,7 @@ namespace ptsCogo.Horizontal
       private HorizontalAlignmentBase.Unit thisUnit { get; set; }  /*  */
 
       public virtual void drawHorizontalByOffset
-         (IPersistantDrawer drawer, StationOffsetElevation soe1, StationOffsetElevation soe2)
+         (IPersistantDrawer_Cogo drawer, StationOffsetElevation soe1, StationOffsetElevation soe2)
       {
          
       }

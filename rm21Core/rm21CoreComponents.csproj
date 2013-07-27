@@ -46,6 +46,7 @@
     <Compile Include="CorridorTypes\rm21RoadwayCorridor.cs" />
     <Compile Include="ExternalClasses\ObservableDictionary.cs" />
     <Compile Include="ExternalClasses\ViewModelBase.cs" />
+    <Compile Include="IPersistantDrawer.cs" />
     <Compile Include="Irm21surface.cs" />
     <Compile Include="Irm21TreeViewItemable.cs" />
     <Compile Include="Mocks\rm21MockSurface.cs" />

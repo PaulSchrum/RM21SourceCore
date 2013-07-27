@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ptsCogo
 {
-   public interface IPersistantDrawer
+   public interface IPersistantDrawer_Cogo
    {
       void PlaceLine(rm21HorLineSegment lineSegment, 
          ptsPoint startPoint, StationOffsetElevation startSOE,

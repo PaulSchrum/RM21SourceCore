@@ -14,6 +14,8 @@ namespace ptsCogo.Ribbons
       public Shoulder(CogoStation beginStation, CogoStation endStation, double initialWidth, Slope initialSlope)
          : base(beginStation, endStation, initialWidth, initialSlope) { }
 
+      public Shoulder(PGLGrouping pglG, Double width, Slope slope) : base(pglG, width, slope) { }
+
       public override string getHashName() { return "Shoulder"; }
 
       public override void DrawCrossSection(IRM21cad2dDrawingContext cadContext,

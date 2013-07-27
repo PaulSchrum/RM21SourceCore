@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Mocks\rm21MockFundamentalGeometry.cs" />
     <Compile Include="Mocks\rm21MockSurface.cs" />
+    <Compile Include="TestClassForCadFoundations.cs" />
     <Compile Include="TestClassForCorridors.cs" />
     <Compile Include="TestClassForHorizontalAlignments.cs" />
     <Compile Include="TestClassForProfiles.cs" />
