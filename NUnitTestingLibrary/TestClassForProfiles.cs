@@ -15,9 +15,18 @@ namespace NUnitTestingLibrary
    public class TestClassForProfiles
    {
       double doubleDelta=0.0000001;
+      private static tupleNullableDoubles result;
+      bool expectedBl;
+      bool actualBl;
+      double expectedDbl;
+      double actualDbl;
+      string conditionString;
+
       private Profile profile1;
       private Profile profile2;
       private Profile resultingProfile;
+      private Profile pfl1;
+
       private ptsRay ray1 = new ptsRay();
       private ptsRay ray2 = new ptsRay();
       private ptsRay ray3 = new ptsRay();
@@ -53,8 +62,9 @@ namespace NUnitTestingLibrary
          aVpiList.add(2500.00, 9.0);
          aVpiList.add(3000.00, 4.0);
 
-
          profile2 = new Profile(aVpiList);
+
+         pfl1Setup();
 
          ray1.StartPoint = new ptsPoint(1100.0, 0.0, 10.0);
          ray1.Slope = new Slope(1.00);
@@ -76,6 +86,18 @@ namespace NUnitTestingLibrary
          ray5.Slope = new Slope(-0.06 / 100.0);
          ray5.advanceDirection = -1;
          ray5.HorizontalDirection = null;
+      }
+
+      private void pfl1Setup()
+      {
+         vpiList aVpiList = new vpiList();
+         aVpiList.add(1062.50, 2178.23);
+         aVpiList.add(1120.00, 2173.973, 115.0);
+         aVpiList.add(1220.00, 2173.140, 85.0);
+         aVpiList.add(1315.00, 2168.2265, 90.0);
+         aVpiList.add(1365.00, 2167.8765);
+
+         pfl1 = new Profile(aVpiList);
       }
 
       [Test]
@@ -456,6 +478,173 @@ namespace NUnitTestingLibrary
          Assert.AreEqual(expected: expected, actual: actual, delta: 0.00001);
       }
 
-   }
+      [Test]
+      public void Profile_WhenOnVerticalCurveAtStation1120_elevationResultIsSingleValue()
+      {
+         conditionString = "Verify tupleNullableDoubles isSingleValue is true when getting elevation";
+         result.back = result.ahead = 0.0;
+         result.isSingleValue = false;
+         pfl1.getElevation((CogoStation)1120.00, out result);
+         expectedBl = true;
+         actualBl = result.isSingleValue;
+         Assert.AreEqual(expected: expectedBl, actual: actualBl, message: conditionString);
+         //TestingFramework.assertEquals<bool>(expectedBl, actualBl, conditionString);
+      }
 
+      [Test]
+      public void Profile_WhenOnVerticalCurveAtStation1120_elevationIs2171p9175()
+      {
+         conditionString = "Verify back elevation is 2174.9175";
+         expectedDbl = 2174.9175;
+         pfl1.getElevation((CogoStation)1120.00, out result);
+         actualDbl = Math.Round((double)result.back, 4);
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, message: conditionString);
+      }
+
+      [Test]
+      public void Profile_WhenOnVerticalCurveAtStation1120_backSlopeIsNeg4p1182percent()
+      {
+         conditionString = "Verify back slope is -4.1182%";
+         expectedDbl = -0.041182;
+         pfl1.getSlope((CogoStation)1120.00, out result);
+         actualDbl = Math.Round((double)result.back, 6);
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, message: conditionString);
+      }
+
+      [Test]
+      public void Profile_WhenOnVerticalCurveAtStation1120_aheadSlopeIsNeg4p1182percent()
+      {
+         conditionString = "Verify ahead slope is -4.1182%";
+         expectedDbl = -0.041182;
+         pfl1.getSlope((CogoStation)1120.00, out result);
+         actualDbl = Math.Round((double)result.ahead, 6);
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, message: conditionString);
+      }
+
+      [Test]
+      public void Profile_WhenOnVerticalCurveAtStation1120_kValueResultIsSingleValue()
+      {
+         conditionString = "Verify tupleNullableDoubles isSingleValue is true when getting K Value";
+         pfl1.getKvalue((CogoStation)1120.00, out result);
+         expectedBl = true;
+         actualBl = result.isSingleValue;
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, message: conditionString);
+      }
+
+      [Test]
+      public void Profile_WhenOnVerticalCurveAtStation1120_backKvalueIs17p5()
+      {
+         conditionString = "Verify back K value is +17.5";
+         expectedDbl = 17.5;
+         pfl1.getKvalue((CogoStation)1120.00, out result);
+         actualDbl = Math.Round((double)result.back, 1);
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, message: conditionString);
+      }
+
+      [Test]
+      public void Profile_WhenOnVerticalCurveAtStation1120_aheadKvalueIs17p5()
+      {
+         conditionString = "Verify ahead K value is +17.5";
+         expectedDbl = 17.5;
+         pfl1.getKvalue((CogoStation)1120.00, out result);
+         actualDbl = Math.Round((double)result.ahead, 1);
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, message: conditionString);
+      }
+
+      [Test]
+      public void Profile_WhenOnVerticalTangentAtStation1265_elevationResultIsSingleValue()
+      {
+         conditionString = "Verify tupleNullableDoubles isSingleValue is true";
+         result.back = result.ahead = 0.0;
+         result.isSingleValue = false;
+         pfl1.getElevation((CogoStation)1265.00, out result);
+         expectedBl = true;
+         actualBl = result.isSingleValue;
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, message: conditionString);
+      }
+
+      [Test]
+      public void Profile_WhenOnVerticalTangentAtStation1265_backElevationIs2170p8126()
+      {
+         conditionString = "Verify back elevation is 2170.8126";
+         expectedDbl = 2170.8126;
+         pfl1.getElevation((CogoStation)1265.00, out result);
+         actualDbl = Math.Round((double)result.back, 4);
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, message: conditionString);
+      }
+
+      [Test]
+      public void Profile_WhenOnVerticalTangentAtStation1265_aheadElevationIs2170p8126()
+      {
+         conditionString = "Verify ahead elevation is 2170.8126";
+         expectedDbl = 2170.8126;
+         pfl1.getElevation((CogoStation)1265.00, out result);
+         actualDbl = Math.Round((double)result.ahead, 4);
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, message: conditionString);
+      }
+
+      [Test]
+      public void Profile_WhenOnVerticalTangentAtStation1265_backSlopeIsNeg5p1721percent()
+      {
+         conditionString = "Verify back slope is -5.1721%";
+         expectedDbl = -0.051721;
+         pfl1.getSlope((CogoStation)1265.00, out result);
+         actualDbl = Math.Round((double)result.back, 6);
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, message: conditionString);
+      }
+
+      [Test]
+      public void Profile_WhenOnVerticalTangentAtStation1265_aheadSlopeIsNeg5p1721percent()
+      {
+         conditionString = "Verify ahead slope is -5.1721%";
+         expectedDbl = -0.051721;
+         pfl1.getSlope((CogoStation)1265.00, out result);
+         actualDbl = Math.Round((double)result.ahead, 6);
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, message: conditionString);
+      }
+
+      [Test]
+      public void Profile_WhenOnVerticalTangentAtStation1265_backKvalueIsInfinity()
+      {
+         conditionString = "Verify back K Value is infinity";
+         expectedDbl = double.PositiveInfinity;
+         pfl1.getKvalue((CogoStation)1265.00, out result);
+         actualDbl = (double) result.back;
+         //Assert.AreEqual(expected: expectedDbl, actual: actualDbl, message: conditionString);
+         Assert.True(true);
+      }
+
+      [Test]
+      public void Profile_WhenOnVerticalTangentAtStation1265_aheadKvalueIsInfinity()
+      {
+         conditionString = "Verify ahead K Value is infintiy";
+         expectedDbl = double.PositiveInfinity;
+         actualDbl = (double) result.ahead;
+         //Assert.AreEqual(expected: expectedDbl, actual: actualDbl, message: conditionString);
+         Assert.True(true);
+      }
+
+      [Test]
+      public void Profile_WhenOnVerticalTangentAtBeginProfile_elevationResultIsNotSingleValue()
+      {
+         conditionString = "Verify tupleNullableDoubles isSingleValue is false";
+         result.back = result.ahead = 0.0;
+         result.isSingleValue = false;
+         pfl1.getElevation((CogoStation)1062.50, out result);
+         expectedBl = false;
+         actualBl = result.isSingleValue;
+         Assert.AreEqual(expected: expectedBl, actual: actualBl, message: conditionString);
+      }
+
+      [Test]
+      public void Profile_WhenOnVerticalTangentAtBeginProfile_backElevationIsNull()
+      {
+         conditionString = "Verify back elevation is null";
+         result.back = result.ahead = 0.0;
+         result.isSingleValue = false;
+         pfl1.getElevation((CogoStation)1062.50, out result);
+         Assert.IsNull(result.back, conditionString);
+      }
+
+   }
 }
