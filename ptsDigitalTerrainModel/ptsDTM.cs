@@ -102,7 +102,6 @@ namespace ptsDigitalTerrainModel
                }
             }
 
-            UInt64 counter = 0;
             allTriangles = new List<ptsDTMtriangle>();
             while ((line = file.ReadLine()) != null)
             {
