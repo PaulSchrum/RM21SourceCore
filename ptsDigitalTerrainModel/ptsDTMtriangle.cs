@@ -44,6 +44,17 @@ namespace ptsDigitalTerrainModel
          normalVec_ = null;
       }
 
+      public ptsDTMtriangle(Dictionary<UInt64, ptsDTMpoint> pointList, UInt64 ptIndex1,
+         UInt64 ptIndex2, UInt64 ptIndex3)
+      {
+         point1 = pointList[ptIndex1];
+         point2 = pointList[ptIndex2];
+         point3 = pointList[ptIndex3];
+
+         computeBoundingBox();
+         normalVec_ = null;
+      }
+
       public void computeBoundingBox()
       {
          myBoundingBox_ = new ptsBoundingBox2d(point1);

@@ -37,14 +37,147 @@ namespace ptsDigitalTerrainModel
       [NonSerialized]
       private Stopwatch aStopwatch;
 
-      private ptsDTM() { }
-
-      // Constructor to construct from an xml file
-      public ptsDTM(string fileName)
+      private void LoadTINfromVRML(string fileName)
       {
-         if (!(String.Compare(Path.GetExtension(fileName), "xml", true) == 0))
+         string line;
+         long lineCount = 0;
+         if (!(String.Compare(Path.GetExtension(fileName), ".wrl", true) == 0))
          {
-            //throw new notAnXMLfileException();
+            throw new Exception("Filename must have wrl extension.");
+         }
+
+         System.IO.StreamReader file = new System.IO.StreamReader(fileName);
+         try
+         {
+            while ((line = file.ReadLine()) != null)
+            {
+               if (false == validateVRMLfileHeader(line))
+                  throw new System.IO.InvalidDataException("File not in VRML2 format.");
+               break;
+            }
+
+            lineCount++;
+            while ((line = file.ReadLine()) != null)
+            {
+               lineCount++;
+               if(line.Equals("IndexedFaceSet"))
+                  break;
+            }
+
+            while ((line = file.ReadLine()) != null)
+            {
+               lineCount++;
+               if (line.Equals("point"))
+               {
+                  line = file.ReadLine();  // eat the open brace,  [
+                  break;
+               }
+            }
+
+            ulong ptIndex=0;
+            while ((line = file.ReadLine()) != null)
+            {
+               lineCount++;
+               // Read until the close brace,  [
+               if(line.Equals("]"))
+                  break;
+               scratchPoint = convertLineOfDataToPoint(line);
+               if (allPoints == null)
+               {
+                  allPoints = new Dictionary<ulong, ptsDTMpoint>();
+                  myBoundingBox = new ptsBoundingBox2d(scratchPoint);
+               }
+               allPoints.Add(ptIndex, scratchPoint);
+               ptIndex++;
+               myBoundingBox.expandByPoint(scratchPoint);
+            }
+
+            while ((line = file.ReadLine()) != null)
+            {
+               lineCount++;
+               if (line.Equals("coordIndex"))
+               {
+                  line = file.ReadLine();  // eat the open brace,  [
+                  break;
+               }
+            }
+
+            UInt64 counter = 0;
+            allTriangles = new List<ptsDTMtriangle>();
+            while ((line = file.ReadLine()) != null)
+            {
+               lineCount++;
+               // Read until the close brace,  [
+               if (line.Equals("]"))
+                  break;
+               scratchTriangle = convertLineOfDataToTriangle(line);
+               allTriangles.Add(scratchTriangle);
+            }
+
+            allTriangles.Sort();
+         }
+         finally
+         {
+            file.Close();
+         }
+      }
+
+      private ptsDTMtriangle convertLineOfDataToTriangle(string line)
+      {
+         UInt64 ptIndex1, ptIndex2, ptIndex3;
+         string[] parsed = line.Split(',');
+         int correction = parsed.Length - 4;
+         ptIndex1 = Convert.ToUInt64(parsed[0 + correction]);
+         ptIndex2 = Convert.ToUInt64(parsed[1 + correction]);
+         ptIndex3 = Convert.ToUInt64(parsed[2 + correction]);
+         ptsDTMtriangle triangle = new ptsDTMtriangle(allPoints, ptIndex1, ptIndex2, ptIndex3);
+         return triangle;
+      }
+
+      private ptsDTMpoint convertLineOfDataToPoint(string line)
+      {
+         ptsDTMpoint newPt;
+         string[] preParsedLine = line.Split(',');
+         string[] parsedLine = preParsedLine[preParsedLine.Length-1].Split(' ');
+
+         newPt = new ptsDTMpoint(
+            Convert.ToDouble(parsedLine[0]),
+            Convert.ToDouble(parsedLine[1]),
+            Convert.ToDouble(parsedLine[2]));
+
+         return newPt;
+      }
+
+      private bool validateVRMLfileHeader(string line)
+      {
+         string[] words = line.Split(' ');
+         if (words.Length < 2) return false;
+         if (!(words[0].Equals("#VRML", StringComparison.OrdinalIgnoreCase))) return false;
+         if (!(words[1].Equals("V2.0", StringComparison.OrdinalIgnoreCase))) return false;
+
+         return true;
+      }
+
+      public void LoadTextFile(string fileName)
+      {
+         string extension;
+         if (false == File.Exists(fileName))
+            throw new FileNotFoundException("File Not Found", fileName);
+
+         extension = Path.GetExtension(fileName);
+         if (extension.Equals(".xml", StringComparison.OrdinalIgnoreCase))
+            LoadTINfromLandXML(fileName);
+         else if (extension.Equals(".wrl", StringComparison.OrdinalIgnoreCase))
+            LoadTINfromVRML(fileName);
+         else
+            throw new Exception("Filename must have xml or wrl extension.");
+      }
+
+      private void LoadTINfromLandXML(string fileName)
+      {
+         if (!(String.Compare(Path.GetExtension(fileName), ".xml", true) == 0))
+         {
+            throw new Exception("Filename must have xml extension.");
          }
 
          Stopwatch stopwatch = new Stopwatch();
