@@ -17,7 +17,8 @@ namespace ptsDtmTest1
          {
             //aTinFile = new ptsDTM(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\BigTest.xml");
             //aTinFile = new ptsDTM(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\SmallExample.xml");
-            aTinFile = new ptsDTM(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.xml");
+            aTinFile = new ptsDTM();
+            aTinFile.LoadTextFile(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.xml");
             // find desired values and comparissons at:
             //    "C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\Tin Test Points.xlsx"
          }

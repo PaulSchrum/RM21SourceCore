@@ -37,6 +37,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\rm21Core\bin\Release\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="ptsDigitalTerrainModel">
+      <HintPath>..\rm21Core\bin\Debug\ptsDigitalTerrainModel.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,6 +53,7 @@
     <Compile Include="Mocks\rm21MockSurface.cs" />
     <Compile Include="TestClassForCadFoundations.cs" />
     <Compile Include="TestClassForCorridors.cs" />
+    <Compile Include="TestClassForDTMs.cs" />
     <Compile Include="TestClassForHorizontalAlignments.cs" />
     <Compile Include="TestClassForProfiles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -69,6 +73,10 @@
       <Project>{B0A390F8-61B4-4155-8819-4D7BB65E2F9B}</Project>
       <Name>rm21CoreComponents</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="TestingData\B4656_rm21_mesh_test.wrl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
