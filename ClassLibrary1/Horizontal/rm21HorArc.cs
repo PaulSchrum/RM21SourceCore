@@ -1,4 +1,5 @@
 ﻿using ptsCogo.Angle;
+using ptsCogo.coordinates;
 using ptsCogo.coordinates.CurvilinearCoordinates;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,47 @@ namespace ptsCogo.Horizontal
       public Double Radius { get; protected set; }
       public ptsVector BeginRadiusVector { get; protected set; }
       public ptsVector EndRadiusVector { get; protected set; }
+
+      public rm21HorArc(ptsPoint begPt, ptsPoint endPt, Azimuth incomingAzimuth, Double radius)
+         : base(begPt, endPt)
+      {
+         Double tanOffsetToEndPt;
+         ptsRay incomingRay = new ptsRay(); incomingRay.advanceDirection = 1;
+         incomingRay.StartPoint = begPt; incomingRay.HorizontalDirection = incomingAzimuth;
+         tanOffsetToEndPt = incomingRay.getOffset(endPt);
+
+         if (0 == utilFunctions.tolerantCompare(tanOffsetToEndPt, 0.0, 0.000001))
+            throw new Exception("Can't create arc with zero degree deflection.");
+
+         this.BeginStation = 0.0;
+         this.Radius = radius;
+         this.BeginAzimuth = incomingAzimuth;
+
+         deflDirection = Math.Sign(tanOffsetToEndPt);
+         Deflection defl = Deflection.ctorDeflectionFromAngle(90.0, deflDirection);
+         Azimuth azToCenter = incomingAzimuth + defl;
+         ptsVector traverseToCenterVec = new ptsVector(azToCenter, radius);
+         ArcCenterPt = begPt + traverseToCenterVec;
+
+         this.BeginRadiusVector = this.ArcCenterPt - this.BeginPoint;
+         Azimuth endVecAz = (this.ArcCenterPt - endPt).Azimuth;
+         this.EndRadiusVector = new ptsVector(endVecAz, radius);
+         this.EndPoint = this.ArcCenterPt + this.EndRadiusVector;
+
+         var deflectionDbl = endVecAz - this.BeginRadiusVector.Azimuth;
+         this.Deflection = new Deflection(deflectionDbl, deflDirection);
+         this.EndAzimuth = this.BeginAzimuth + this.Deflection;
+
+         // applies to English projects only (for now)
+         this.BeginDegreeOfCurve = HorizontalAlignmentBase.computeDegreeOfCurve(this.Radius);
+         this.EndDegreeOfCurve = this.BeginDegreeOfCurve;
+
+         this.Length = 100.0 * this.Deflection.getAsRadians() / this.BeginDegreeOfCurve.getAsRadians();
+         this.Length = Math.Abs(this.Length);
+         this.EndStation = this.BeginStation + this.Length;
+
+
+      }
 
       public rm21HorArc(ptsPoint begPt, ptsPoint centerPt, ptsPoint endPt, expectedType ExpectedType,
          int deflectionDirection)
