@@ -31,7 +31,13 @@ When in tangent dynamics, both dynamic and final DP modify the previous curve's 
 
 As the stream is being developed, Edge of Flow Bottom is drawn as the CL is drawn, including transition elements.
 
+As the stream is being developed, segment lengths are shown in a grid UI.
 
+end Demo Version 1
+===========
+begin Minimum Viable Product Version 1
 
+As the stream is being developed, the existing ground profile is displayed in a different view.
+As the stream is being developed, a computer-generated proposed thalweg profile is drawn in the profile view.
 
 
