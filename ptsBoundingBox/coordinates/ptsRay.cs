@@ -57,5 +57,13 @@ namespace ptsCogo.coordinates
 
          return false;
       }
+
+      public double getOffset(ptsPoint endPt)
+      {
+         ptsVector directVectr = endPt - this.StartPoint;
+         ptsAngle alpha =  this.HorizontalDirection - directVectr;
+         Double offset = -1.0 * directVectr.Length * Math.Sin(alpha.getAsRadians());
+         return offset;
+      }
    }
 }
