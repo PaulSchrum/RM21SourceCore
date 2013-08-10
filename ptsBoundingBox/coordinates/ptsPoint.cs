@@ -40,7 +40,8 @@ namespace ptsCogo
 
       public static ptsPoint operator +(ptsPoint point, ptsVector vector)
       {
-         return new ptsPoint(point.x + vector.y, point.y + vector.x, point.z + vector.z);
+         // dont know why I did this:  return new ptsPoint(point.x + vector.y, point.y + vector.x, point.z + vector.z);
+         return new ptsPoint(point.x + vector.x, point.y + vector.y, point.z + vector.z);
       }
 
       public Double GetHorizontalDistanceTo(ptsPoint other)
