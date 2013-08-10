@@ -29,8 +29,8 @@ namespace ptsCogo
 
       public ptsVector(Azimuth direction, Double length)
       {
-         x = length * Math.Cos(direction.angle_);
-         y = length * Math.Sin(direction.angle_);
+         x = length * Math.Sin(direction.angle_);
+         y = length * Math.Cos(direction.angle_);
          z = 0.0;
       }
 
