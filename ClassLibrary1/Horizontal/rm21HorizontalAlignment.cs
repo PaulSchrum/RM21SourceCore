@@ -17,6 +17,8 @@ namespace ptsCogo.Horizontal
       // scratch pad member for re-use.  Not part of the data structure.
       List<ptsPoint> ptList = null;
 
+      public rm21HorizontalAlignment() { }
+
       public rm21HorizontalAlignment(List<IRM21fundamentalGeometry> fundamentalGeometryList,
          String Name, List<Double> stationEquationing)
          : base(stationEquationing)
@@ -272,6 +274,37 @@ namespace ptsCogo.Horizontal
             }
          }
          return returnItem;
+      }
+
+      public void reset(ptsPoint pt1, ptsPoint pt2)
+      {
+         var lineSeg = new rm21HorLineSegment(pt1, pt2);
+         lineSeg.Parent = this;
+         allChildSegments = new List<HorizontalAlignmentBase>();
+         allChildSegments.Add(lineSeg);
+         this.BeginStation = 0.0;
+         this.EndStation = lineSeg.EndStation;
+         this.Length = this.EndStation - this.BeginStation;
+         this.BeginAzimuth = lineSeg.BeginAzimuth;
+         this.EndAzimuth = lineSeg.EndAzimuth;
+         this.BeginDegreeOfCurve = this.EndDegreeOfCurve = 0.0;
+         this.BeginPoint = lineSeg.BeginPoint;
+         this.EndPoint = lineSeg.EndPoint;
+      }
+
+      public void appendArc(ptsPoint ArcEndPoint, Double radius)
+      {
+         var newArc = new rm21HorArc(this.EndPoint, ArcEndPoint, this.EndAzimuth, radius);
+         newArc.BeginStation = this.EndStation;
+         newArc.EndStation = newArc.BeginStation + newArc.Length;
+
+         newArc.Parent = this;
+         this.allChildSegments.Add(newArc);
+
+         this.EndStation = newArc.EndStation;
+         this.EndPoint = newArc.EndPoint;
+         this.EndDegreeOfCurve = newArc.EndDegreeOfCurve;
+         this.EndAzimuth = newArc.EndAzimuth;
       }
    }
 }
