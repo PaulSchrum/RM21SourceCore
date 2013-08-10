@@ -16,6 +16,9 @@ namespace ptsCogo.Horizontal
          //this.EndBearing = do this later
          this.BeginDegreeOfCurve = 0.0;
          this.EndDegreeOfCurve = 0.0;
+         this.BeginStation = 0.0;
+         this.EndStation = (endPt - begPt).Length;
+         this.BeginAzimuth = this.EndAzimuth = (endPt - begPt).Azimuth;
       }
 
       public override Azimuth BeginAzimuth 
