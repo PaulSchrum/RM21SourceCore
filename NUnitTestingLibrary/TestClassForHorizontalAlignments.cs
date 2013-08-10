@@ -672,5 +672,53 @@ namespace NUnitTestingLibrary
          Assert.IsTrue(allValuesAgree);
       }
 
+      private rm21HorizontalAlignment createSingleTangentHA()
+      {
+         var newHA = new rm21HorizontalAlignment();
+         newHA.reset(new ptsPoint(2082268.0907, 740846.3249, 0.0), 
+            new ptsPoint(2082339.9608, 740834.3849, 0.0));
+         return newHA;
+      }
+
+      [Test]
+      public void HorizontalAlignment_from2points_producesCorrectValues()
+      {
+         rm21HorizontalAlignment HA = createSingleTangentHA();
+
+         double expectedDbl = 72.8552;
+         double actualDbl = (Double)HA.EndStation;
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0001);
+
+         expectedDbl = 99.43257281767;
+         Azimuth az = HA.EndAzimuth;
+         actualDbl = az.getAsDegrees();
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0001);
+
+         HA.reset(new ptsPoint(100.0, 100.0, 0.0), new ptsPoint(80.0, 150.0, 0.0));
+
+         expectedDbl = 53.8516480713;
+         actualDbl = (Double)HA.EndStation;
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0001);
+
+         expectedDbl = 338.198590514;
+         actualDbl = HA.EndAzimuth.getAsDegrees();
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0001);
+
+      }
+
+      [Test]
+      public void HorizontalAlignment_appendSimpleArcToTangent_DPonAlignment_EndStationIs391p78()
+      {
+         Double radius = 1170.0;
+         var HA = createSingleTangentHA();
+         HA.appendArc(ArcEndPoint: new ptsPoint(2082657.7727, 740825.3769, 0.0),
+            radius: radius);
+
+         Double expectedDbl = 391.7812;
+         Double actualDbl = (Double) HA.EndStation;
+
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0001);
+      }
+
    }
 }
