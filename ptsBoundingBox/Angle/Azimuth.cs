@@ -99,8 +99,8 @@ namespace ptsCogo.Angle
       {
          //Double returnDeflection = ptsAngle.normalizeToPlusOrMinus2PiStatic(Az1.angle_ - Az2.angle_);
          Double returnDeflection = (Az1.angle_ - Az2.angle_);
-         if (returnDeflection < 0.0)
-            returnDeflection += 2*Math.PI;
+         //if (returnDeflection < 0.0)
+            //returnDeflection += 2*Math.PI;
 
          return ptsAngle.normalizeToPlusOrMinus2PiStatic(returnDeflection);
       }
