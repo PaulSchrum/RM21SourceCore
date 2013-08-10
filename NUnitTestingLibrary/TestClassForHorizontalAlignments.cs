@@ -715,7 +715,21 @@ namespace NUnitTestingLibrary
             radius: radius);
 
          Double expectedDbl = 391.7812;
-         Double actualDbl = (Double) HA.EndStation;
+         Double actualDbl = (Double)HA.EndStation;
+
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0001);
+      }
+
+      [Test]
+      public void HorizontalAlignment_appendSimpleArcToTangent_DPoffAlignment_EndStationIs391p78()
+      {
+         Double radius = 1170.0;
+         var HA = createSingleTangentHA();
+         HA.appendArc(ArcEndPoint: new ptsPoint(2082652.9833, 740869.5684, 0.0),
+            radius: radius);
+
+         Double expectedDbl = 391.7812;
+         Double actualDbl = (Double)HA.EndStation;
 
          Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0001);
       }
