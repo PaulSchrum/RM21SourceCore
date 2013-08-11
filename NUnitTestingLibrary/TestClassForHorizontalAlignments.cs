@@ -716,7 +716,10 @@ namespace NUnitTestingLibrary
 
          Double expectedDbl = 391.7812;
          Double actualDbl = (Double)HA.EndStation;
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0001);
 
+         expectedDbl = -15.61806;
+         actualDbl = HA.GetElementByStation(390.0).Deflection.getAsDegrees();
          Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0001);
       }
 
@@ -730,7 +733,10 @@ namespace NUnitTestingLibrary
 
          Double expectedDbl = 391.7812;
          Double actualDbl = (Double)HA.EndStation;
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0001);
 
+         expectedDbl = -15.61806;
+         actualDbl = HA.GetElementByStation(390.0).Deflection.getAsDegrees();
          Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0001);
       }
 
