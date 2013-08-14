@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ptsCogo.Angle;
 
 namespace ptsCogo
 {
@@ -10,7 +11,31 @@ namespace ptsCogo
    {
       protected double angle__;
 
+      public static ptsAngle HALFCIRCLE 
+      {
+         get { return new ptsAngle(2.0 * Math.PI); } 
+         private set{}
+      }
+
+      public static ptsAngle DEGREE
+      {
+         get { return new ptsAngle(Math.PI / 180.0); }
+         private set { }
+      }
+
+      public static ptsAngle RADIAN
+      {
+         get { return new ptsAngle(1.0); }
+         private set { }
+      }
+
+
       public ptsAngle() { }
+
+      public ptsAngle(Double valueAsRadians)
+      {
+         angle_ = valueAsRadians;
+      }
 
       public ptsAngle(double radius, double degreeOfCurveLength)
       {
@@ -21,12 +46,17 @@ namespace ptsCogo
 
       public virtual double getAsRadians() { return angle_; }
 
-      public virtual double getAsDegrees()
+      public virtual double getAsDegreesDouble()
       {
          return 180.0 * angle_ / Math.PI;
       }
 
-      public virtual void setFromDegrees(double degrees)
+      public virtual ptsDegree getAsDegrees()
+      {
+         return ptsDegree.newFromRadians(angle_);
+      }
+
+      public virtual void setFromDegreesDouble(double degrees)
       {
          angle_ = Math.PI * degrees / 180.0;
       }
@@ -43,7 +73,7 @@ namespace ptsCogo
 
       public virtual void setFromDegreesMinutesSeconds(int degrees, int minutes, double seconds)
       {
-         setFromDegrees(
+         setFromDegreesDouble(
                (double) degrees + (double) minutes / 60.0 + seconds / 3600.0
                         );
       }
@@ -96,13 +126,18 @@ namespace ptsCogo
          return ComputeRemainderScaledByDenominator(anAngle, 2 * Math.PI);
       }
 
+      public static Double normalizeToPlusOrMinus360Static(Double val)
+      {
+         return ComputeRemainderScaledByDenominator(val, 360.0);
+      }
+
       public static Double ComputeRemainderScaledByDenominator(Double numerator, double denominator)  
       {
          Double sgn = Math.Sign(numerator);
          Double ratio = numerator / denominator;
          ratio = Math.Abs(ratio);
          Double fractionPart;
-         fractionPart = 1.0 + ratio - Math.Round(ratio, MidpointRounding.AwayFromZero);
+         fractionPart = 1 + ratio - Math.Round(ratio, MidpointRounding.AwayFromZero);
          if (sgn < 0.0)
          {
             fractionPart = fractionPart - 2;
@@ -132,6 +167,11 @@ namespace ptsCogo
          var retVal = new ptsAngle();
          retVal.normalize( angle1.angle__ - angle2.angle__);
          return retVal;
+      }
+
+      public ptsAngle multiply(Double multiplier)
+      {
+         return new ptsAngle(this.angle__ * multiplier);
       }
       
       // operator overloads

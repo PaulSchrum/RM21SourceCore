@@ -15,11 +15,40 @@ namespace NUnitTestingLibrary
       private Double delta = 0.0000001;
 
       [Test]
+      public void ptsDegree_sin90_returns1p0()
+      {
+         ptsDegree deg = 90.0;
+         Double expectedDbl = 1.0;
+         Double actualDbl = ptsDegree.Sin(deg);
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: delta);
+      }
+
+      [Test]
+      public void ptsDegree_Atan2Of10And0_returns90degrees()
+      {
+         ptsDegree deg = ptsDegree.Atan2(10.0, 0.0);
+         Double expectedDbl = 90.0;
+         Double actualDbl = deg.getAsDouble();
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: delta);
+      }
+
+      [Test]
+      public void AzimuthAddition_Az189PlusDeflNeg15_shouldEqual174()
+      {
+         Double expectedDbl = 174.0;
+         Azimuth az = new Azimuth(); az.setFromDegreesDouble(189.0);
+         Deflection defl = new Deflection(); defl.setFromDegreesDouble(-15.0);
+         Azimuth newAz = az + defl;
+         Double actualDbl = newAz.getAsDegreesDouble();
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: delta);
+      }
+
+      [Test]
       public void ptsAngle_settingTo1_shouldResultIn_equals57_2957795Degrees()
       {
          ptsAngle angle = 1.0;
          Double expected = 57.2957795;
-         Double actual = angle.getAsDegrees();
+         Double actual = angle.getAsDegreesDouble();
          Assert.AreEqual(expected: expected, actual: actual, delta: delta);
       }
 
@@ -29,7 +58,7 @@ namespace NUnitTestingLibrary
          Azimuth anAzimuth = new Azimuth();
          anAzimuth.setFromDegreesMinutesSeconds(183, 29, 29.5);
          Double expected = 183.4915277778;
-         Double actual = anAzimuth.getAsDegrees();
+         Double actual = anAzimuth.getAsDegreesDouble();
          Assert.AreEqual(expected: expected, actual: actual, delta: delta);
       }
 
@@ -54,11 +83,11 @@ namespace NUnitTestingLibrary
       }
 
       [Test]
-      public void Deflection_setTo_Pos6Rad_shouldBe_Neg0_28318Rad()
+      public void Deflection_setTo_Pos6Rad_shouldBe_Pos6Rad()
       {
          Deflection aDefl = new Deflection();
          aDefl = (Deflection) 6.0;
-         Double expected = -0.283185307181;
+         Double expected = 6.0;
          Double actual = aDefl.getAsRadians();
          Assert.AreEqual(expected: expected, actual: actual, delta: delta);
       }
@@ -67,10 +96,10 @@ namespace NUnitTestingLibrary
       public void Deflection_setTo_Pos2_shouldBe_Pos2Degrees()
       {
          Deflection defl = new Deflection();
-         defl.setFromDegrees(2.0);
+         defl.setFromDegreesDouble(2.0);
 
          Double expected = 2.0;
-         Double actual = defl.getAsDegrees();
+         Double actual = defl.getAsDegreesDouble();
          Assert.AreEqual(expected: expected, actual: actual, delta: delta);
       }
 
@@ -79,8 +108,8 @@ namespace NUnitTestingLibrary
       {
          Deflection aDeflection = new Deflection();
          aDeflection.setFromDegreesMinutesSeconds(-5, 18, 29.5);
-         Double expected = -5.30811111111;
-         Double actual = aDeflection.getAsDegrees();
+         Double expected = -5.308194444444;
+         Double actual = aDeflection.getAsDegreesDouble();
          Assert.AreEqual(expected: expected, actual: actual, delta: delta);
       }
 
@@ -94,7 +123,7 @@ namespace NUnitTestingLibrary
 
          Double expected = 3.75;
          Azimuth newAz = anAzimuth + aDefl;
-         Double actual = newAz.getAsDegrees();
+         Double actual = newAz.getAsDegreesDouble();
          Assert.AreEqual(expected: expected, actual: actual, delta: delta);
       }
 
@@ -106,11 +135,49 @@ namespace NUnitTestingLibrary
       {
          Azimuth anAzimuth = new Azimuth();
          anAzimuth.setFromXY(x, y);
-         Double actualDegrees = anAzimuth.getAsDegrees();
+         Double actualDegrees = anAzimuth.getAsDegreesDouble();
 
          Assert.AreEqual(expected: expectedDegrees, actual: actualDegrees, delta: delta);
       }
 
+      [TestCase(20.0, 10.0, -10.0)]
+      [TestCase(340.0, 350.0, 10.0)]
+      [TestCase(20.0, 340.0, -40.0)]
+      [TestCase(340.0, 20.0, 40.0)]
+      public void AzimuthArithmatic_subtraction(Double Az1Dbl, Double Az2Dbl, Double expectedDeflection)
+      {
+         Azimuth Az1 = new Azimuth(); Az1.setFromDegreesDouble(Az1Dbl);
+         Azimuth Az2 = new Azimuth(); Az2.setFromDegreesDouble(Az2Dbl);
+
+         Double actualDeflection = Az2.minus(Az1).getAsDegreesDouble();
+
+         Assert.AreEqual(expected: expectedDeflection, actual: actualDeflection, delta: 0.00000001);
+      }
+
+      [TestCase(20.0, 10.0, -10.0)]
+      [TestCase(340.0, 350.0, 10.0)]
+      [TestCase(20.0, 340.0, -40.0)]
+      [TestCase(340.0, 20.0, 40.0)]
+      public void AzimuthArithmatic_addition(Double Az1Dbl, Double ExpectedAz2Dbl, Double DeflectionDbl)
+      {
+         Azimuth Az1 = new Azimuth(); Az1.setFromDegreesDouble(Az1Dbl);
+         Deflection defl = DeflectionDbl.AsPtsDegree();
+         Azimuth Az2 = Az1 + defl;
+
+         Double actualAzimuth = Az2.getAsDegreesDouble();
+
+         Assert.AreEqual(expected: ExpectedAz2Dbl, actual: actualAzimuth, delta: 0.00000001);
+      }
+
+      [TestCase(5.0, 10.0, 5.0)]
+      [TestCase(15.0, 10.0, 5.0)]
+      [TestCase(-5.0, 10.0, -5.0)]
+      [TestCase(-15.0, 10.0, -5.0)]
+      public void ComputeRemainder_ScaledByDenominator(Double numerator, Double Denominator, Double expectedDbl)
+      {
+         Double actualDbl = ptsAngle.ComputeRemainderScaledByDenominator(numerator, Denominator);
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.00000001);
+      }
 
    }
 }

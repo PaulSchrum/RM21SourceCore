@@ -43,6 +43,7 @@
     <Compile Include="Angle\Azimuth.cs" />
     <Compile Include="Angle\Deflection.cs" />
     <Compile Include="Angle\ptsAngle.cs" />
+    <Compile Include="Angle\ptsDegree.cs" />
     <Compile Include="Angle\Slope.cs" />
     <Compile Include="coordinates\CurvilinearCoordinates\Elevation.cs" />
     <Compile Include="coordinates\CurvilinearCoordinates\Offset.cs" />

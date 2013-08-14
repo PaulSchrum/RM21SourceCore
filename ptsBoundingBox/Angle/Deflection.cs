@@ -58,9 +58,12 @@ namespace ptsCogo.Angle
 
       public Deflection(ptsAngle anAngle)
       {
-         this.deflectionDirection = 1;
-         angle_ = anAngle.angle_;
+         this.deflectionDirection = Math.Sign(anAngle.angle_);
+         angle__ = Math.Abs(anAngle.angle_);
       }
+
+      public Deflection (double deflectionAngleDbl) : this(deflectionAngleDbl, Math.Sign(deflectionAngleDbl))
+      { }
 
       internal override double angle_ 
       { 
@@ -68,7 +71,7 @@ namespace ptsCogo.Angle
          {
             Double retAngle = angle__;
 
-            if (deflectionDirection > 0)
+            if (deflectionDirection >= 0)
             {
                if (retAngle < 0.0)
                   retAngle += 2.0 * Math.PI;
@@ -86,6 +89,12 @@ namespace ptsCogo.Angle
          set { normalize(value); } 
       }
 
+      public override void setFromDegreesDouble(double deg)
+      {
+         base.setFromDegreesDouble(Math.Abs(deg));
+         this.deflectionDirection = Math.Sign(deg);
+      }
+
       public override double getAsRadians()
       {
          Double retVal = base.getAsRadians();
@@ -100,14 +109,33 @@ namespace ptsCogo.Angle
          return retVal;
       }
 
-      public override double getAsDegrees()
+      public override void setFromDegreesMinutesSeconds(int degrees, int minutes, double seconds)
+      {
+         setFromDegreesDouble(
+               Math.Abs((double)degrees) + 
+               (double)minutes / 60.0 + seconds / 3600.0
+                        );
+         deflectionDirection = Math.Sign(degrees);
+      }
+
+      public override double getAsDegreesDouble()
       {
          return 180.0 * this.getAsRadians() / Math.PI;
       }
 
+      public static implicit operator Deflection(double radianDbl)
+      {
+         return new Deflection(radianDbl);
+      }
+
+      public static implicit operator Deflection(ptsDegree degrees)
+      {
+         return new Deflection(degrees.getAsRadians());
+      }
+
       public override string ToString()
       {
-         return this.getAsDegrees().ToString();
+         return this.getAsDegreesDouble().ToString();
       }
    }
 }

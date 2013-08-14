@@ -36,7 +36,7 @@ namespace ptsCogo.coordinates
 
       }
 
-      public double get_m() { return this.Slope * this.advanceDirection; }
+      public double get_m() { return this.Slope.getAsSlope() * this.advanceDirection; }
       public double get_b()
       {
          if (true == Slope.isVertical())

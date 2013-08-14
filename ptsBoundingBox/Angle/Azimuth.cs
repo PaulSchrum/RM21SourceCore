@@ -14,12 +14,22 @@ namespace ptsCogo.Angle
          angle_ = anAngleDbl;
       }
 
+      public Azimuth(ptsDegree deg)
+      {
+         this.angle__ = Math.Atan2(ptsDegree.Sin(deg), ptsDegree.Cos(deg));
+      }
+
       public Azimuth(ptsPoint beginPt, ptsPoint endPt)
       {
          this.angle__ = Math.Atan2(endPt.y - beginPt.y, endPt.x - beginPt.x);
       }
 
       public new double angle_ { get { return getAsAzimuth(); } set { base.normalize(value); } }
+
+      public Azimuth reverse()
+      {
+         return new Azimuth(this.angle__ + Math.PI);
+      }
       
       //public override void setFromXY(double x, double y)
       //{
@@ -38,16 +48,22 @@ namespace ptsCogo.Angle
 
       public override string ToString()
       {
-         return this.getAsDegrees().ToString();
+         return this.getAsDegreesDouble().ToString();
       }
 
-      public override double getAsDegrees()
+      public override double getAsDegreesDouble()
       {
          double retValueDbl = getAsAzimuth() * 180 / Math.PI;
          return retValueDbl >= 0.0 ? retValueDbl : retValueDbl + 360.0;
       }
 
-      public override void setFromDegrees(double degrees)
+      public override ptsDegree getAsDegrees()
+      {
+         ptsDegree retValueDeg = getAsAzimuth() * 180 / Math.PI;
+         return retValueDeg >= 0.0 ? retValueDeg : retValueDeg + 360.0;
+      }
+
+      public override void setFromDegreesDouble(double degrees)
       {
          //double adjustedDegrees = ((degrees / -180.0)+ 1) *180.0;
          double radians = degrees * Math.PI / 180.0;
@@ -57,7 +73,7 @@ namespace ptsCogo.Angle
 
       public override void setFromDegreesMinutesSeconds(int degrees, int minutes, double seconds)
       {
-         setFromDegrees(
+         setFromDegreesDouble(
                (double)degrees + (double)minutes / 60.0 + seconds / 3600.0
                         );
       }
@@ -74,7 +90,12 @@ namespace ptsCogo.Angle
       //setAsDegreeMinuteSecond
       //yada
 
-      //public void fromCastOf(
+      public static Azimuth newAzimuthFromAngle(ptsAngle angle)
+      {
+         Azimuth retAz = new Azimuth();
+         retAz.setFromDegreesDouble(angle.getAsDegreesDouble());
+         return retAz;
+      }
 
       // operator overloads
       public static implicit operator Azimuth(double angleAs_double)
@@ -84,12 +105,6 @@ namespace ptsCogo.Angle
          return anAzimuth;
       }
 
-      //public static explicit operator Azimuth(ptsAngle asAngle)
-      //{
-      //   Azimuth anAzimuth = new Azimuth();
-      //   anAzimuth.angle_ = asAngle.angle_;
-      //   return anAzimuth;
-      //}
       public static Azimuth operator +(Azimuth anAz, ptsAngle anAngle)
       {
          return new Azimuth(anAz.getAsRadians() - anAngle.getAsRadians());  // Note: Subtraction is intentional since azimuths are clockwise
@@ -97,12 +112,32 @@ namespace ptsCogo.Angle
 
       public static double operator -(Azimuth Az1, Azimuth Az2)
       {
-         //Double returnDeflection = ptsAngle.normalizeToPlusOrMinus2PiStatic(Az1.angle_ - Az2.angle_);
          Double returnDeflection = (Az1.angle_ - Az2.angle_);
-         //if (returnDeflection < 0.0)
-            //returnDeflection += 2*Math.PI;
-
          return ptsAngle.normalizeToPlusOrMinus2PiStatic(returnDeflection);
       }
+
+      public static Azimuth operator +(Azimuth Az1, Deflection defl)
+      {
+         var newAzDeg = Az1.getAsDegreesDouble() + defl.getAsDegreesDouble();
+         Double retDbl = ptsAngle.normalizeToPlusOrMinus360Static(newAzDeg);
+         Azimuth retAz = new Azimuth();
+         retAz.setFromDegreesDouble(retDbl);
+         return retAz;
+      }
+
+      public Deflection minus(Azimuth Az2)
+      {
+         Double returnDeflection = (this.angle_ - Az2.angle_);
+         return new Deflection(ptsAngle.normalizeToPlusOrMinus2PiStatic(returnDeflection));
+      }
    }
+
+   public static class extendDoubleForAzimuth
+   {
+      public static Azimuth AsAzimuth(this Double val)
+      {
+         return new Azimuth(val);
+      }
+   }
+
 }

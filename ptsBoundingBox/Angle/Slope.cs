@@ -37,7 +37,7 @@ namespace ptsCogo.Angle
 
       public bool isSlopeUp()
       {
-         double asDegrees = this.getAsDegrees();
+         double asDegrees = this.getAsDegreesDouble();
          return ((asDegrees > 0.0) || (asDegrees < 180.0));
       }
 
