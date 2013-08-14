@@ -278,12 +278,12 @@ namespace ptsCogo
                cadContext.Draw(mySlope.ToString(),
                   (X1 + aSOE.offset) / 2,
                   (Y1 + aSOE.elevation) / 2,
-                  mySlope.getAsDegrees());
+                  mySlope.getAsDegreesDouble());
             else
                cadContext.Draw(mySlope.FlipDirection().ToString(),
                   (X1 + aSOE.offset) / 2,
                   (Y1 + aSOE.elevation) / 2,
-                  mySlope.getAsDegrees());
+                  mySlope.getAsDegreesDouble());
          }
          SuppressSlopeText = false;
       }
