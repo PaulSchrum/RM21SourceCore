@@ -101,8 +101,8 @@ namespace ptsCogo.Horizontal
 
       private void computeDeflectionForOutsideSolutionCurve()
       {
-         Double radVector1Az = this.BeginRadiusVector.Azimuth.getAsDegrees();
-         Double radVector2Az = this.EndRadiusVector.Azimuth.getAsDegrees();
+         Double radVector1Az = this.BeginRadiusVector.Azimuth.getAsDegreesDouble();
+         Double radVector2Az = this.EndRadiusVector.Azimuth.getAsDegreesDouble();
 
          int quadrantAZ1 = Azimuth.getQuadrant(radVector1Az);
          int quadrantAZ2 = Azimuth.getQuadrant(radVector2Az);
@@ -131,12 +131,12 @@ namespace ptsCogo.Horizontal
       {
          ptsVector arcCenterToInterestPtVector = new ptsVector(this.ArcCenterPt, interestPoint);
          Deflection deflToInterestPt = new Deflection(this.BeginRadiusVector.Azimuth, arcCenterToInterestPtVector.Azimuth, true);
-         int arcDeflDirection = Math.Sign(this.Deflection.getAsDegrees());
-         if (arcDeflDirection * deflToInterestPt.getAsDegrees() < 0.0)
+         int arcDeflDirection = Math.Sign(this.Deflection.getAsDegreesDouble());
+         if (arcDeflDirection * deflToInterestPt.getAsDegreesDouble() < 0.0)
          {
             return null;
          }
-         else if (Math.Abs(this.Deflection.getAsDegrees()) - Math.Abs(deflToInterestPt.getAsDegrees()) < 0.0)
+         else if (Math.Abs(this.Deflection.getAsDegreesDouble()) - Math.Abs(deflToInterestPt.getAsDegreesDouble()) < 0.0)
          {
             return null;
          }
@@ -175,5 +175,21 @@ namespace ptsCogo.Horizontal
          drawer.PlaceArc(this, startPoint, soe1, endPoint, soe2);
       }
 
+
+      internal void setDeflection(Deflection newDeflection)
+      {
+         if (newDeflection.getAsRadians() == 0.0)
+            throw new Exception("Can't create arc with zero degree deflection.");
+
+         this.Deflection = newDeflection;
+         this.deflDirection = Math.Sign(newDeflection.getAsRadians());
+
+         var newAz = Azimuth.newAzimuthFromAngle(this.BeginRadiusVector + this.Deflection);
+         this.EndRadiusVector = new ptsVector(newAz, this.Radius); // start here.  this throws exception
+         this.EndAzimuth = this.BeginAzimuth + this.Deflection;
+         this.Length = 100.0 * this.Deflection.getAsRadians() / this.BeginDegreeOfCurve.getAsRadians();
+         this.Length = Math.Abs(this.Length);
+         this.EndStation = this.BeginStation + this.Length;
+      }
    }
 }

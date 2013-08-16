@@ -27,7 +27,7 @@ namespace NUnitTestingLibrary
       {
          Double expectedValue = 45.0;
          Deflection defl = new Deflection(0.785398164, 1);
-         Double actualValue = defl.getAsDegrees();
+         Double actualValue = defl.getAsDegreesDouble();
          Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: 0.00001);
       }
 
@@ -36,7 +36,7 @@ namespace NUnitTestingLibrary
       {
          Double expectedValue = 310.0;
          Deflection defl = new Deflection(5.41052068118, 1);
-         Double actualValue = defl.getAsDegrees();
+         Double actualValue = defl.getAsDegreesDouble();
          Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: 0.00001);
       }
 
@@ -45,7 +45,7 @@ namespace NUnitTestingLibrary
       {
          Double expectedValue = -45.0;
          Deflection defl = new Deflection(0.785398164, -1);
-         Double actualValue = defl.getAsDegrees();
+         Double actualValue = defl.getAsDegreesDouble();
          Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: 0.00001);
       }
 
@@ -54,7 +54,7 @@ namespace NUnitTestingLibrary
       {
          Double expectedValue = -310.0;
          Deflection defl = new Deflection(5.41052068118, -1);
-         Double actualValue = defl.getAsDegrees();
+         Double actualValue = defl.getAsDegreesDouble();
          Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: 0.00001);
       }
 
@@ -194,7 +194,7 @@ namespace NUnitTestingLibrary
          Double Radius = 5729.58; Double LengthForDegreeOfCurve = 100.0;
          ptsAngle DegreeOfCurve = new ptsAngle(Radius, LengthForDegreeOfCurve);
 
-         Double actualValue = DegreeOfCurve.getAsDegrees();
+         Double actualValue = DegreeOfCurve.getAsDegreesDouble();
          Double expectedValue = 1.00;
 
          Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: 0.000001);
@@ -691,7 +691,7 @@ namespace NUnitTestingLibrary
 
          expectedDbl = 99.43257281767;
          Azimuth az = HA.EndAzimuth;
-         actualDbl = az.getAsDegrees();
+         actualDbl = az.getAsDegreesDouble();
          Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0001);
 
          HA.reset(new ptsPoint(100.0, 100.0, 0.0), new ptsPoint(80.0, 150.0, 0.0));
@@ -701,7 +701,7 @@ namespace NUnitTestingLibrary
          Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0001);
 
          expectedDbl = 338.198590514;
-         actualDbl = HA.EndAzimuth.getAsDegrees();
+         actualDbl = HA.EndAzimuth.getAsDegreesDouble();
          Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0001);
 
       }
@@ -719,7 +719,7 @@ namespace NUnitTestingLibrary
          Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0001);
 
          expectedDbl = -15.61806;
-         actualDbl = HA.GetElementByStation(390.0).Deflection.getAsDegrees();
+         actualDbl = HA.GetElementByStation(390.0).Deflection.getAsDegreesDouble();
          Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0001);
       }
 
@@ -736,8 +736,27 @@ namespace NUnitTestingLibrary
          Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0001);
 
          expectedDbl = -15.61806;
-         actualDbl = HA.GetElementByStation(390.0).Deflection.getAsDegrees();
+         actualDbl = HA.GetElementByStation(390.0).Deflection.getAsDegreesDouble();
          Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0001);
+      }
+
+      [Test]
+      public void HorizontalAlignment_appendTangentToSimpleArc_EndStationIs481p78()
+      {
+         Double radius = 1170.0;
+         var HA = createSingleTangentHA();
+         HA.appendArc(ArcEndPoint: new ptsPoint(2082660.0, 740870.0, 0.0),
+            radius: radius);
+
+         Double expectedDbl = -15.618046;
+         Double actualDbl = HA.GetElementByStation(390.0).Deflection.getAsDegreesDouble();
+         Assert.AreNotEqual(expected: expectedDbl, actual: actualDbl);
+
+         HA.appendTangent(TangentEndPoint: new ptsPoint(2082747.242780, 740835.073448, 0.0));
+
+         expectedDbl = -15.61806;
+         actualDbl = HA.GetElementByStation(390.0).Deflection.getAsDegreesDouble();
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.000045);
       }
 
    }

@@ -53,12 +53,12 @@ namespace ptsCogo.Horizontal
       {
          ptsVector BeginToInterestPtVector = new ptsVector(this.BeginPoint, interestPoint);
          Deflection BeginToInterestDeflection = new Deflection(this.BeginAzimuth, BeginToInterestPtVector.Azimuth, true);
-         if (Math.Abs(BeginToInterestDeflection.getAsDegrees()) > 90.0)
+         if (Math.Abs(BeginToInterestDeflection.getAsDegreesDouble()) > 90.0)
             return null;
 
          ptsVector EndToInterestPtVector = new ptsVector(this.EndPoint, interestPoint);
          Deflection EndToInterestDeflection = new Deflection(this.EndAzimuth, EndToInterestPtVector.Azimuth, true);
-         if (Math.Abs(EndToInterestDeflection.getAsDegrees()) < 90.0)
+         if (Math.Abs(EndToInterestDeflection.getAsDegreesDouble()) < 90.0)
             return null;
 
          Double length = BeginToInterestPtVector.Length * Math.Cos(BeginToInterestDeflection.getAsRadians());

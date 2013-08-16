@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ptsCogo.Angle;
 
 namespace ptsCogo.Horizontal
 {
@@ -301,10 +302,53 @@ namespace ptsCogo.Horizontal
          newArc.Parent = this;
          this.allChildSegments.Add(newArc);
 
-         this.EndStation = newArc.EndStation;
-         this.EndPoint = newArc.EndPoint;
-         this.EndDegreeOfCurve = newArc.EndDegreeOfCurve;
-         this.EndAzimuth = newArc.EndAzimuth;
+         mendEndValuesFrom(newArc);
+      }
+
+      public void appendTangent(ptsPoint TangentEndPoint)
+      {
+         // See "Solving SSA triangles" 
+         // http://www.mathsisfun.com/algebra/trig-solving-ssa-triangles.html
+
+         var lastChainItem = allChildSegments.Last();
+         if (!(lastChainItem is rm21HorArc))
+            throw new Exception("Can't add tangent on a tangent segment.");
+
+         var finalArc = lastChainItem as rm21HorArc;
+
+         ptsVector ccToPtVec = finalArc.ArcCenterPt - TangentEndPoint;
+
+         //Note: sin(90^) == 1.0
+         ptsAngle rho = Math.Asin(finalArc.Radius / ccToPtVec.Length);  // step 1 from Solving SSA triangles
+         ptsAngle ninetyDegrees = ptsAngle.DEGREE.multiply(90.0);
+         ninetyDegrees.setFromDegreesDouble(90.0);
+         ptsAngle tau = ninetyDegrees - rho;  // step2 from Solving SSA triangles
+
+         Azimuth ccToPtVecAz = ccToPtVec.Azimuth;
+         Azimuth arcBegRadAz = finalArc.BeginRadiusVector.Azimuth;
+
+         try{
+         ptsCogo.Angle.Deflection outerDefl = ccToPtVecAz.minus(arcBegRadAz);
+         Deflection newDeflection = new Deflection(tau - outerDefl);
+         finalArc.setDeflection(newDeflection: newDeflection);  }
+
+         catch (Exception e) {}
+
+         var appendedLineSegment = new rm21HorLineSegment(finalArc.EndPoint, TangentEndPoint);
+         appendedLineSegment.BeginStation = finalArc.EndStation;
+         appendedLineSegment.Parent = this;
+         allChildSegments.Add(appendedLineSegment);
+
+         mendEndValuesFrom(appendedLineSegment); 
+
+      }
+
+      private void mendEndValuesFrom(HorizontalAlignmentBase finalChild)
+      {
+         this.EndStation = finalChild.EndStation;
+         this.EndPoint = finalChild.EndPoint;
+         this.EndDegreeOfCurve = finalChild.EndDegreeOfCurve;
+         this.EndAzimuth = finalChild.EndAzimuth;
       }
    }
 }
