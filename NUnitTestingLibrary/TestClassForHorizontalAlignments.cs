@@ -757,6 +757,7 @@ namespace NUnitTestingLibrary
          expectedDbl = -15.61806;
          actualDbl = HA.GetElementByStation(390.0).Deflection.getAsDegreesDouble();
          Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.000045);
+         // Note: The error is 1 inch over 20 miles -- acceptable accuracy.
       }
 
    }
