@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ptsCogo.Angle;
+using ptsCogo.coordinates;
 
 namespace ptsCogo.Horizontal
 {
@@ -302,7 +303,7 @@ namespace ptsCogo.Horizontal
          newArc.Parent = this;
          this.allChildSegments.Add(newArc);
 
-         mendEndValuesFrom(newArc);
+         this_mendEndValuesFrom(newArc);
       }
 
       public void appendTangent(ptsPoint TangentEndPoint)
@@ -316,6 +317,10 @@ namespace ptsCogo.Horizontal
 
          var finalArc = lastChainItem as rm21HorArc;
 
+         var incomingTanRay = new ptsRay(); incomingTanRay.StartPoint = finalArc.BeginPoint;
+         incomingTanRay.HorizontalDirection = finalArc.BeginAzimuth;
+         int offsetSide = Math.Sign(incomingTanRay.getOffset(TangentEndPoint));
+
          ptsVector ccToPtVec = finalArc.ArcCenterPt - TangentEndPoint;
 
          //Note: sin(90^) == 1.0
@@ -327,25 +332,23 @@ namespace ptsCogo.Horizontal
          Azimuth ccToPtVecAz = ccToPtVec.Azimuth;
          Azimuth arcBegRadAz = finalArc.BeginRadiusVector.Azimuth;
 
-         try{
          ptsCogo.Angle.Deflection outerDefl = ccToPtVecAz.minus(arcBegRadAz);
-         Deflection newDeflection = new Deflection(tau - outerDefl);
-         finalArc.setDeflection(newDeflection: newDeflection);  }
-
-         catch (Exception e) {}
+         ptsDegree defl = Math.Abs((tau - outerDefl).getAsDegreesDouble()) * offsetSide;
+         Deflection newDeflection = new Deflection(defl.getAsRadians());
+         finalArc.setDeflection(newDeflection: newDeflection);
 
          var appendedLineSegment = new rm21HorLineSegment(finalArc.EndPoint, TangentEndPoint);
          appendedLineSegment.BeginStation = finalArc.EndStation;
          appendedLineSegment.Parent = this;
          allChildSegments.Add(appendedLineSegment);
 
-         mendEndValuesFrom(appendedLineSegment); 
+         this_mendEndValuesFrom(appendedLineSegment); 
 
       }
 
-      private void mendEndValuesFrom(HorizontalAlignmentBase finalChild)
+      private void this_mendEndValuesFrom(HorizontalAlignmentBase finalChild)
       {
-         this.EndStation = finalChild.EndStation;
+         this.EndStation += finalChild.Length;
          this.EndPoint = finalChild.EndPoint;
          this.EndDegreeOfCurve = finalChild.EndDegreeOfCurve;
          this.EndAzimuth = finalChild.EndAzimuth;

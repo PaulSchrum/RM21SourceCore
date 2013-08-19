@@ -760,5 +760,72 @@ namespace NUnitTestingLibrary
          // Note: The error is 1 inch over 20 miles -- acceptable accuracy.
       }
 
+      [Test]
+      public void HorizontalAlignment_appendTangentToSimpleArc_DeflectionIsToTheRight()
+      {
+         var HA = new rm21HorizontalAlignment();
+         HA.reset(new ptsPoint(2083115.2982, 740931.8698, 0.0),
+            new ptsPoint(X: 2083652.8068, Y: 741163.1806, Z: 0.0));
+
+         HA.appendArc(new ptsPoint(X: 2084073.2987, Y: 741255.4852, Z: 0.0), 1138.0);
+         HA.appendTangent(new ptsPoint(X: 2084518.1573, Y: 741266.9617, Z: 0.0));
+
+         Double expectedDbl = 21.806287;
+         Double actualDbl = HA.GetElementByStation(1010.0).Deflection.getAsDegreesDouble();
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.000045);
+      }
+
+      private rm21HorizontalAlignment buildFrehandHAforTesting()
+      {
+         var retHA = new rm21HorizontalAlignment();
+         retHA.reset(new ptsPoint(X: 2082268.0907, Y: 740846.3249, Z: 0.0), 
+            new ptsPoint(X: 2082339.9608, Y: 740834.3849, Z: 0.0));
+
+         retHA.appendArc(new ptsPoint(X: 2082657.7727, Y: 740825.3769, Z: 0.0), 1170.0);
+         retHA.appendTangent(new ptsPoint(X: 2082747.2428, Y: 740835.0734, Z: 0.0));
+
+         retHA.appendArc(new ptsPoint(X: 2083115.2982, Y: 740931.8698, Z: 0.0), 1280.0);
+         retHA.appendTangent(new ptsPoint(X: 2083652.8068, Y: 741163.1806, Z: 0.0));
+
+         retHA.appendArc(new ptsPoint(X: 2084073.2987, Y: 741255.4852, Z: 0.0), 1138.0);
+         retHA.appendTangent(new ptsPoint(X: 2084518.1573, Y: 741266.9617, Z: 0.0));
+
+         return retHA;
+      }
+
+      [Test]
+      public void HorizontalAlignment_buildFreehand_EndStationIs2327p0486()
+      {
+         var HA = buildFrehandHAforTesting();
+         Assert.IsNotNull(HA);
+
+         Double expected = 2327.0486;
+         Double actual = HA.Length;
+         Assert.AreEqual(expected: expected, actual: actual, delta: 0.00018);
+      }
+
+      [Test]
+      public void HorizontalAlignment_buildFreehand_PointIs8LeftOf2000()
+      {
+         var HA = buildFrehandHAforTesting();
+         Assert.IsNotNull(HA);
+
+         StationOffsetElevation soe = new StationOffsetElevation(2000.0, -8.0, 0.0);
+         var pt = HA.getXYZcoordinates(soe);
+
+         Double expectedX = 2084191.011134;
+         Double actualX = pt.x;
+         Assert.AreEqual(expected: expectedX, actual: actualX, delta: 0.00018);
+         Double expectedY = 741266.52458;
+         Double actualY = pt.y;
+         Assert.AreEqual(expected: expectedY, actual: actualY, delta: 0.00018);
+      }
+
+   }
+
+   internal class pointRadiusPair 
+   {
+      public ptsPoint point{get; set;}
+      public Double radius{get; set;}
    }
 }
