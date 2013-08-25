@@ -801,7 +801,7 @@ namespace NUnitTestingLibrary
 
          Double expected = 2327.0486;
          Double actual = HA.Length;
-         Assert.AreEqual(expected: expected, actual: actual, delta: 0.00018);
+         Assert.AreEqual(expected: expected, actual: actual, delta: 0.0025);
       }
 
       [Test]
@@ -815,10 +815,28 @@ namespace NUnitTestingLibrary
 
          Double expectedX = 2084191.011134;
          Double actualX = pt.x;
-         Assert.AreEqual(expected: expectedX, actual: actualX, delta: 0.00018);
+         Assert.AreEqual(expected: expectedX, actual: actualX, delta: 0.0025);
          Double expectedY = 741266.52458;
          Double actualY = pt.y;
-         Assert.AreEqual(expected: expectedY, actual: actualY, delta: 0.00018);
+         Assert.AreEqual(expected: expectedY, actual: actualY, delta: 0.0025);
+      }
+
+      [Test]
+      public void HorizontalAlignment_buildFreehand_5LeftOf2200isPoint()
+      {
+         var HA = buildFrehandHAforTesting();
+         Assert.IsNotNull(HA);
+
+         var soe = HA.getStationOffsetElevation(new ptsPoint(2084391.021982, 741268.683499));
+         Assert.IsNotNull(soe);
+         Assert.AreEqual(expected: 1, actual: soe.Count);
+
+         Double expectedStation = 2200.0;
+         Double actualStation = soe[0].station;
+         Assert.AreEqual(expected: expectedStation, actual: actualStation, delta: 0.0025);
+         Double expectedOffset = -5.0;
+         Double actualOffset = soe[0].offset;
+         Assert.AreEqual(expected: expectedOffset, actual: actualOffset, delta: 0.0025);
       }
 
    }

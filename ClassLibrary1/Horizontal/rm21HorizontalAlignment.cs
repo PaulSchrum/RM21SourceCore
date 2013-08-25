@@ -292,6 +292,8 @@ namespace ptsCogo.Horizontal
          this.BeginDegreeOfCurve = this.EndDegreeOfCurve = 0.0;
          this.BeginPoint = lineSeg.BeginPoint;
          this.EndPoint = lineSeg.EndPoint;
+         restationAlignment();
+
       }
 
       public void appendArc(ptsPoint ArcEndPoint, Double radius)
@@ -303,7 +305,10 @@ namespace ptsCogo.Horizontal
          newArc.Parent = this;
          this.allChildSegments.Add(newArc);
 
-         this_mendEndValuesFrom(newArc);
+         this.EndAzimuth = this.BeginAzimuth + newArc.Deflection;
+         this.EndPoint = newArc.EndPoint;
+         restationAlignment();
+
       }
 
       public void appendTangent(ptsPoint TangentEndPoint)
@@ -320,20 +325,23 @@ namespace ptsCogo.Horizontal
          var incomingTanRay = new ptsRay(); incomingTanRay.StartPoint = finalArc.BeginPoint;
          incomingTanRay.HorizontalDirection = finalArc.BeginAzimuth;
          int offsetSide = Math.Sign(incomingTanRay.getOffset(TangentEndPoint));
+         double rad = finalArc.Radius;
+         Azimuth traverseToRevisedCenterPtAzimuth = finalArc.BeginAzimuth + offsetSide * Math.PI/2.0;
+         ptsVector traverseToRevisedCenterPt = new ptsVector(traverseToRevisedCenterPtAzimuth, rad);
+         ptsPoint revCenterPt = finalArc.BeginPoint + traverseToRevisedCenterPt;
 
-         ptsVector ccToPtVec = finalArc.ArcCenterPt - TangentEndPoint;
+         ptsVector ccToTEPvec = finalArc.ArcCenterPt - TangentEndPoint;
 
-         //Note: sin(90^) == 1.0
-         ptsAngle rho = Math.Asin(finalArc.Radius / ccToPtVec.Length);  // step 1 from Solving SSA triangles
-         ptsAngle ninetyDegrees = ptsAngle.DEGREE.multiply(90.0);
+         ptsAngle rho = Math.Asin(rad / ccToTEPvec.Length);
+         ptsAngle ninetyDegrees = new ptsAngle();
          ninetyDegrees.setFromDegreesDouble(90.0);
-         ptsAngle tau = ninetyDegrees - rho;  // step2 from Solving SSA triangles
+         ptsAngle tau = ninetyDegrees - rho;  
 
-         Azimuth ccToPtVecAz = ccToPtVec.Azimuth;
+         Azimuth ccToPtVecAz = ccToTEPvec.Azimuth;
          Azimuth arcBegRadAz = finalArc.BeginRadiusVector.Azimuth;
 
          ptsCogo.Angle.Deflection outerDefl = ccToPtVecAz.minus(arcBegRadAz);
-         ptsDegree defl = Math.Abs((tau - outerDefl).getAsDegreesDouble()) * offsetSide;
+         ptsDegree  defl = Math.Abs((tau - outerDefl).getAsDegreesDouble()) * offsetSide;
          Deflection newDeflection = new Deflection(defl.getAsRadians());
          finalArc.setDeflection(newDeflection: newDeflection);
 
@@ -342,16 +350,11 @@ namespace ptsCogo.Horizontal
          appendedLineSegment.Parent = this;
          allChildSegments.Add(appendedLineSegment);
 
-         this_mendEndValuesFrom(appendedLineSegment); 
+         this.EndAzimuth = appendedLineSegment.EndAzimuth;
+         this.EndPoint = appendedLineSegment.EndPoint;
+         restationAlignment();
 
       }
 
-      private void this_mendEndValuesFrom(HorizontalAlignmentBase finalChild)
-      {
-         this.EndStation += finalChild.Length;
-         this.EndPoint = finalChild.EndPoint;
-         this.EndDegreeOfCurve = finalChild.EndDegreeOfCurve;
-         this.EndAzimuth = finalChild.EndAzimuth;
-      }
    }
 }
