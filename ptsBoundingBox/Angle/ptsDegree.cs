@@ -71,6 +71,11 @@ namespace ptsCogo.Angle
          return Math.Tan(deg.getAsRadians());
       }
 
+      public static ptsDegree Abs(ptsDegree deg)
+      {
+         return Math.Abs(deg.degrees_);
+      }
+
       public static implicit operator ptsDegree(double doubleVal)
       {
          return new ptsDegree(doubleVal);
@@ -91,9 +96,24 @@ namespace ptsCogo.Angle
          return left.degrees_ + right;
       }
 
+      public static ptsDegree operator -(ptsDegree left, ptsDegree right)
+      {
+         return left.degrees_ - right.degrees_;
+      }
+
       public static ptsDegree operator -(ptsDegree left, Double right)
       {
          return left.degrees_ - right;
+      }
+
+      public static ptsDegree operator -(ptsDegree left, Deflection right)
+      {
+         return left.degrees_ - right.getAsDegrees();
+      }
+
+      public static ptsDegree operator *(ptsDegree left, Double right)
+      {
+         return left.degrees_ * right;
       }
 
       public override string ToString()

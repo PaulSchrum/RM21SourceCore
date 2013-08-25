@@ -89,5 +89,13 @@ namespace ptsCogo
          return newVec;
       }
 
+      public override String ToString()
+      {
+         var retStr = new StringBuilder(String.Format("L: {0:#.0000}, Az: ", this.Length));
+         retStr.Append(this.Azimuth.ToString());
+         return  retStr.ToString();
+      }
+
+
    }
 }

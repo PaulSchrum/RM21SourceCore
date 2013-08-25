@@ -33,6 +33,12 @@ namespace ptsCogo
          x = X; y = Y; z = Z;
       }
 
+      public ptsPoint(double X, double Y)
+         : this(X, Y, 0.0)
+      {
+
+      }
+
       public static ptsVector operator -(ptsPoint p1, ptsPoint p2)
       {
          return new ptsVector(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);

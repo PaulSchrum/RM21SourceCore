@@ -46,11 +46,6 @@ namespace ptsCogo.Angle
          return retVal;
       }
 
-      public override string ToString()
-      {
-         return this.getAsDegreesDouble().ToString();
-      }
-
       public override double getAsDegreesDouble()
       {
          double retValueDbl = getAsAzimuth() * 180 / Math.PI;
@@ -129,6 +124,11 @@ namespace ptsCogo.Angle
       {
          Double returnDeflection = (this.angle_ - Az2.angle_);
          return new Deflection(ptsAngle.normalizeToPlusOrMinus2PiStatic(returnDeflection));
+      }
+
+      public override String ToString()
+      {
+         return String.Format("{0:0.0000}°", this.getAsDegreesDouble());
       }
    }
 
