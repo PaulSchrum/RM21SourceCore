@@ -33,6 +33,15 @@ namespace NUnitTestingLibrary
       }
 
       [Test]
+      public void ptsDegree_AsinOf1overSqrt2_shouldEqual45degrees()
+      {
+         ptsDegree deg = ptsDegree.Asin(1.0/Math.Sqrt(2.0));
+         Double expectedDbl = 45.0;
+         Double actualDbl = deg.getAsDouble();
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: delta);
+      }
+
+      [Test]
       public void AzimuthAddition_Az189PlusDeflNeg15_shouldEqual174()
       {
          Double expectedDbl = 174.0;
