@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Horizontal\HorizontalAlignmentBase.cs" />
+    <Compile Include="Horizontal\ILinearElementDrawer.cs" />
     <Compile Include="Horizontal\IRM21fundamentalGeometry.cs" />
     <Compile Include="Horizontal\rm21HorArc.cs" />
     <Compile Include="Horizontal\rm21HorizontalAlignment.cs" />

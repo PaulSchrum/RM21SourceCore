@@ -94,5 +94,10 @@ namespace ptsCogo.Horizontal
          drawer.PlaceLine(this, startPoint, soe1, endPoint, soe2);
       }
 
+      public override void draw(ILinearElementDrawer drawer)
+      {
+         drawer.drawLineSegment(this.BeginPoint, this.EndPoint);
+      }
+
    }
 }

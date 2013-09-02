@@ -89,6 +89,15 @@ namespace ptsCogo
          return newVec;
       }
 
+      public static ptsVector operator +(ptsVector vec1, Deflection defl)
+      {
+         Azimuth newAz = vec1.Azimuth + defl;
+         ptsVector newVec = new ptsVector(newAz, vec1.Length);
+         newVec.z = vec1.z;
+
+         return newVec;
+      }
+
       public override String ToString()
       {
          var retStr = new StringBuilder(String.Format("L: {0:#.0000}, Az: ", this.Length));

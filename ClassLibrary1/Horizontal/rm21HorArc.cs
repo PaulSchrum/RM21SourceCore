@@ -19,13 +19,16 @@ namespace ptsCogo.Horizontal
       public rm21HorArc(ptsPoint begPt, ptsPoint endPt, Azimuth incomingAzimuth, Double radius)
          : base(begPt, endPt)
       {
+         if (0 == utilFunctions.tolerantCompare((endPt - begPt).Length, 0.0, 0.000001))
+            throw new ArcExceptionZeroLengthNotDefined();
+
          Double tanOffsetToEndPt;
          ptsRay incomingRay = new ptsRay(); incomingRay.advanceDirection = 1;
          incomingRay.StartPoint = begPt; incomingRay.HorizontalDirection = incomingAzimuth;
          tanOffsetToEndPt = incomingRay.getOffset(endPt);
 
          if (0 == utilFunctions.tolerantCompare(tanOffsetToEndPt, 0.0, 0.000001))
-            throw new Exception("Can't create arc with zero degree deflection.");
+            throw new ArcExceptionZeroDeflectionNotDefined();
 
          this.BeginStation = 0.0;
          this.Radius = radius;
@@ -184,12 +187,38 @@ namespace ptsCogo.Horizontal
          this.Deflection = newDeflection;
          this.deflDirection = Math.Sign(newDeflection.getAsRadians());
 
-         var newAz = Azimuth.newAzimuthFromAngle(this.BeginRadiusVector + this.Deflection);
-         this.EndRadiusVector = new ptsVector(newAz, this.Radius); // start here.  this throws exception
+         //var anAngle = this.BeginRadiusVector + this.Deflection;
+         //var newAz = Azimuth.newAzimuthFromAngle(anAngle);
+         this.EndRadiusVector = this.BeginRadiusVector + this.Deflection;
          this.EndAzimuth = this.BeginAzimuth + this.Deflection;
          this.Length = 100.0 * this.Deflection.getAsRadians() / this.BeginDegreeOfCurve.getAsRadians();
          this.Length = Math.Abs(this.Length);
          this.EndStation = this.BeginStation + this.Length;
+         this.EndPoint = this.ArcCenterPt + this.EndRadiusVector;
       }
+
+      public override void draw(ILinearElementDrawer drawer)
+      {
+         drawer.drawArcSegment(this.BeginPoint, this.ArcCenterPt, this.EndPoint, 
+            this.Deflection.getAsRadians());
+      }
+
    }
+   public class ArcException : Exception
+   {
+      public ArcException(String msg) : base(msg) { }
+   }
+
+   public class ArcExceptionZeroDeflectionNotDefined : ArcException
+   {
+      public ArcExceptionZeroDeflectionNotDefined() :
+         base("Arc with zero-degree deflection not defined.") { }
+   }
+
+   public class ArcExceptionZeroLengthNotDefined : ArcException
+   {
+      public ArcExceptionZeroLengthNotDefined() :
+         base("Arc with zero-length not defined.") { }
+   }
+
 }

@@ -167,6 +167,7 @@ namespace NUnitTestingLibrary
       [TestCase(340.0, 350.0, 10.0)]
       [TestCase(20.0, 340.0, -40.0)]
       [TestCase(340.0, 20.0, 40.0)]
+      [TestCase(189.4326, 173.8145, -15.6181)]
       public void AzimuthArithmatic_addition(Double Az1Dbl, Double ExpectedAz2Dbl, Double DeflectionDbl)
       {
          Azimuth Az1 = new Azimuth(); Az1.setFromDegreesDouble(Az1Dbl);

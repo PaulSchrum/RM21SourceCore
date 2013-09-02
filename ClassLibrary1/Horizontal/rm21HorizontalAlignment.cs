@@ -356,5 +356,44 @@ namespace ptsCogo.Horizontal
 
       }
 
+      public override void draw(ILinearElementDrawer drawer)
+      {
+         foreach (var child in allChildSegments)
+         {
+            child.draw(drawer);
+         }
+      }
+
+      public void drawTemporary(ILinearElementDrawer drawer)
+      {
+         drawer.setDrawingStateTemporary();
+         this.draw(drawer);
+      }
+
+      public long childCount()
+      {
+         return this.allChildSegments.Count;
+      }
+
+      public void removeFinalChildItem()
+      {
+         allChildSegments.RemoveAt(allChildSegments.Count - 1);
+         var newLastElement = allChildSegments[allChildSegments.Count - 1];
+         this.EndAzimuth = newLastElement.EndAzimuth;
+         this.EndDegreeOfCurve = newLastElement.EndDegreeOfCurve;
+         this.EndPoint = newLastElement.EndPoint;
+         this.EndStation = newLastElement.EndStation;
+      }
+
+      public String getDeflectionOfFinalArc()
+      {
+         int index;
+         for (index = allChildSegments.Count - 1; index >= 0; index--)
+         {
+            var child = allChildSegments[index];
+            if (child is rm21HorArc) return (child as rm21HorArc).Deflection.ToString();
+         }
+         return String.Empty;
+      }
    }
 }

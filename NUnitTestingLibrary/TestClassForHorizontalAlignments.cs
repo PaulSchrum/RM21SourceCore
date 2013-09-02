@@ -761,6 +761,30 @@ namespace NUnitTestingLibrary
       }
 
       [Test]
+      public void HorizontalAlignment_appendTangentToSimpleArc_ArcEndPtAtRightLocation()
+      {
+         Double radius = 1170.0;
+         var HA = createSingleTangentHA();
+         HA.appendArc(ArcEndPoint: new ptsPoint(2082660.0, 740870.0, 0.0),
+            radius: radius);
+
+         Double expectedDbl = -15.618046;
+         Double actualDbl = HA.GetElementByStation(390.0).Deflection.getAsDegreesDouble();
+         Assert.AreNotEqual(expected: expectedDbl, actual: actualDbl);
+
+         HA.appendTangent(TangentEndPoint: new ptsPoint(2082747.242780, 740835.073448, 0.0));
+
+         ptsPoint arcEndPt = HA.GetElementByStation(390.0).EndPoint;
+         expectedDbl = 2082657.772726;
+         actualDbl = arcEndPt.x;
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.001);
+
+         expectedDbl = 740825.376857;
+         actualDbl = arcEndPt.y;
+         Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.001);
+      }
+
+      [Test]
       public void HorizontalAlignment_appendTangentToSimpleArc_DeflectionIsToTheRight()
       {
          var HA = new rm21HorizontalAlignment();

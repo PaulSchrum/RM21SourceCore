@@ -76,5 +76,10 @@ namespace ptsCogo.Horizontal
       {
          
       }
+
+      public virtual void draw(ILinearElementDrawer drawer)
+      {
+
+      }
    }
 }
