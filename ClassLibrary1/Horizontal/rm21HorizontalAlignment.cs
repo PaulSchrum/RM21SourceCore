@@ -370,6 +370,12 @@ namespace ptsCogo.Horizontal
          this.draw(drawer);
       }
 
+      public void drawPermanent(ILinearElementDrawer drawer)
+      {
+         drawer.setDrawingStatePermanent();
+         this.draw(drawer);
+      }
+
       public long childCount()
       {
          return this.allChildSegments.Count;
