@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using ptsCogo.Angle;
 using ptsCogo.coordinates;
+using System.ComponentModel;
 
 namespace ptsCogo.Horizontal
 {
@@ -358,9 +359,14 @@ namespace ptsCogo.Horizontal
 
       public override void draw(ILinearElementDrawer drawer)
       {
+         int indx = 0;
          foreach (var child in allChildSegments)
          {
             child.draw(drawer);
+            drawer.setAlignmentValues(indx, CogoStation.stationToString(child.BeginStation),
+               child.Length.ToString(), child.EndAzimuth.ToString(), child.radiusStr,
+               child.Deflection.ToString());
+            indx++;
          }
       }
 
@@ -402,4 +408,5 @@ namespace ptsCogo.Horizontal
          return String.Empty;
       }
    }
+
 }

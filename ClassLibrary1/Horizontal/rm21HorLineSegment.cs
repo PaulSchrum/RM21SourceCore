@@ -33,12 +33,22 @@ namespace ptsCogo.Horizontal
          get { return this.BeginAzimuth; }
       }
 
+      public override Deflection Deflection
+      {  get { return new Deflection(0.0); }
+         protected set { }  }
+
       public override Double Length
       {
          get
          {
             return BeginPoint.GetHorizontalDistanceTo(EndPoint);
          }
+         protected set { }
+      }
+
+      public override String radiusStr
+      {
+         get {  return "Inf.";  }
          protected set { }
       }
 

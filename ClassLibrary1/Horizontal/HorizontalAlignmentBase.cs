@@ -35,6 +35,7 @@ namespace ptsCogo.Horizontal
 
       public virtual Deflection Deflection { get; protected set; }
       public virtual Double Length { get; protected set; }
+      public virtual String radiusStr { get; protected set; }
 
       public virtual ptsVector LongChordVector
       { get { return (new ptsVector(this.BeginPoint, this.EndPoint)).flattenZnew(); } }

@@ -15,6 +15,10 @@ namespace ptsCogo.Horizontal
       public Double Radius { get; protected set; }
       public ptsVector BeginRadiusVector { get; protected set; }
       public ptsVector EndRadiusVector { get; protected set; }
+      public override String radiusStr
+      {
+         get { return String.Format("{0:0.0000}", Radius); }
+         protected set { } }
 
       public rm21HorArc(ptsPoint begPt, ptsPoint endPt, Azimuth incomingAzimuth, Double radius)
          : base(begPt, endPt)
