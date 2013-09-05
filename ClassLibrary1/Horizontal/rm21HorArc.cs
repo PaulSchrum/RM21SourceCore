@@ -12,13 +12,9 @@ namespace ptsCogo.Horizontal
    {
       private int deflDirection { get; set; }
       public ptsPoint ArcCenterPt {get; protected set;}
-      public Double Radius { get; protected set; }
+      public override Double Radius { get; protected set; }
       public ptsVector BeginRadiusVector { get; protected set; }
       public ptsVector EndRadiusVector { get; protected set; }
-      public override String radiusStr
-      {
-         get { return String.Format("{0:0.0000}", Radius); }
-         protected set { } }
 
       public rm21HorArc(ptsPoint begPt, ptsPoint endPt, Azimuth incomingAzimuth, Double radius)
          : base(begPt, endPt)

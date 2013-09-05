@@ -13,13 +13,7 @@ namespace ptsCogo.Horizontal
       void drawLineSegment(ptsPoint startPt, ptsPoint endPt);
       void drawArcSegment(ptsPoint startPt, ptsPoint centerPt, ptsPoint endPt, Double deflection);
       //void drawEulerSpiralSegment(List<ptsPoint> allPoints, Double offset);
-      void setAlignmentValues(
-         int itemIndex, 
-         String BegSta, 
-         String Length, 
-         String Azimuth, 
-         String Radius, 
-         String Deflection);
+      void setAlignmentValues(List<alignmentDataPacket> dataSummary);
 
    }
 }

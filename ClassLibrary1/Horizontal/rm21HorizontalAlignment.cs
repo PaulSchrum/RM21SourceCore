@@ -12,6 +12,7 @@ namespace ptsCogo.Horizontal
    public class rm21HorizontalAlignment : HorizontalAlignmentBase
    {
       private List<HorizontalAlignmentBase> allChildSegments = null;
+      private List<alignmentDataPacket> alignmentData { get; set; }
 
       // used in constructing, never kept long term
       // scratch pad member for re-use.  Not part of the data structure.
@@ -295,6 +296,8 @@ namespace ptsCogo.Horizontal
          this.EndPoint = lineSeg.EndPoint;
          restationAlignment();
 
+         alignmentData = new List<alignmentDataPacket>();
+         alignmentData.Add(new alignmentDataPacket(0, lineSeg));
       }
 
       public void appendArc(ptsPoint ArcEndPoint, Double radius)
@@ -310,6 +313,7 @@ namespace ptsCogo.Horizontal
          this.EndPoint = newArc.EndPoint;
          restationAlignment();
 
+         alignmentData.Add(new alignmentDataPacket(alignmentData.Count, newArc));
       }
 
       public void appendTangent(ptsPoint TangentEndPoint)
@@ -355,19 +359,19 @@ namespace ptsCogo.Horizontal
          this.EndPoint = appendedLineSegment.EndPoint;
          restationAlignment();
 
+         if (alignmentData.Count > 0)
+            alignmentData.RemoveAt(alignmentData.Count-1);
+         alignmentData.Add(new alignmentDataPacket(alignmentData.Count, finalArc));
+         alignmentData.Add(new alignmentDataPacket(alignmentData.Count, appendedLineSegment));
       }
 
       public override void draw(ILinearElementDrawer drawer)
       {
-         int indx = 0;
          foreach (var child in allChildSegments)
          {
             child.draw(drawer);
-            drawer.setAlignmentValues(indx, CogoStation.stationToString(child.BeginStation),
-               child.Length.ToString(), child.EndAzimuth.ToString(), child.radiusStr,
-               child.Deflection.ToString());
-            indx++;
          }
+         drawer.setAlignmentValues(this.alignmentData);  // technical debt: add tests for this
       }
 
       public void drawTemporary(ILinearElementDrawer drawer)
@@ -395,6 +399,7 @@ namespace ptsCogo.Horizontal
          this.EndDegreeOfCurve = newLastElement.EndDegreeOfCurve;
          this.EndPoint = newLastElement.EndPoint;
          this.EndStation = newLastElement.EndStation;
+         alignmentData.RemoveAt(alignmentData.Count - 1);
       }
 
       public String getDeflectionOfFinalArc()
@@ -406,6 +411,27 @@ namespace ptsCogo.Horizontal
             if (child is rm21HorArc) return (child as rm21HorArc).Deflection.ToString();
          }
          return String.Empty;
+      }
+   }
+
+   public sealed class alignmentDataPacket
+   {
+
+      public int myIndex { get; set; }
+      public Double BeginStationDbl { get; set; }
+      public Double Length { get; set; }
+      public Double Radius { get; set; }
+      public Deflection Deflection { get; set; }
+      public Boolean HasChanged { get; set; }
+
+      public alignmentDataPacket(int p, HorizontalAlignmentBase alignmentItem)
+      {
+         myIndex = p;
+         BeginStationDbl = alignmentItem.BeginStation;
+         Length = alignmentItem.Length;
+         Radius = alignmentItem.Radius;
+         Deflection = alignmentItem.Deflection;
+         HasChanged = true;
       }
    }
 

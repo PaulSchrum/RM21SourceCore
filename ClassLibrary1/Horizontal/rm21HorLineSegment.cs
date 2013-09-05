@@ -46,9 +46,9 @@ namespace ptsCogo.Horizontal
          protected set { }
       }
 
-      public override String radiusStr
+      public override Double Radius
       {
-         get {  return "Inf.";  }
+         get {  return Double.PositiveInfinity;  }
          protected set { }
       }
 
