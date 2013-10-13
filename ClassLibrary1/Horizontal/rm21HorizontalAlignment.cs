@@ -160,8 +160,10 @@ namespace ptsCogo.Horizontal
       {
          Double equalityTolerance = 0.00015;
 
-         var distanceVector = itemInQuestion.BeginPoint - secondItem.EndPoint;
-         return (Math.Abs(distanceVector.Length) < equalityTolerance);
+         var distanceToEndVector = itemInQuestion.BeginPoint - secondItem.EndPoint;
+         var distanceToBeginVector = itemInQuestion.BeginPoint - secondItem.BeginPoint;
+         return (Math.Abs(distanceToEndVector.Length) < equalityTolerance) ||
+                (Math.Abs(distanceToBeginVector.Length) < equalityTolerance);
       }
 
       private void restationAlignment()

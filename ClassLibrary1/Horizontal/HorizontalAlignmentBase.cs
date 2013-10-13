@@ -37,6 +37,9 @@ namespace ptsCogo.Horizontal
       public virtual Double Length { get; protected set; }
       public virtual Double Radius { get; protected set; }
 
+      protected List<HorizontalAlignmentBase> incomingElements { get; set; }
+      protected List<HorizontalAlignmentBase> outgoingElements { get; set; }
+      
       public virtual ptsVector LongChordVector
       { get { return (new ptsVector(this.BeginPoint, this.EndPoint)).flattenZnew(); } }
 
