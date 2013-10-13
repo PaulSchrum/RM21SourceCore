@@ -12,7 +12,7 @@ namespace ptsCogo
       {
          this.RLside = rightLeftSide;
          this.InOutside = inOutSide;
-      }
+      }  // inOutside means "inside or outside"
 
       public rm21Side(int leftOrRightSide, int inOrOutSide)
       {
