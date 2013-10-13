@@ -5,7 +5,6 @@ using System.Text;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using ptsCogo;
-using ptsCogo;
 using ptsCogo.CorridorTypes;
 using ptsCogo.Ribbons;
 using ptsCogo.Horizontal;
@@ -262,6 +261,47 @@ namespace NUnitTestingLibrary
          pglGrLT.addOutsideRibbon(new RoadwayLane(pglGrLT, 20.0, new Slope(0.10)));
 
          Assert.True(true);
+      }
+
+      [Test]
+      public void CreateTypicalSection_SimpleTwoLaneRoadway()
+      {
+         TypicalSection ts = createSimple2LaneRoadway();
+         Assert.AreEqual("Two Lane No Shoulder", ts.TSname);
+      }
+
+      private TypicalSection createSimple2LaneRoadway()
+      {
+         return new TypicalSection(
+            "Two Lane No Shoulder",
+            new PGLGroupingTypicalSection[]
+            {
+               new ptsCogo.PGLGroupingTypicalSection(-1, // = whichSide
+                  // InsideRibbons =
+                  null,
+
+                  // OutsideRibbons =
+                  new IRibbonLike[] 
+                  {
+                     new RoadwayLane(12.0, -0.02),
+                     new Shoulder(10.0, -0.04)
+                  } 
+                  ),
+
+               new ptsCogo.PGLGroupingTypicalSection(1, // = whichSide
+                  // InsideRibbons =
+                  null,
+
+                  // OutsideRibbons =
+                  new IRibbonLike[] 
+                  {
+                     new RoadwayLane(12.0, -0.02),
+                     new Shoulder(10.0, -0.04)
+                  } 
+                  )
+            }
+            );
+
       }
    }
 }

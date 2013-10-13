@@ -17,6 +17,8 @@ namespace ptsCogo
 
       public RoadwayLane(PGLGrouping pglG, Double width, Slope slope) : base(pglG, width, slope) { }
 
+      public RoadwayLane(Double width, Slope slope) : base(width, slope) { }
+
       public override string getHashName() { return "Roadway Lane"; }
 
       public override void DrawCrossSection(IRM21cad2dDrawingContext cadContext, 

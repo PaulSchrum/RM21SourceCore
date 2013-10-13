@@ -42,8 +42,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CorridorTypes\rm21CorridorPrecursor.cs" />
     <Compile Include="CorridorTypes\rm21OpenChannelCorridor.cs" />
     <Compile Include="CorridorTypes\rm21RoadwayCorridor.cs" />
+    <Compile Include="CorridorTypes\TypicalSection.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="ExternalClasses\ObservableDictionary.cs" />
     <Compile Include="ExternalClasses\ViewModelBase.cs" />
     <Compile Include="IPersistantDrawer.cs" />
@@ -81,6 +84,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram2.cd" />
+    <None Include="ClassDiagram3.cd" />
+    <None Include="ClassDiagram4.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

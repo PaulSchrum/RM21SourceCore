@@ -83,6 +83,15 @@ namespace ptsCogo
 
       public ribbonBase() { }
 
+      public ribbonBase(Double TSwidth, Slope TSslope)
+      {
+         MyParentPGLgrouping = null;
+         NominalWidth = TSwidth;
+         Widths = new InvariantProfile(NominalWidth);
+         NominalCrossSlope = TSslope;
+         CrossSlopes = new InvariantProfile(NominalCrossSlope);
+      }
+
       /// <summary>
       /// 
       /// </summary>

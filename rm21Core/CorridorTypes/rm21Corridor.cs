@@ -8,6 +8,7 @@ using ptsCogo.Angle;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
 using ptsCogo.Horizontal;
+using ptsCogo.CorridorTypes;
 
 
 namespace ptsCogo
@@ -18,7 +19,7 @@ namespace ptsCogo
    ///   and roadways will be implemented by a subclass, just as riparian
    ///   ways and railways will be.
    /// </summary>
-   public class rm21Corridor
+   public class rm21Corridor : rm21CorridorPrecursor
    {
       public ObservableCollection<PGLGrouping> allPGLgroupings { get; private set; }
 

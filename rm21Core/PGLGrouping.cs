@@ -353,4 +353,24 @@ namespace ptsCogo
       }
    }
 
+   public sealed class PGLGroupingTypicalSection : PGLGrouping
+   {
+      public PGLGroupingTypicalSection(int whichSide)
+         : base(whichSide)
+      { }
+
+      public PGLGroupingTypicalSection
+         (int whichSide, 
+         IEnumerable<IRibbonLike> InsideRibbons,
+         IEnumerable<IRibbonLike> OutsideRibbons)
+         : this(whichSide)
+      {
+         outsideRibbons = OutsideRibbons == null ? null : OutsideRibbons.ToLinkedList();
+         insideRibbons = InsideRibbons == null? null : InsideRibbons.ToLinkedList();
+      }
+
+      private new rm21Corridor ParentCorridor { get; set; }
+      private new rm21HorizontalAlignment GoverningAlignment { get; set; }
+      
+   }
 }
