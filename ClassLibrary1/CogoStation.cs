@@ -42,6 +42,9 @@ namespace ptsCogo
       private static int plusOffset_ = 2;
       public static int plusOffset { get { return plusOffset_; } set { plusOffset = value > 0 ? value : 2; } }
 
+      public static CogoStation MAX { get { return new CogoStation(Double_.OneTrillion); } }
+      public static CogoStation MIN { get { return new CogoStation(0.0); } }
+
       public CogoStation() 
       {
          myAlignment = null; station = 0; region = 1; isOnMyAlignemnt = true;

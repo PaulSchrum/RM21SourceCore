@@ -1541,4 +1541,23 @@ namespace ptsCogo
 
    }
 
+   public class InvariantProfile : Profile
+   {
+      public InvariantProfile(Double Value) :
+         base(0.0, Double_.OneTrillion, Value)
+      {
+         
+      }
+
+      public InvariantProfile() : this(0.0) { }
+
+      private new vpiList  VpiList { get; set; }
+
+      private new void setFromVPIlist(vpiList newVPIlist) { }
+
+      private new void appendStationAndElevation(CogoStation newStation, double newElevation)
+      { }
+
+
+   }
 }
