@@ -261,6 +261,42 @@ namespace NUnitTestingLibrary
       }
 
       [Test]
+      public void HorizontalAlignment_instantiateFromFundamentalGeometry_shouldNotThrowException()
+      {
+         var fgList = new List<IRM21fundamentalGeometry>();
+         var funGeomItem = new rm21MockFundamentalGeometry();
+
+         // Line 1, Item [0], geometric sequence 1
+         funGeomItem.pointList.Add(new ptsPoint(2078236.6862, 746878.8969, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(2078312.7571, 746940.1485, 0.0));
+         funGeomItem.expectedType = expectedType.LineSegment;
+         fgList.Add(funGeomItem);
+
+         // Line 2, Item [1], geometric sequence 3
+         funGeomItem = new rm21MockFundamentalGeometry();
+         funGeomItem.pointList.Add(new ptsPoint(2078814.5136, 747096.7721, 0.0));
+         funGeomItem.pointList.Add(new ptsPoint(2079329.4845, 747059.2340, 0.0));
+         funGeomItem.expectedType = expectedType.LineSegment;
+         fgList.Add(funGeomItem);
+
+         // Arc 1, Item [2], geometric sequence 2, oriented backward
+         funGeomItem = new rm21MockFundamentalGeometry();
+         funGeomItem.pointList.Add(new ptsPoint(2078814.5136, 747096.7721, 0.0)); // beg matches [0].end
+         funGeomItem.pointList.Add(new ptsPoint(2078762.3916, 746381.7284, 0.0)); // center pt
+         funGeomItem.pointList.Add(new ptsPoint(2078312.7571, 746940.1485, 0.0)); // end matches [1].begin
+         funGeomItem.expectedType = expectedType.ArcSegmentInsideSolution;
+         funGeomItem.deflectionSign = 1;
+         fgList.Add(funGeomItem);
+
+         try {
+         var HA = new rm21HorizontalAlignment(
+            fundamentalGeometryList: fgList,
+            Name: null, stationEquationing: null); }
+         catch (Exception e)
+         { Assert.Fail("Exception not expected: \"" + e.Message + "\""); }
+      }
+
+      [Test]
       public void HorizontalAlignment_instantiate5ItemHA_fromFundamentalGeometry_HAlengthIs7155()
       {
          List<IRM21fundamentalGeometry> fundmtlGeoms = createTestHA_fundGeom1();
