@@ -39,6 +39,12 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UpdateControls">
+      <HintPath>..\packages\UpdateControls.2.2.5.1\lib\Net35\UpdateControls.dll</HintPath>
+    </Reference>
+    <Reference Include="UpdateControls.XAML">
+      <HintPath>..\packages\UpdateControls.2.2.5.1\lib\Net35\UpdateControls.XAML.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -53,6 +59,9 @@
     <Compile Include="Irm21surface.cs" />
     <Compile Include="Irm21TreeViewItemable.cs" />
     <Compile Include="Mocks\rm21MockSurface.cs" />
+    <Compile Include="Models\Document.cs" />
+    <Compile Include="Models\Item.cs" />
+    <Compile Include="Models\Selection.cs" />
     <Compile Include="Ribbons\BackSlopeCutDitch.cs" />
     <Compile Include="Ribbons\FrontSlopeCutDitch.cs" />
     <Compile Include="Ribbons\IRibbonLike.cs" />
@@ -67,6 +76,10 @@
     <Compile Include="Ribbons\Shoulder.cs" />
     <Compile Include="rm21Model.cs" />
     <Compile Include="RM21Project.cs" />
+    <Compile Include="ViewModels\ItemHeader.cs" />
+    <Compile Include="ViewModels\ItemViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelLocator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClassLibrary1\ptsCogo.csproj">
@@ -86,6 +99,11 @@
     <None Include="ClassDiagram2.cd" />
     <None Include="ClassDiagram3.cd" />
     <None Include="ClassDiagram4.cd" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Readme_UpdateControls.txt" />
+    <Content Include="Readme_UpdateControls_Snippets.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

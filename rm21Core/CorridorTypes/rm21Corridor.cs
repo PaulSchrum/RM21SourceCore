@@ -33,6 +33,19 @@ namespace ptsCogo
          Name = name_;
       }
 
+      public rm21Corridor(string name_, TypicalSection TypicalSection)
+         : this(name_)
+      {
+         // deep clone TypicalSection.allTypicalSectionPGLgroupings to
+         //   this.allTypicalSectionPGLgroupings.
+         allPGLgroupings = new ObservableCollection<PGLGrouping>();
+         foreach (var entry in base.allTypicalSectionPGLgroupings)
+         {
+            allPGLgroupings.Add(entry);
+         }
+         //start here
+      }
+
       [Obsolete("Use GoverningAlignment instead")]
       /// <summary>
       /// Deprecated.

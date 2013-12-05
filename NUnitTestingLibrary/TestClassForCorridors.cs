@@ -303,5 +303,12 @@ namespace NUnitTestingLibrary
             );
 
       }
+
+      [Test]
+      public void CreateSimpleRoadway_FromTypicalSection()
+      {
+         TypicalSection ts = createSimple2LaneRoadway();
+         var aRoadway = new rm21RoadwayCorridor("US 321", ts);
+      }
    }
 }
