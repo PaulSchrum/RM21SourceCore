@@ -34,6 +34,7 @@ namespace NUnitTestingLibrary
       private Profile pfl7;
       private Profile pfl8;
       private Profile pfl9;
+      private Profile pfl21;
 
       private ptsRay ray1 = new ptsRay();
       private ptsRay ray2 = new ptsRay();
@@ -1138,6 +1139,126 @@ namespace NUnitTestingLibrary
 
          actualDbl = (double)result.back;
          Assert.AreEqual(expected: expectedDbl, actual: actualDbl, message: conditionString);
+      }
+
+      [Test]
+      public void Profile_Constraints_createAsConstrained_createSuccessful()
+      {
+         pfl21 = null;
+         pfl21 = new Profile(unconstrained: false);
+         Assert.IsNotNull(pfl21);
+      }
+
+      [Test]
+      public void Profile_Constraints_createAsUnconstrained_createSuccessful()
+      {
+         pfl21 = null;
+         pfl21 = new Profile(unconstrained: true);
+         Assert.IsNotNull(pfl21);
+      }
+
+      [Test]
+      public void Profile_Constraints_createAsUnconstrained_VerifyConstrainedStatus()
+      {
+         pfl21 = null;
+         pfl21 = new Profile(unconstrained: true);
+         Assert.IsTrue(pfl21.BeginIsUnconstrained && pfl21.EndIsUnconstrained);
+      }
+
+      [Test]
+      public void Profile_Constraints_createAsUnconstrainedSingleValue_CreateSuccessful()
+      {
+         pfl21 = null;
+         pfl21 = new Profile((CogoStation)0.0, (CogoStation)0.0, 12.0, unconstrained: true);
+         Assert.IsTrue(pfl21.BeginIsUnconstrained && pfl21.EndIsUnconstrained);
+      }
+
+      [Test]
+      public void Profile_Constraints_constrainedSingleValue_getValuePastEnd()
+      {
+         pfl21 = null;
+         pfl21 = new Profile((CogoStation)0.0, (CogoStation)0.0, 12.0, unconstrained: false);
+
+         double? actual = pfl21.getElevation((CogoStation)1000.0);
+         Assert.IsNull(actual);
+      }
+
+      [Test]
+      public void Profile_Constraints_unconstrainedSingleValue_getValuePastEnd_simple()
+      {
+         pfl21 = null;
+         pfl21 = new Profile((CogoStation)0.0, (CogoStation)0.0, 12.0, unconstrained: true);
+
+         double expected = 12.0;
+         double? actual = pfl21.getElevation((CogoStation)1000.0);
+         Assert.IsNotNull(actual);
+         Assert.AreEqual(expected, actual, 0.000001);
+      }
+
+      [Test]
+      public void Profile_Constraints_constrainedBeginUnconstrainedEnd_getValueBeforeBegin_isNull()
+      {
+         pfl21 = null;
+         pfl21 = new Profile((CogoStation)1000.0, (CogoStation)2000.0, 12.0);
+         pfl21.EndIsUnconstrained = true;
+
+         double? actual = pfl21.getElevation((CogoStation)500.0);
+         Assert.IsNull(actual);
+      }
+
+      [Test]
+      public void Profile_Constraints_constrainedBeginUnconstrainedEnd_getValueAfterEnd_is12()
+      {
+         pfl21 = null;
+         pfl21 = new Profile((CogoStation)1000.0, (CogoStation)2000.0, 12.0);
+         pfl21.EndIsUnconstrained = true;
+
+         double? actual = pfl21.getElevation((CogoStation)2500.0);
+         Assert.IsNotNull(actual);
+         double expected = 12.0;
+         Assert.AreEqual(expected, actual, 0.000001);
+      }
+
+      [Test]
+      public void Profile_Constraints_constrainedBeginUnconstrainedEnd_getValueAfterEnd_is14_complex()
+      {
+         pfl21 = null;
+         pfl21 = new Profile((CogoStation)1000.0, (CogoStation)2000.0, 12.0);
+         pfl21.EndIsUnconstrained = true;
+
+         pfl21.appendStationAndElevation((CogoStation)2100.0, 18.0);
+         pfl21.appendStationAndElevation((CogoStation)2200.0, 20.0);
+         pfl21.appendStationAndElevation((CogoStation)2300.0, 14.0);
+
+         //double? actual = pfl21.getElevation((CogoStation)1150.0);
+         double? actual = pfl21.getElevation((CogoStation)2150.0);
+         double expected = 19.0;
+         Assert.AreEqual(expected, actual, 0.000001);
+
+         actual = pfl21.getElevation((CogoStation)2500.0);
+         Assert.IsNotNull(actual);
+         expected = 14.0;
+         Assert.AreEqual(expected, actual, 0.000001);
+      }
+
+      [Test]
+      public void Profile_Constraints_constrainedBothUnconstrainedEnd_getValueAfterEnd_is14_complex()
+      {
+         pfl21 = null;
+         pfl21 = new Profile((CogoStation)1000.0, (CogoStation)2000.0, 12.0, true);
+
+         pfl21.appendStationAndElevation((CogoStation)2100.0, 18.0);
+         pfl21.appendStationAndElevation((CogoStation)2200.0, 20.0);
+         pfl21.appendStationAndElevation((CogoStation)2300.0, 14.0);
+
+         double? actual = pfl21.getElevation((CogoStation)2150.0);
+         double expected = 19.0;
+         Assert.AreEqual(expected, actual, 0.000001);
+
+         actual = pfl21.getElevation((CogoStation)500.0);
+         Assert.IsNotNull(actual);
+         expected = 12.0;
+         Assert.AreEqual(expected, actual, 0.000001);
       }
 
    }

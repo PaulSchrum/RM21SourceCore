@@ -19,6 +19,9 @@ namespace ptsCogo
       public double BeginProfTrueStation {get; private set;}
       public double EndProfTrueStation { get; private set; }
 
+      public Boolean BeginIsUnconstrained { get; set; }
+      public Boolean EndIsUnconstrained { get; set; }
+
       private vpiList thisAsVpiList_;  // To Do: Make sure all modifications to the data
       // get reflected in thisAsVpiList.
       public vpiList VpiList
@@ -30,6 +33,14 @@ namespace ptsCogo
       public Profile() 
       {
          vpiList aVpiList = new vpiList();
+         this.BeginIsUnconstrained = false;
+         this.EndIsUnconstrained = false;
+      }
+
+      public Profile(Boolean unconstrained) : this()
+      {  // Note that the default is that the profile is constrained front and back
+         this.BeginIsUnconstrained = unconstrained;
+         this.EndIsUnconstrained = unconstrained;
       }
 
       //public Profile(CogoStation beginStation, CogoStation endStation, int singleElevation)
@@ -52,6 +63,16 @@ namespace ptsCogo
          aVpiList.add(endStation, singleElevation);
 
          buildThisFromRawVPIlist(aVpiList);
+      }
+
+      public Profile(
+         CogoStation beginStation, 
+         CogoStation endStation, 
+         double singleElevation,
+         Boolean unconstrained) : this(beginStation, endStation, singleElevation)
+      {
+         this.BeginIsUnconstrained = unconstrained;
+         this.EndIsUnconstrained = unconstrained;
       }
 
       public Profile(vpiList rawVPIlist)
@@ -584,11 +605,34 @@ namespace ptsCogo
 
       public double? getElevation(CogoStation station)
       {
+         double? retVal;
          var resultTND = new tupleNullableDoubles();
          getElevation(station, out resultTND);
          if(resultTND.back != null)
-            return resultTND.back;
-         return resultTND.ahead;
+            retVal = resultTND.back;
+         retVal = resultTND.ahead;
+
+         if (null == retVal)
+         {
+            if (station > EndProfTrueStation)
+            {
+               if (this.EndIsUnconstrained == true)
+               {
+                  this.getElevation((CogoStation)EndProfTrueStation, out resultTND);
+                  retVal = resultTND.back;
+               }
+            }
+            if (station < this.BeginProfTrueStation)
+            {
+               if (this.BeginIsUnconstrained == true)
+               {
+                  this.getElevation((CogoStation)BeginProfTrueStation, out resultTND);
+                  retVal = resultTND.ahead;
+               }
+            }
+         }
+
+         return retVal;
       }
 
       public void getElevation(CogoStation station, out tupleNullableDoubles theElevation)
@@ -660,8 +704,15 @@ namespace ptsCogo
          catch (IndexOutOfRangeException) { }
          verticalCurve aVC = allVCs[vcIndex];
 
+         // if there are effectively no VCs, treat it as singleElevation
+         if (allVCs.Count == 1 && aVC.Length < 0.00000001)
+         {
+            theOutValue.back = aVC.BeginElevation;
+            theOutValue.ahead = aVC.BeginElevation;
+            theOutValue.isSingleValue = true;
+         }
          // if we are at the begin station, check to see how we relate to the previous vc
-         if (utilFunctions.tolerantCompare(station.trueStation, aVC.BeginStation.trueStation, stationEqualityTolerance) == 0)
+         else if (utilFunctions.tolerantCompare(station.trueStation, aVC.BeginStation.trueStation, stationEqualityTolerance) == 0)
          {
             // if we are at the beginning of the profile, split theOutValue
             if (vcIndex == 0)
