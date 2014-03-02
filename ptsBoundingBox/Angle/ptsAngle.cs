@@ -83,7 +83,7 @@ namespace ptsCogo
          throw new NotImplementedException();
       }
 
-      public virtual void setFromXY(double x, double y)
+      public void setFromXY(double x, double y)
       {
          double dbl = Math.Atan2(y, x);
          angle_ = dbl;
