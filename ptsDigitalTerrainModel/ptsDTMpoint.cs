@@ -28,6 +28,10 @@ namespace ptsDigitalTerrainModel
 
       private ptsDTMpoint() { }
 
+      public ptsDTMpoint(String x, String y, String z)
+         : base(x, y, z)
+      {  myIndex = 0L;   }
+
       static public ptsDTMpoint getAveragePoint(ptsDTMpoint pt1, ptsDTMpoint pt2, ptsDTMpoint pt3)
       {
          ptsDTMpoint returnPoint = new ptsDTMpoint();

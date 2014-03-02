@@ -453,6 +453,59 @@ namespace ptsDigitalTerrainModel
          return aTriangle.givenXYgetSlopeAzimuth(aPoint);
 
       }
+
+      public void loadFromXYZtextFile(string fileToOpen)
+      {
+         
+         using (var inputFile = new StreamReader(fileToOpen))
+         {
+            Double x, y, z;
+            String line;
+            String[] values;
+            while ((line = inputFile.ReadLine()) != null)
+            {
+               values = line.Split(',');
+               if (values.Length != 3) continue;
+               var newPt = new ptsDTMpoint(values[0], values[1], values[2]);
+               GridDTMhelper.addPoint(newPt);
+            }
+         }
+      }
    }
-   
+
+   internal static class GridDTMhelper
+   {
+      private const long GridSize = 20;
+      public static Dictionary<XYtuple, List<ptsDTMpoint>> grid = new Dictionary<XYtuple, List<ptsDTMpoint>>();
+      public static void addPoint(ptsDTMpoint pt)
+      {
+         long xGrid = (long)Math.Floor(pt.x / GridSize);
+         long yGrid = (long)Math.Floor(pt.y / GridSize);
+         addPoint_(new XYtuple(xGrid, yGrid), pt);
+      }
+
+      private static void addPoint_(XYtuple tupl, ptsDTMpoint pt)
+      {
+         if (false == grid.ContainsKey(tupl))
+         {
+            var ptList = new List<ptsDTMpoint>();
+            ptList.Add(pt);
+            grid.Add(tupl, ptList);
+         }
+         else
+         {
+            grid[tupl].Add(pt);
+         }
+      }
+   }
+
+   internal class XYtuple
+   {
+      public XYtuple(long x, long y)
+      {
+         X = x; Y = y;
+      }
+      public long X { get; set; }
+      public long Y { get; set; }
+   }
 }
