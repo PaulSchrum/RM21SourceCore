@@ -13,6 +13,12 @@ namespace ptsCogo
 
       private ptsBoundingBox2d() { }
 
+      public ptsBoundingBox2d(Double LLx, Double LLy, Double URx, Double URy)
+      {
+         lowerLeftPt = new ptsPoint(LLx, LLy);
+         upperRightPt = new ptsPoint(URx, URy);
+      }
+
       public ptsBoundingBox2d(ptsPoint aPoint)
       {
          lowerLeftPt = new ptsPoint(aPoint);
@@ -42,6 +48,21 @@ namespace ptsCogo
             if (aPoint.z > upperRightPt.z)
                upperRightPt.z = aPoint.z;
          }
+      }
+
+      public bool isPointInsideBB2d(Double x, Double y)
+      {
+         if (x < lowerLeftPt.x)
+            return false;
+         if (y < lowerLeftPt.y)
+            return false;
+
+         if (x > upperRightPt.x)
+            return false;
+         if (y > upperRightPt.y)
+            return false;
+
+         return true;
       }
 
       public bool isPointInsideBB2d(ptsPoint testPoint)

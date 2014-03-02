@@ -33,6 +33,14 @@ namespace ptsCogo
          x = X; y = Y; z = Z;
       }
 
+      public ptsPoint(String X, String Y, String Z)
+      {
+         x = Double.Parse(X);
+         y = Double.Parse(Y);
+         z = Double.Parse(Z);
+         isEmpty_ = false;
+      }
+
       public ptsPoint(double X, double Y)
          : this(X, Y, 0.0)
       {
@@ -84,6 +92,12 @@ namespace ptsCogo
       public override string ToString()
       {
          return x.ToString(NumberFormatInfo.InvariantInfo) + ", " + y.ToString(NumberFormatInfo.InvariantInfo) + ", " +
+            z.ToString(NumberFormatInfo.InvariantInfo);
+      }
+
+      public string ToStringSpaceDelimited()
+      {
+         return x.ToString(NumberFormatInfo.InvariantInfo) + " " + y.ToString(NumberFormatInfo.InvariantInfo) + " " +
             z.ToString(NumberFormatInfo.InvariantInfo);
       }
 
