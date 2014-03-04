@@ -456,7 +456,7 @@ namespace ptsDigitalTerrainModel
 
       public void loadFromXYZtextFile(string fileToOpen)
       {
-         
+         //ptsBoundingBox2d fileBB = new ptsBoundingBox2d()
          using (var inputFile = new StreamReader(fileToOpen))
          {
             Double x, y, z;
@@ -469,13 +469,14 @@ namespace ptsDigitalTerrainModel
                var newPt = new ptsDTMpoint(values[0], values[1], values[2]);
                GridDTMhelper.addPoint(newPt);
             }
+            int i = 0;
          }
       }
    }
 
    internal static class GridDTMhelper
    {
-      private const long GridSize = 20;
+      private const long GridSize = 500;
       public static Dictionary<XYtuple, List<ptsDTMpoint>> grid = new Dictionary<XYtuple, List<ptsDTMpoint>>();
       public static void addPoint(ptsDTMpoint pt)
       {
@@ -491,6 +492,7 @@ namespace ptsDigitalTerrainModel
             var ptList = new List<ptsDTMpoint>();
             ptList.Add(pt);
             grid.Add(tupl, ptList);
+            long lng = (long)(int.MaxValue) + 1L;
          }
          else
          {
