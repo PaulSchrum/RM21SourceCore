@@ -2,6 +2,11 @@
 [Bb]in/
 [Oo]bj/
 
+#Large Test Files -- Contact Paul.Schrum@gmail.com
+#if you need these
+BigTest.xml
+GPEtin.xml
+
 # mstest test results
 TestResults
 
