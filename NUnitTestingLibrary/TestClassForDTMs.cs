@@ -7,18 +7,22 @@ using ptsCogo;
 using ptsDigitalTerrainModel;
 using ptsCogo.Angle;
 using ptsCogo.coordinates;
-
+using System.IO;
+using System.Diagnostics;
 
 namespace NUnitTestingLibrary
 {
    [TestFixture]
    class TestClassForDTMs
    {
+      private ptsDTM GardenParkwayDTM;
       private ptsDTM aDTM;
       private string pathRM21SourceCode;
       private string NUnitTestingData;
       private string vrmlTestFileName;
       private string fullname;
+
+      private TimeSpan timeToLoadGardenParkwayTinFromXML;
 
       [SetUp]
       public void setupDTMtests()
@@ -33,6 +37,73 @@ namespace NUnitTestingLibrary
 
          aDTM = new ptsDTM();
          aDTM.LoadTextFile(NUnitTestingData + vrmlTestFileName);
+
+         GardenParkwayDTM = new ptsDTM();
+         var stopwatch = new Stopwatch();
+         stopwatch.Start();
+         try { GardenParkwayDTM.LoadTextFile(NUnitTestingData + "GPEtin.xml"); }
+         catch (FileNotFoundException fnf) { GardenParkwayDTM = null; }
+         stopwatch.Stop();
+         timeToLoadGardenParkwayTinFromXML = stopwatch.Elapsed;
+      }
+      
+      [Test]
+      public void TIN_GardenParkwayTests_PointOnTriangleHasCorrectValues()
+      {
+         if (null == GardenParkwayDTM) Assert.True(true);
+
+         var testpoint = new ptsPoint(529790.0, 1406750.0);
+         var expectedElevation = 674.9297;
+         var actualElevation = GardenParkwayDTM.getElevation(testpoint);
+         Assert.AreEqual(
+            expected: expectedElevation, 
+            actual: actualElevation, 
+            delta: 0.0001, message: "Elevation");
+
+         var expectedSlope = 7.072;
+         var actualSlope = GardenParkwayDTM.getSlope(testpoint);
+         Assert.AreEqual(
+            expected: expectedSlope,
+            actual: actualSlope,
+            delta: 0.01, message: "Slope");
+
+         var expectedAzimuth = 176.905;
+         var actualAzimuth = GardenParkwayDTM.getSlopeAzimuth(testpoint);
+         Assert.AreEqual(
+            expected: expectedAzimuth,
+            actual: actualAzimuth.getAsDegreesDouble(),
+            delta: 0.0001, message: "Azimuth of Slope");
+
+      }
+
+      [Test]
+      public void TIN_GardenParkwayTests_PointOnTriangleLineHasCorrectElevation()
+      {
+         if (null == GardenParkwayDTM) Assert.True(true);
+
+         var testpoint = new ptsPoint(529666.7993, 1406618.4759);
+         var expectedElevation = 673.8398;
+         var actualElevation = GardenParkwayDTM.getElevation(testpoint);
+         Assert.AreEqual(
+            expected: expectedElevation,
+            actual: actualElevation,
+            delta: 0.0001, message: "Elevation");
+
+      }
+
+      //[Test]
+      public void TIN_GardenParkwayTests_PointOnTriangleVertexHasCorrectElevation()
+      {
+         if (null == GardenParkwayDTM) Assert.True(true);
+
+         var testpoint = new ptsPoint(529649.9585, 1406460.9585);
+         var expectedElevation = 683.7885;
+         var actualElevation = GardenParkwayDTM.getElevation(testpoint);
+         Assert.AreEqual(
+            expected: expectedElevation,
+            actual: actualElevation,
+            delta: 0.0001, message: "Elevation");
+
       }
 
       [Test]
