@@ -40,11 +40,14 @@ namespace NUnitTestingLibrary
 
          GardenParkwayDTM = new ptsDTM();
          var stopwatch = new Stopwatch();
+
+         System.Console.WriteLine("Creating Garden Parkway. . .");
          stopwatch.Start();
          try { GardenParkwayDTM.LoadTextFile(NUnitTestingData + "GPEtin.xml"); }
          catch (FileNotFoundException fnf) { GardenParkwayDTM = null; }
          stopwatch.Stop();
          timeToLoadGardenParkwayTinFromXML = stopwatch.Elapsed;
+         System.Console.WriteLine("time to create Garden Parkway: " + timeToLoadGardenParkwayTinFromXML.ToString());
       }
       
       [Test]
