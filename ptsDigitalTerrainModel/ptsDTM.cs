@@ -18,6 +18,7 @@ namespace ptsDigitalTerrainModel
       // Substantive members - Do serialize
       private Dictionary<UInt64, ptsDTMpoint> allPoints;
       private List<ptsDTMtriangle> allTriangles;
+      //private List<ConcurrentBag> allTriangles;
       private ptsBoundingBox2d myBoundingBox;
 
       // temp scratch pad members -- do not serialize
@@ -256,14 +257,14 @@ namespace ptsDigitalTerrainModel
 
          
          // assemble the allTriangles collection
-         UInt64 counter = 0;
+         //UInt64 counter = 0;
          //System.Console.WriteLine(trianglesAsStrings.Count.ToString() + " /\\ as string.");
-         allTriangles = new List<ptsDTMtriangle>(trianglesAsStrings.Count);   //(int)trianglesAsStrings.Count);
+         allTriangles = new List<ptsDTMtriangle>(trianglesAsStrings.Count);
          foreach (string refString in trianglesAsStrings)
          {
-            scratchTriangle = new ptsDTMtriangle(allPoints, refString);
-            allTriangles.Add(scratchTriangle);
-            counter++;
+            //scratchTriangle = new ptsDTMtriangle(allPoints, refString);
+            allTriangles.Add(new ptsDTMtriangle(allPoints, refString));
+            //counter++;
          }
          trianglesAsStrings = null;
          GC.Collect(); GC.WaitForPendingFinalizers();
