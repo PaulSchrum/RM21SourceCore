@@ -84,13 +84,14 @@ namespace ptsDigitalTerrainModel
                scratchPoint = convertLineOfDataToPoint(line);
                if (allPoints == null)
                {
-                  allPoints = new Dictionary<ulong, ptsDTMpoint>();
+                  createAllpointsCollection();
                   myBoundingBox = new ptsBoundingBox2d(scratchPoint.x, scratchPoint.y,scratchPoint.x, scratchPoint.y);
                }
                allPoints.Add(ptIndex, scratchPoint);
                ptIndex++;
                myBoundingBox.expandByPoint(scratchPoint.x, scratchPoint.y, scratchPoint.z);
             }
+            
 
             while ((line = file.ReadLine()) != null)
             {
@@ -216,7 +217,7 @@ namespace ptsDigitalTerrainModel
                      scratchPoint = new ptsDTMpoint(reader.Value, id);
                      if (allPoints == null)
                      {
-                        allPoints = new Dictionary<ulong, ptsDTMpoint>();
+                        createAllpointsCollection();
                         myBoundingBox = new ptsBoundingBox2d(scratchPoint.x, scratchPoint.y, scratchPoint.x, scratchPoint.y);
                      }
                      allPoints.Add(id, scratchPoint);
@@ -228,6 +229,7 @@ namespace ptsDigitalTerrainModel
 
             // Read Triangles, but only as strings
             stopwatch.Stop();  consoleOutStopwatch(stopwatch);
+            System.Console.WriteLine(allPoints.Count.ToString() + " Points Total.");
             
             System.Console.WriteLine("Loading Triangle Reference Strings took:");
             stopwatch.Reset();    stopwatch.Start();
@@ -255,7 +257,8 @@ namespace ptsDigitalTerrainModel
          
          // assemble the allTriangles collection
          UInt64 counter = 0;
-         allTriangles = new List<ptsDTMtriangle>();   //(int)trianglesAsStrings.Count);
+         //System.Console.WriteLine(trianglesAsStrings.Count.ToString() + " /\\ as string.");
+         allTriangles = new List<ptsDTMtriangle>(trianglesAsStrings.Count);   //(int)trianglesAsStrings.Count);
          foreach (string refString in trianglesAsStrings)
          {
             scratchTriangle = new ptsDTMtriangle(allPoints, refString);
@@ -265,7 +268,9 @@ namespace ptsDigitalTerrainModel
          trianglesAsStrings = null;
          GC.Collect(); GC.WaitForPendingFinalizers();
 
-         stopwatch.Stop(); consoleOutStopwatch(stopwatch);
+         stopwatch.Stop();
+         System.Console.WriteLine(allTriangles.Count.ToString() + " Total Triangles.");
+         consoleOutStopwatch(stopwatch);
          
          System.Console.WriteLine("Sorting Triangle Collection in x took:");
          stopwatch.Reset(); stopwatch.Start();
@@ -485,6 +490,11 @@ namespace ptsDigitalTerrainModel
             }
             int i = 0;
          }
+      }
+
+      private void createAllpointsCollection()
+      {
+         allPoints = new Dictionary<UInt64, ptsDTMpoint>();
       }
    }
 
