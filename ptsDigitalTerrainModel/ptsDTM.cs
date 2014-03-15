@@ -85,11 +85,11 @@ namespace ptsDigitalTerrainModel
                if (allPoints == null)
                {
                   allPoints = new Dictionary<ulong, ptsDTMpoint>();
-                  myBoundingBox = new ptsBoundingBox2d(scratchPoint);
+                  myBoundingBox = new ptsBoundingBox2d(scratchPoint.x, scratchPoint.y,scratchPoint.x, scratchPoint.y);
                }
                allPoints.Add(ptIndex, scratchPoint);
                ptIndex++;
-               myBoundingBox.expandByPoint(scratchPoint);
+               myBoundingBox.expandByPoint(scratchPoint.x, scratchPoint.y, scratchPoint.z);
             }
 
             while ((line = file.ReadLine()) != null)
@@ -217,10 +217,10 @@ namespace ptsDigitalTerrainModel
                      if (allPoints == null)
                      {
                         allPoints = new Dictionary<ulong, ptsDTMpoint>();
-                        myBoundingBox = new ptsBoundingBox2d(scratchPoint);
+                        myBoundingBox = new ptsBoundingBox2d(scratchPoint.x, scratchPoint.y, scratchPoint.x, scratchPoint.y);
                      }
                      allPoints.Add(id, scratchPoint);
-                     myBoundingBox.expandByPoint(scratchPoint);
+                     myBoundingBox.expandByPoint(scratchPoint.x, scratchPoint.y, scratchPoint.z);
                   }
                }
                reader.Read();
@@ -378,7 +378,7 @@ namespace ptsDigitalTerrainModel
          }
       }
 
-      public void testGetTriangles(ptsPoint aPoint)
+      public void testGetTriangles(ptsDTMpoint aPoint)
       {
 
          aStopwatch = new Stopwatch();
@@ -390,7 +390,7 @@ namespace ptsDigitalTerrainModel
          aStopwatch.Stop(); consoleOutStopwatch(aStopwatch);
       }
 
-      internal List<ptsDTMtriangle> getTrianglesForPointInBB(ptsPoint aPoint)
+      internal List<ptsDTMtriangle> getTrianglesForPointInBB(ptsDTMpoint aPoint)
       {
          return  (from ptsDTMtriangle triangle in allTriangles
                           where triangle.isPointInBoundingBox(aPoint)
@@ -403,12 +403,12 @@ namespace ptsDigitalTerrainModel
          System.Console.WriteLine("given a point, return containing Triangle:");
          aStopwatch.Reset(); aStopwatch.Start();
 
-         ptsDTMtriangle singleTriangle = getTriangleContaining(aPoint);
+         ptsDTMtriangle singleTriangle = getTriangleContaining((ptsDTMpoint) aPoint);
 
          aStopwatch.Stop(); consoleOutStopwatch(aStopwatch);
       }
 
-      internal ptsDTMtriangle getTriangleContaining(ptsPoint aPoint)
+      internal ptsDTMtriangle getTriangleContaining(ptsDTMpoint aPoint)
       {
          bool found = false;
          ptsDTMtriangle theTriangle = null;
@@ -426,6 +426,10 @@ namespace ptsDigitalTerrainModel
 
       public double? getElevation(ptsPoint aPoint)
       {
+         return getElevation((ptsDTMpoint)aPoint);
+      }
+      public double? getElevation(ptsDTMpoint aPoint)
+      {
          ptsDTMtriangle aTriangle = getTriangleContaining(aPoint);
          if (null == aTriangle)
             return null;
@@ -436,6 +440,11 @@ namespace ptsDigitalTerrainModel
 
       public double? getSlope(ptsPoint aPoint)
       {
+         return getSlope((ptsDTMpoint)aPoint);
+      }
+
+      public double? getSlope(ptsDTMpoint aPoint)
+      {
          ptsDTMtriangle aTriangle = getTriangleContaining(aPoint);
          if (null == aTriangle)
             return null;
@@ -445,6 +454,11 @@ namespace ptsDigitalTerrainModel
       }
 
       public Azimuth getSlopeAzimuth(ptsPoint aPoint)
+      {
+         return getSlopeAzimuth((ptsDTMpoint)aPoint);
+      }
+
+      public Azimuth getSlopeAzimuth(ptsDTMpoint aPoint)
       {
          ptsDTMtriangle aTriangle = getTriangleContaining(aPoint);
          if (null == aTriangle)

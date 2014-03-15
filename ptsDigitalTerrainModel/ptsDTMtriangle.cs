@@ -57,14 +57,14 @@ namespace ptsDigitalTerrainModel
 
       public void computeBoundingBox()
       {
-         myBoundingBox_ = new ptsBoundingBox2d(point1);
-         myBoundingBox_.expandByPoint(point2);
-         myBoundingBox_.expandByPoint(point3);
+         myBoundingBox_ = new ptsBoundingBox2d(point1.x, point1.y, point1.x, point1.y);
+         myBoundingBox_.expandByPoint(point2.x, point2.y, point2.z);
+         myBoundingBox_.expandByPoint(point3.x, point3.y, point3.z);
       }
 
-      public bool isPointInBoundingBox(ptsPoint aPoint)
+      public bool isPointInBoundingBox(ptsDTMpoint aPoint)
       {
-         return myBoundingBox_.isPointInsideBB2d(aPoint);
+         return myBoundingBox_.isPointInsideBB2d(aPoint.x, aPoint.y);
       }
 
       #region IComparable Members
@@ -84,7 +84,7 @@ namespace ptsDigitalTerrainModel
       
       // adapted from
       // http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-triangle
-      internal bool contains(ptsPoint aPoint)
+      internal bool contains(ptsDTMpoint aPoint)
       {
          bool b1, b2, b3;
 
@@ -95,13 +95,13 @@ namespace ptsDigitalTerrainModel
          return ((b1 == b2) && (b2 == b3));
       }
 
-      double sign(ptsPoint p1, ptsPoint p2, ptsPoint p3)
+      double sign(ptsDTMpoint p1, ptsDTMpoint p2, ptsDTMpoint p3)
       {
          return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
       }
       // End: adapted from
 
-      public double givenXYgetZ(ptsPoint aPoint)
+      public double givenXYgetZ(ptsDTMpoint aPoint)
       {
          setupNormalVec();
 
@@ -126,6 +126,11 @@ namespace ptsDigitalTerrainModel
 
       public double? givenXYgetSlopePercent(ptsPoint aPoint)
       {
+         return givenXYgetSlopePercent((ptsDTMpoint)aPoint);
+      }
+
+      public double? givenXYgetSlopePercent(ptsDTMpoint aPoint)
+      {
          setupNormalVec();
 
          if (0.0 == normalVec_.z) return null;
@@ -136,6 +141,11 @@ namespace ptsDigitalTerrainModel
       }
 
       public Azimuth givenXYgetSlopeAzimuth(ptsPoint aPoint)
+      {
+         return givenXYgetSlopeAzimuth((ptsDTMpoint)aPoint);
+      }
+
+      public Azimuth givenXYgetSlopeAzimuth(ptsDTMpoint aPoint)
       {
          setupNormalVec();
 

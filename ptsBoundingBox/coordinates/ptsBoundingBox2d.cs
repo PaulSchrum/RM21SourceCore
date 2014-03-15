@@ -27,26 +27,31 @@ namespace ptsCogo
 
       public void expandByPoint(ptsPoint aPoint)
       {
+         expandByPoint(aPoint.x, aPoint.y, aPoint.z);
+      }
+
+      public void expandByPoint(Double x, Double y, Double z)
+      {
          if (lowerLeftPt.isEmpty == true)
          {
-            lowerLeftPt = new ptsPoint(aPoint);
-            upperRightPt = new ptsPoint(aPoint);
+            lowerLeftPt = new ptsPoint(x, y, z);
+            upperRightPt = new ptsPoint(x, y, z);
          }
          else
          {
-            if (aPoint.x < lowerLeftPt.x)
-               lowerLeftPt.x = aPoint.x;
-            if (aPoint.y < lowerLeftPt.y)
-               lowerLeftPt.y = aPoint.y;
-            if (aPoint.z < lowerLeftPt.z)
-               lowerLeftPt.z = aPoint.z;
+            if (x < lowerLeftPt.x)
+               lowerLeftPt.x = x;
+            if (y < lowerLeftPt.y)
+               lowerLeftPt.y = y;
+            if (z < lowerLeftPt.z)
+               lowerLeftPt.z = z;
 
-            if (aPoint.x > upperRightPt.x)
-               upperRightPt.x = aPoint.x;
-            if (aPoint.y > upperRightPt.y)
-               upperRightPt.y = aPoint.y;
-            if (aPoint.z > upperRightPt.z)
-               upperRightPt.z = aPoint.z;
+            if (x > upperRightPt.x)
+               upperRightPt.x = x;
+            if (y > upperRightPt.y)
+               upperRightPt.y = y;
+            if (z > upperRightPt.z)
+               upperRightPt.z = z;
          }
       }
 

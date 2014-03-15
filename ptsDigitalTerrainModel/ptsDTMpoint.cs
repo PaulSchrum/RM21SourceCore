@@ -24,38 +24,51 @@ namespace ptsDigitalTerrainModel
    }
 
    [Serializable]
-   public class ptsDTMpoint : ptsCogo.ptsPoint
+   public struct ptsDTMpoint //: ptsCogo.ptsPoint
    {
-      //public UInt64 myIndex { get; private set; }
+      public Double x { get; set; }
+      public Double y { get; set; }
+      public Double z { get; set; }
 
       [NonSerialized]
       private static String[] parsedStrings;
 
-      public ptsDTMpoint(double newX, double newY, double newZ)
+      public ptsDTMpoint(double newX, double newY, double newZ) : this()
       { x = newX; y = newY; z = newZ; } //myIndex = 0L; }
 
-      public ptsDTMpoint(String ptAsString, UInt64 myIndx)
+      public ptsDTMpoint(String ptAsString, UInt64 myIndx) : this()
       {
          parsedStrings = ptAsString.Split(' ');
-         Double.TryParse(parsedStrings[0], out base.x_);
-         Double.TryParse(parsedStrings[1], out base.y_);
-         Double.TryParse(parsedStrings[2], out base.z_);
+         this.x = Double.Parse(parsedStrings[0]);
+         this.y = Double.Parse(parsedStrings[1]);
+         this.z = Double.Parse(parsedStrings[2]);
          //myIndex = myIndx;
       }
 
-      private ptsDTMpoint() { }
-
-      public ptsDTMpoint(String x, String y, String z)
-         : base(x, y, z)
-      {  }  //myIndex = 0L;   }
+      public ptsDTMpoint(String x, String y, String z) : this()
+      {
+         this.x = Double.Parse(x);
+         this.y = Double.Parse(y);
+         this.z = Double.Parse(z);
+      }
 
       static public ptsDTMpoint getAveragePoint(ptsDTMpoint pt1, ptsDTMpoint pt2, ptsDTMpoint pt3)
       {
-         ptsDTMpoint returnPoint = new ptsDTMpoint();
-         returnPoint.x_ = (pt1.x_ + pt2.x_ + pt3.x_) / 3.0;
-         returnPoint.y_ = (pt1.y_ + pt2.y_ + pt3.y_) / 3.0;
-         returnPoint.z_ = (pt1.z_ + pt2.z_ + pt3.z_) / 3.0;
-         return returnPoint;
+         return new ptsDTMpoint(
+            (pt1.x + pt2.x + pt3.x) / 3.0,
+            (pt1.y + pt2.y + pt3.y) / 3.0,
+            (pt1.z + pt2.z + pt3.z) / 3.0
+            );
+      }
+
+      public static ptsVector operator -(ptsDTMpoint p1, ptsDTMpoint p2)
+      {
+         return new ptsVector(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
+      }
+
+      public static explicit operator ptsDTMpoint(ptsPoint aPt)
+      {
+         return new ptsDTMpoint(aPt.x, aPt.y, aPt.z);
       }
    }
 }
