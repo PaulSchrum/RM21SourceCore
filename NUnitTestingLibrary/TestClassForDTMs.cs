@@ -53,6 +53,26 @@ namespace NUnitTestingLibrary
       }
       
       [Test]
+      public void TIN_GardenParkwayTests_GetElevationSpeedTests()
+      {
+         this.timerStart();
+
+         var EL = GardenParkwayDTM.getElevation(new ptsDTMpoint(529790.0, 1406750.0, 0.0));
+         EL = GardenParkwayDTM.getElevation(new ptsDTMpoint(529500.0, 1406000.0, 0.0));
+         EL = GardenParkwayDTM.getElevation(new ptsDTMpoint(529500.0, 1406500.0, 0.0));
+         EL = GardenParkwayDTM.getElevation(new ptsDTMpoint(528000.0, 1407000.0, 0.0));
+         EL = GardenParkwayDTM.getElevation(new ptsDTMpoint(529100.0, 1406070.0, 0.0));
+         EL = GardenParkwayDTM.getElevation(new ptsDTMpoint(529200.0, 1406140.0, 0.0));
+         EL = GardenParkwayDTM.getElevation(new ptsDTMpoint(529300.0, 1406210.0, 0.0));
+         EL = GardenParkwayDTM.getElevation(new ptsDTMpoint(529400.0, 1406280.0, 0.0));
+         EL = GardenParkwayDTM.getElevation(new ptsDTMpoint(529500.0, 1406350.0, 0.0));
+         EL = GardenParkwayDTM.getElevation(new ptsDTMpoint(529600.0, 1406420.0, 0.0));
+
+         this.timerStopAndPrint();
+         Assert.True(true);
+      }
+
+      [Test]
       public void TIN_GardenParkwayTests_PointOnTriangleHasCorrectValues()
       {
          if (null == GardenParkwayDTM) Assert.True(true);
