@@ -7,23 +7,6 @@ using ptsCogo;
 namespace ptsDigitalTerrainModel
 {
    [Serializable]
-   public struct efficientPoint
-   {
-      public efficientPoint(String Index, String X, String Y, String Z)
-      {
-         index = UInt64.Parse(Index);
-         x = Double.Parse(X);
-         y = Double.Parse(Y);
-         z = Double.Parse(Z);
-      }
-
-      public UInt64 index;
-      public Double x;
-      public Double y;
-      public Double z;
-   }
-
-   [Serializable]
    public struct ptsDTMpoint //: ptsCogo.ptsPoint
    {
       public Double x { get; set; }
