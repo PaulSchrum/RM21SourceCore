@@ -33,7 +33,7 @@ namespace NUnitTestingLibrary
       //   CreateCorridor_CreateHorizontalAlignmentFirst_BeginStation0();
       //}
 
-      [SetUp]
+      [TestFixtureSetUp]
       public void CorridorTestsSetup()
       {
          setupTest1();

@@ -21,7 +21,7 @@ namespace NUnitTestingLibrary
       private RoadwayLane simpleRibbon;
       private RoadwayLane complexRibbon;
 
-      [SetUp]
+      [TestFixtureSetUp]
       public void setupTestClassForRibbons()
       {
          simpleRibbon = new RoadwayLane((CogoStation)1000.0, (CogoStation)2000.0, 12.0, -0.02);

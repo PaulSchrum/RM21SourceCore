@@ -42,7 +42,7 @@ namespace NUnitTestingLibrary
       private ptsRay ray4 = new ptsRay();
       private ptsRay ray5 = new ptsRay();
 
-      [SetUp]
+      [TestFixtureSetUp]
       public void ProfilesTestSetup()
       {
          var aVpiList = new vpiList();

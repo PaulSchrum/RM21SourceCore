@@ -24,7 +24,8 @@ namespace NUnitTestingLibrary
 
       private TimeSpan timeToLoadGardenParkwayTinFromXML;
 
-      [SetUp]
+      //[SetUp]
+      [TestFixtureSetUp]
       public void setupDTMtests()
       {
          pathRM21SourceCode = AppDomain.CurrentDomain.BaseDirectory + @"..\..\..\";
