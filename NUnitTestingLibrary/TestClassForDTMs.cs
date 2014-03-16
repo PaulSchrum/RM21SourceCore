@@ -13,7 +13,7 @@ using System.Diagnostics;
 namespace NUnitTestingLibrary
 {
    [TestFixture]
-   class TestClassForDTMs
+   class TestClassForDTMs : TimeableTest
    {
       private ptsDTM GardenParkwayDTM;
       private ptsDTM aDTM;
@@ -49,6 +49,7 @@ namespace NUnitTestingLibrary
          stopwatch.Stop();
          timeToLoadGardenParkwayTinFromXML = stopwatch.Elapsed;
          System.Console.WriteLine("time to create Garden Parkway: " + timeToLoadGardenParkwayTinFromXML.ToString());
+         base.timerStart();
       }
       
       [Test]
@@ -58,21 +59,21 @@ namespace NUnitTestingLibrary
 
          var testpoint = new ptsPoint(529790.0, 1406750.0);
          var expectedElevation = 674.9297;
-         var actualElevation = GardenParkwayDTM.getElevation(testpoint);
+         var actualElevation = GardenParkwayDTM.getElevation(testpoint); timerStopAndPrint();
          Assert.AreEqual(
             expected: expectedElevation, 
             actual: actualElevation, 
             delta: 0.0001, message: "Elevation");
 
          var expectedSlope = 7.072;
-         var actualSlope = GardenParkwayDTM.getSlope(testpoint);
+         var actualSlope = GardenParkwayDTM.getSlope(testpoint); timerStopAndPrint();
          Assert.AreEqual(
             expected: expectedSlope,
             actual: actualSlope,
             delta: 0.01, message: "Slope");
 
          var expectedAzimuth = 176.905;
-         var actualAzimuth = GardenParkwayDTM.getSlopeAzimuth(testpoint);
+         var actualAzimuth = GardenParkwayDTM.getSlopeAzimuth(testpoint); timerStopAndPrint();
          Assert.AreEqual(
             expected: expectedAzimuth,
             actual: actualAzimuth.getAsDegreesDouble(),
@@ -87,7 +88,7 @@ namespace NUnitTestingLibrary
 
          var testpoint = new ptsPoint(529666.7993, 1406618.4759);
          var expectedElevation = 673.8398;
-         var actualElevation = GardenParkwayDTM.getElevation(testpoint);
+         var actualElevation = GardenParkwayDTM.getElevation(testpoint); timerStopAndPrint();
          Assert.AreEqual(
             expected: expectedElevation,
             actual: actualElevation,
@@ -102,7 +103,7 @@ namespace NUnitTestingLibrary
 
          var testpoint = new ptsPoint(529649.9585, 1406460.9585);
          var expectedElevation = 683.7885;
-         var actualElevation = GardenParkwayDTM.getElevation(testpoint);
+         var actualElevation = GardenParkwayDTM.getElevation(testpoint); timerStopAndPrint();
          Assert.AreEqual(
             expected: expectedElevation,
             actual: actualElevation,
@@ -115,7 +116,7 @@ namespace NUnitTestingLibrary
       {
          double? elev;
          ptsPoint testPt = new ptsPoint(2082100.0, 74200.0, 0.0);
-         elev = aDTM.getElevation(testPt);
+         elev = aDTM.getElevation(testPt); timerStopAndPrint();
 
          Assert.IsNull(elev);
       }
@@ -125,7 +126,7 @@ namespace NUnitTestingLibrary
       {
          double? elev;
          ptsPoint testPt = new ptsPoint(2083000, 740648.0, 0.0);
-         elev = aDTM.getElevation(testPt);
+         elev = aDTM.getElevation(testPt); timerStopAndPrint();
 
          Assert.IsNull(elev);
       }
@@ -147,7 +148,7 @@ namespace NUnitTestingLibrary
          double expectedDbl, actualDbl;
          expectedDbl = 454.504;
          ptsPoint testPt = new ptsPoint(2082985.4480, 740657.1722, 0.0);
-         actualDbl = (Double)aDTM.getElevation(testPt);
+         actualDbl = (Double)aDTM.getElevation(testPt); timerStopAndPrint();
 
          Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0015);
       }
@@ -158,7 +159,7 @@ namespace NUnitTestingLibrary
          double expectedDbl, actualDbl;
          expectedDbl = 464.0131;
          ptsPoint testPt = new ptsPoint(2083058.8956, 740819.1854, 0.0);
-         actualDbl = (Double)aDTM.getElevation(testPt);
+         actualDbl = (Double)aDTM.getElevation(testPt); timerStopAndPrint();
 
          Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0015);
       }
@@ -169,7 +170,7 @@ namespace NUnitTestingLibrary
          double expectedDbl, actualDbl;
          expectedDbl = 482.5578;
          ptsPoint testPt = new ptsPoint(2082886.0883, 740821.373, 0.0);
-         actualDbl = (Double)aDTM.getElevation(testPt);
+         actualDbl = (Double)aDTM.getElevation(testPt); timerStopAndPrint();
 
          Assert.AreEqual(expected: expectedDbl, actual: actualDbl, delta: 0.0015);
       }
