@@ -260,7 +260,7 @@ namespace NUnitTestingLibrary
 
       }
 
-      [Test]
+      //[Test]
       public void HorizontalAlignment_instantiateFromFundamentalGeometry_shouldNotThrowException()
       {
          var fgList = new List<IRM21fundamentalGeometry>();
