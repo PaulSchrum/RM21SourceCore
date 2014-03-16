@@ -7,8 +7,10 @@ using System.IO;
 using System.Diagnostics;
 using System.Xml;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.Concurrent;
 using ptsCogo;
 using ptsCogo.Angle;
+using System.Threading.Tasks;
 
 namespace ptsDigitalTerrainModel
 {
@@ -18,7 +20,7 @@ namespace ptsDigitalTerrainModel
       // Substantive members - Do serialize
       private Dictionary<UInt64, ptsDTMpoint> allPoints;
       private List<ptsDTMtriangle> allTriangles;
-      //private List<ConcurrentBag> allTriangles;
+      private ConcurrentBag<ptsDTMtriangle> allTrianglesBag;
       private ptsBoundingBox2d myBoundingBox;
 
       // temp scratch pad members -- do not serialize
@@ -257,16 +259,15 @@ namespace ptsDigitalTerrainModel
 
          
          // assemble the allTriangles collection
-         //UInt64 counter = 0;
-         //System.Console.WriteLine(trianglesAsStrings.Count.ToString() + " /\\ as string.");
-         allTriangles = new List<ptsDTMtriangle>(trianglesAsStrings.Count);
-         foreach (string refString in trianglesAsStrings)
-         {
-            //scratchTriangle = new ptsDTMtriangle(allPoints, refString);
-            allTriangles.Add(new ptsDTMtriangle(allPoints, refString));
-            //counter++;
-         }
-         trianglesAsStrings = null;
+         //allTriangles = new List<ptsDTMtriangle>(trianglesAsStrings.Count);
+         allTrianglesBag = new ConcurrentBag<ptsDTMtriangle>();
+         Parallel.ForEach(trianglesAsStrings, refString =>
+            {
+               allTrianglesBag.Add(new ptsDTMtriangle(allPoints, refString));
+            }
+            );
+         allTriangles = allTrianglesBag.OrderBy(triangle => triangle.point1.x).ToList();
+         trianglesAsStrings = null; allTrianglesBag = null;
          GC.Collect(); GC.WaitForPendingFinalizers();
 
          stopwatch.Stop();
@@ -275,7 +276,6 @@ namespace ptsDigitalTerrainModel
          
          System.Console.WriteLine("Sorting Triangle Collection in x took:");
          stopwatch.Reset(); stopwatch.Start();
-         allTriangles.Sort();
          stopwatch.Stop(); consoleOutStopwatch(stopwatch);
 
          //
