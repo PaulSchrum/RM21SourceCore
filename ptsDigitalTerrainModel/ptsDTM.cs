@@ -274,10 +274,6 @@ namespace ptsDigitalTerrainModel
          System.Console.WriteLine(allTriangles.Count.ToString() + " Total Triangles.");
          consoleOutStopwatch(stopwatch);
          
-         System.Console.WriteLine("Sorting Triangle Collection in x took:");
-         stopwatch.Reset(); stopwatch.Start();
-         stopwatch.Stop(); consoleOutStopwatch(stopwatch);
-
          //
          //System.Console.WriteLine("Indexing Triangles for adjacency took:");
          //stopwatch.Reset(); stopwatch.Start();
