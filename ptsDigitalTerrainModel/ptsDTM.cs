@@ -394,7 +394,7 @@ namespace ptsDigitalTerrainModel
 
       internal List<ptsDTMtriangle> getTrianglesForPointInBB(ptsDTMpoint aPoint)
       {
-         return  (from ptsDTMtriangle triangle in allTriangles
+         return  (from ptsDTMtriangle triangle in allTriangles.AsParallel()
                           where triangle.isPointInBoundingBox(aPoint)
                           select triangle).ToList<ptsDTMtriangle>();
       }
