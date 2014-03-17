@@ -54,6 +54,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ClassLibrary1\ptsCogo.csproj">
+      <Project>{c6210aa4-95ef-4065-8597-bdb50650ba2e}</Project>
+      <Name>ptsCogo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ptsBoundingBox\ptsCadFoundations.csproj">
+      <Project>{6d55252e-1d19-472a-a712-f7d8dc6a68cd}</Project>
+      <Name>ptsCadFoundations</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\ptsDigitalTerrainModel.csproj">
       <Project>{f878d5a9-26c0-452c-8209-ccd24b41ba02}</Project>
       <Name>ptsDigitalTerrainModel</Name>
