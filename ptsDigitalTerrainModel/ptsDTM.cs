@@ -410,10 +410,23 @@ namespace ptsDigitalTerrainModel
          aStopwatch.Stop(); consoleOutStopwatch(aStopwatch);
       }
 
+      private List<ptsDTMtriangle> localGroupTriangles;
       internal ptsDTMtriangle getTriangleContaining(ptsDTMpoint aPoint)
       {
-         return getTrianglesForPointInBB(aPoint).AsParallel()
-            .FirstOrDefault(aTrngl => aTrngl.contains(aPoint));
+         if (null == localGroupTriangles)
+            localGroupTriangles = getTrianglesForPointInBB(aPoint).AsParallel().ToList();
+
+         ptsDTMtriangle theTriangle = 
+            localGroupTriangles.FirstOrDefault(aTrngl => aTrngl.contains(aPoint));
+
+         if (null == theTriangle)
+         {
+            localGroupTriangles = getTrianglesForPointInBB(aPoint).AsParallel().ToList();
+            theTriangle =
+               localGroupTriangles.FirstOrDefault(aTrngl => aTrngl.contains(aPoint));
+         }
+
+         return theTriangle;
       }
 
       public double? getElevation(ptsPoint aPoint)
