@@ -412,18 +412,8 @@ namespace ptsDigitalTerrainModel
 
       internal ptsDTMtriangle getTriangleContaining(ptsDTMpoint aPoint)
       {
-         bool found = false;
-         ptsDTMtriangle theTriangle = null;
-         foreach(ptsDTMtriangle aTriangle in getTrianglesForPointInBB(aPoint) as List<ptsDTMtriangle>)
-         {
-            if (aTriangle.contains(aPoint))
-            {
-               found = true;
-               theTriangle = aTriangle;
-               break;
-            }
-         }
-         return found == true ? theTriangle : null;
+         return getTrianglesForPointInBB(aPoint).AsParallel()
+            .FirstOrDefault(aTrngl => aTrngl.contains(aPoint));
       }
 
       public double? getElevation(ptsPoint aPoint)
