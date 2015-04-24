@@ -20,10 +20,11 @@ namespace ptsDigitalTerrainModel
       // Substantive members - Do serialize
       private Dictionary<UInt64, ptsDTMpoint> allPoints;
       private List<ptsDTMtriangle> allTriangles;
-      private ConcurrentBag<ptsDTMtriangle> allTrianglesBag;
       private ptsBoundingBox2d myBoundingBox;
 
       // temp scratch pad members -- do not serialize
+      [NonSerialized]
+      private ConcurrentBag<ptsDTMtriangle> allTrianglesBag;
       [NonSerialized]
       private ptsDTMpoint scratchPoint;
       [NonSerialized]
@@ -34,11 +35,17 @@ namespace ptsDigitalTerrainModel
       private ptsDTMtriangleLine scratchTriangleLine;
       [NonSerialized]
       private Dictionary<UInt64pair, ptsDTMtriangleLine> triangleLines;
+      [NonSerialized]
+      private long memoryUsed = 0;
 
       [NonSerialized]
       private Dictionary<string, Stopwatch> stpWatches;
       [NonSerialized]
       private Stopwatch aStopwatch;
+      [NonSerialized]
+      static Stopwatch LoadTimeStopwatch = new Stopwatch();
+      [NonSerialized]
+      public static readonly String StandardExtension = ".ptsTin";
 
       private void LoadTINfromVRML(string fileName)
       {
@@ -46,7 +53,7 @@ namespace ptsDigitalTerrainModel
          long lineCount = 0;
          if (!(String.Compare(Path.GetExtension(fileName), ".wrl", true) == 0))
          {
-            throw new Exception("Filename must have wrl extension.");
+            throw new ArgumentException("Filename must have wrl extension.");
          }
 
          System.IO.StreamReader file = new System.IO.StreamReader(fileName);
@@ -161,6 +168,31 @@ namespace ptsDigitalTerrainModel
          return true;
       }
 
+      /// <summary>
+      /// Creates a tin file
+      /// </summary>
+      /// <param name="fileName"></param>
+      /// <returns></returns>
+      public static ptsDTM CreateFromExistingFile(string fileName)
+      {
+         ptsDTM returnTin = new ptsDTM();
+
+         if(!String.IsNullOrEmpty(fileName))
+         {
+            String ext = Path.GetExtension(fileName);
+            if (ext.Equals(StandardExtension, StringComparison.OrdinalIgnoreCase))
+               returnTin = loadTinFromBinary(fileName);
+            else
+               returnTin.LoadTextFile(fileName);
+         }
+
+         return returnTin;
+      }
+
+      /// <summary>
+      /// Loads tin from either LandXML or VRML file, depending on the extension passed in.
+      /// </summary>
+      /// <param name="fileName">Use .xml extension for LandXML. Use .wrl extension for VRML.</param>
       public void LoadTextFile(string fileName)
       {
          string extension;
@@ -180,9 +212,10 @@ namespace ptsDigitalTerrainModel
       {
          if (!(String.Compare(Path.GetExtension(fileName), ".xml", true) == 0))
          {
-            throw new Exception("Filename must have xml extension.");
+            throw new ArgumentException("Filename must have xml extension.");
          }
 
+         memoryUsed = GC.GetTotalMemory(true);
          Stopwatch stopwatch = new Stopwatch();
          List<string> trianglesAsStrings;
          setupStopWatches();
@@ -190,8 +223,8 @@ namespace ptsDigitalTerrainModel
          scratchUIntPair = new UInt64pair();
          
          System.Console.WriteLine("Load XML document took:");
-         stopwatch.Reset();
-         stopwatch.Start();
+         stopwatch.Reset(); stopwatch.Start();
+         LoadTimeStopwatch.Reset(); LoadTimeStopwatch.Start();
          using (XmlTextReader reader = new XmlTextReader(fileName))
          {
             stopwatch.Stop();  consoleOutStopwatch(stopwatch);
@@ -269,6 +302,8 @@ namespace ptsDigitalTerrainModel
          allTriangles = allTrianglesBag.OrderBy(triangle => triangle.point1.x).ToList();
          trianglesAsStrings = null; allTrianglesBag = null;
          GC.Collect(); GC.WaitForPendingFinalizers();
+         memoryUsed = GC.GetTotalMemory(true) - memoryUsed;
+         LoadTimeStopwatch.Stop();
 
          stopwatch.Stop();
          System.Console.WriteLine(allTriangles.Count.ToString() + " Total Triangles.");
@@ -282,8 +317,53 @@ namespace ptsDigitalTerrainModel
 
       }
 
+      public void saveJustThePointsThenReadThemAgain()
+      {
+         String filenameToSaveTo = @"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\allPoints.binary";
+
+         BinaryFormatter binFrmtr = new BinaryFormatter();
+         using
+         (Stream fstream =
+            new FileStream(filenameToSaveTo, FileMode.Create, FileAccess.Write, FileShare.None))
+         {
+            binFrmtr.Serialize(fstream, this.allPoints);
+         }
+
+         this.allPoints.Clear();
+         this.allTriangles.Clear();
+         GC.Collect();
+         Console.WriteLine("Pausing . . .");
+         Task.Delay(500);
+
+         BinaryFormatter binFrmtr2 = new BinaryFormatter();
+         using
+         (Stream fstream = File.OpenRead(filenameToSaveTo))
+         {
+            Dictionary<UInt64, ptsDTMpoint> testPts = new Dictionary<ulong,ptsDTMpoint>();
+            LoadTimeStopwatch = new Stopwatch();
+            LoadTimeStopwatch.Start();
+            try 
+            { 
+               testPts = (Dictionary<UInt64, ptsDTMpoint>)binFrmtr.UnsafeDeserialize(fstream,null);
+            }
+                                                   #pragma warning disable 0168
+            catch (InvalidCastException e)
+                                                   #pragma warning restore 0168
+            { return;  }
+            finally { LoadTimeStopwatch.Stop(); }
+            
+         }
+
+      }
+
       public void saveAsBinary(string filenameToSaveTo)
       {
+         if(!Path.GetExtension(filenameToSaveTo).
+            Equals(StandardExtension, StringComparison.OrdinalIgnoreCase))
+         { throw new ArgumentException(
+            String.Format("Filename does not have extension: {0}.", StandardExtension));
+         }
+
          BinaryFormatter binFrmtr = new BinaryFormatter();
          using
          (Stream fstream = 
@@ -293,23 +373,29 @@ namespace ptsDigitalTerrainModel
          }
       }
 
-      static public ptsDTM loadFromBinary(string filenameToLoad)
+      static public ptsDTM loadTinFromBinary(string filenameToLoad)
       {
          BinaryFormatter binFrmtr = new BinaryFormatter();
          using
          (Stream fstream = File.OpenRead(filenameToLoad))
          {
             ptsDTM aDTM = new ptsDTM();
-            try{   aDTM = (ptsDTM)binFrmtr.Deserialize(fstream);    }
+            LoadTimeStopwatch = new Stopwatch();
+            LoadTimeStopwatch.Start();
+            try { aDTM = (ptsDTM)binFrmtr.Deserialize(fstream);
+            LoadTimeStopwatch.Stop();
+               int i = 0 + 1; }
                                                    #pragma warning disable 0168
             catch (InvalidCastException e)
                                                    #pragma warning restore 0168
-            {  return null;  }
-
-            foreach (var triangle in aDTM.allTriangles)
             {
-               triangle.computeBoundingBox();
-            }
+               LoadTimeStopwatch.Stop();
+               return null;  }
+            LoadTimeStopwatch.Stop();
+
+            Parallel.ForEach(aDTM.allTriangles
+               , new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }
+               , tri => tri.computeBoundingBox());
             return aDTM;
          }
          //return null;
@@ -495,6 +581,22 @@ namespace ptsDigitalTerrainModel
       private void createAllpointsCollection()
       {
          allPoints = new Dictionary<UInt64, ptsDTMpoint>();
+      }
+
+      public String GenerateSizeSummaryString()
+      {
+         StringBuilder returnString = new StringBuilder();
+         returnString.AppendLine(String.Format(
+            "Points: {0:n0} ", allPoints.Count));
+         returnString.AppendLine(String.Format("Triangles: {0:n0}", this.allTriangles.Count));
+         returnString.AppendLine(String.Format("Total Memory Used: Approx. {0:n0} MBytes",
+            memoryUsed / (1028 * 1028)));
+         returnString.AppendLine(String.Format(
+            "{0:f4} Average Points per Triangle.",
+            (Double)((Double)allPoints.Count / (Double)allTriangles.Count)));
+         returnString.AppendLine(String.Format("Total Load Time: {0:f4} seconds",
+            (Double) LoadTimeStopwatch.ElapsedMilliseconds / 1000.0));
+         return returnString.ToString();
       }
    }
 

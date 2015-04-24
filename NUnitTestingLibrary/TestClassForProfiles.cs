@@ -240,45 +240,6 @@ namespace NUnitTestingLibrary
 
       /* This test must be moved soon the CadFoundations test suite when it is ready */
       [Test]
-      public void rayGetElevationInRayDomain_IsCorrect()
-      {
-         ptsRay localRay = new ptsRay();
-         localRay.StartPoint = new ptsPoint(25.0, 0.0, 25.0);
-         localRay.Slope = new Slope(1.0);
-         localRay.HorizontalDirection = null;
-         double? actual = localRay.getElevationAlong(35.0);
-         double? expected = 35.0;
-         Assert.AreEqual(expected.ToString(), actual.ToString());
-         //String act = actual.ToString();
-         //String exp = expected.ToString();
-      }
-
-      /* This test must be moved soon the CadFoundations test suite when it is ready */
-      [Test]
-      public void rayGetElevationOutsideRayDomain_IsNull()
-      {
-         ptsRay localRay = new ptsRay();
-         localRay.StartPoint = new ptsPoint(25.0, 0.0, 25.0);
-         localRay.Slope = new Slope();
-         localRay.Slope.setFromXY(0, 1);
-         localRay.HorizontalDirection = null;
-         double? actual = localRay.getElevationAlong(25.0);
-         Assert.IsNull(actual);
-      }
-
-      /* This test must be moved soon the CadFoundations test suite when it is ready */
-      [Test]
-      public void rayGetElevationWhenRayIsVertical_IsNull()
-      {
-         ptsRay localRay = new ptsRay();
-         localRay.StartPoint = new ptsPoint(25.0, 0.0, 25.0);
-         localRay.Slope = new Slope(1.0);
-         localRay.HorizontalDirection = null;
-         double? actual = localRay.getElevationAlong(15.0);
-         Assert.IsNull(actual);
-      }
-
-      [Test]
       public void rayIntersectProfileWithRayWithOneHit_ReturnsNotNull()
       {
 

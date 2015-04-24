@@ -12,22 +12,52 @@ namespace ptsDtmTest1
    {
       static void Main(string[] args)
       {
+         long allocatedMemSize = System.Diagnostics.Process.GetCurrentProcess().WorkingSet64;
+         Console.WriteLine("Process {0} has been allocated {1:n0} bytes,",
+            System.Diagnostics.Process.GetCurrentProcess().Id,
+            allocatedMemSize
+            );
+         Console.WriteLine("which is {0:f4} Gb.", allocatedMemSize /
+            (Double)(1024 * 1024 * 1024));
+         Console.WriteLine();
+
          ptsDTM aTinFile = null;
          try
          {
             //aTinFile = new ptsDTM(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\BigTest.xml");
             //aTinFile = new ptsDTM(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\SmallExample.xml");
-            aTinFile = new ptsDTM();
-            aTinFile.LoadTextFile(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.xml");
+            //aTinFile = new ptsDTM();
+            //aTinFile.LoadTextFile(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.xml");
             // find desired values and comparissons at:
             //    "C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\Tin Test Points.xlsx"
+            aTinFile = ptsDTM.CreateFromExistingFile(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.xml");
+            aTinFile.saveJustThePointsThenReadThemAgain();
+            //aTinFile = ptsDTM.CreateFromExistingFile(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.xml");
+         }
+         catch(OutOfMemoryException oome)
+         {
+            System.Console.WriteLine("Exception: {0}", oome.GetType().ToString());
+            System.Console.WriteLine(oome.Message);
+            System.Console.WriteLine("Thrown by {0}", oome.Data.GetType().ToString());
+            System.Console.WriteLine("Total Memory: {0} Mb", (GC.GetTotalMemory(false)/ (1024 * 1024)));
+            System.Console.WriteLine();
+            allocatedMemSize = System.Diagnostics.Process.GetCurrentProcess().WorkingSet64;
+            Console.WriteLine("Process {0} has been allocated {1:n0} bytes,",
+               System.Diagnostics.Process.GetCurrentProcess().Id,
+               allocatedMemSize
+               );
+            Console.WriteLine("which is {0:f4} Gb.", allocatedMemSize /
+               (Double)(1024 * 1024 * 1024));
+
          }
          catch(Exception e)
          {
-            System.Console.WriteLine("Exception: ");
+            System.Console.WriteLine("Exception: {0}", e.GetType().ToString());
             System.Console.WriteLine(e.Message);
+            System.Console.WriteLine("Thrown by {0}", e.Data.GetType().ToString());
          }
-         
+         finally {Console.ReadKey();}
+         return;
          //if (aTinFile != null)
             //aTinFile.saveAsBinary(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.ptsTin");
 
@@ -93,6 +123,9 @@ namespace ptsDtmTest1
          aSlope = aTinFile.getSlope(new ptsPoint(527915.0000, 1406442.0000, 0.0));
          anAzimuth = aTinFile.getSlopeAzimuth(new ptsPoint(527915.0000, 1406442.0000, 0.0));
          printResult(15, anElevation, aSlope, anAzimuth);
+
+         System.Console.WriteLine();
+         System.Console.WriteLine(aTinFile.GenerateSizeSummaryString());
 
          aTinFile = null;
          GC.Collect();

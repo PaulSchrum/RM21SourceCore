@@ -21,6 +21,7 @@ namespace ptsDigitalTerrainModel
       public ptsDTMpoint point2 { get; set; }
       public ptsDTMpoint point3 { get; set; }
 
+      [NonSerialized]
       private ptsVector normalVec_;
       public ptsVector normalVec { get { return normalVec_; } }
 
