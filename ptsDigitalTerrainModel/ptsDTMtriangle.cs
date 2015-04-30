@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using ptsCogo;
@@ -158,5 +159,14 @@ namespace ptsDigitalTerrainModel
          
       }
 
+      internal void SaveToSQLiteDB(System.Data.SQLite.SQLiteConnection conn)
+      {
+         StringBuilder SQLstring = new StringBuilder();
+         SQLstring.Append("INSERT INTO triangles (indexPt1, indexPt2, indexPt3) ");
+         SQLstring.AppendFormat("VALUES ('{0}', '{1}', '{2}')", this.index1, index2, index3);
+         var cmd = new SQLiteCommand(conn);
+         cmd.CommandText = SQLstring.ToString();
+         cmd.ExecuteNonQuery();
+      }
    }
 }
