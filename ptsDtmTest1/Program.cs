@@ -31,7 +31,7 @@ namespace ptsDtmTest1
             // find desired values and comparissons at:
             //    "C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\Tin Test Points.xlsx"
             aTinFile = ptsDTM.CreateFromExistingFile(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.xml");
-            aTinFile.saveJustThePointsThenReadThemAgain();
+            //////aTinFile.saveJustThePointsThenReadThemAgain();
             //aTinFile = ptsDTM.CreateFromExistingFile(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.xml");
          }
          catch(OutOfMemoryException oome)
@@ -50,14 +50,30 @@ namespace ptsDtmTest1
                (Double)(1024 * 1024 * 1024));
 
          }
+         catch(AggregateException ae)
+         {
+            System.Console.WriteLine("Aggregate Exception with {0} exceptions:", 
+               ae.InnerExceptions.Count);
+            int cnt = 0;
+            foreach(var exc in ae.InnerExceptions)
+            {
+               cnt++;
+               System.Console.WriteLine("========================");
+               System.Console.WriteLine("Exception #{1}: {0}", exc.GetType().ToString(), cnt);
+               System.Console.WriteLine(exc.Message);
+               System.Console.WriteLine("Thrown by {0}", exc.Data.GetType().ToString());
+            }
+            System.Console.WriteLine("========================");
+         }
          catch(Exception e)
          {
             System.Console.WriteLine("Exception: {0}", e.GetType().ToString());
             System.Console.WriteLine(e.Message);
             System.Console.WriteLine("Thrown by {0}", e.Data.GetType().ToString());
+            //throw;
          }
-         finally {Console.ReadKey();}
-         return;
+         //finally {Console.ReadKey();}
+         //return;
          //if (aTinFile != null)
             //aTinFile.saveAsBinary(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.ptsTin");
 
@@ -66,8 +82,14 @@ namespace ptsDtmTest1
          //System.Console.WriteLine("Press a key to release memory");
          //System.Console.ReadKey();
          //aTinFile.testGetTriangle
-         double? aSlope; Azimuth anAzimuth;
-         double? anElevation = aTinFile.getElevation(new ptsPoint(529399.6100, 1408669.1900, 0.0));
+         if(null == aTinFile)
+         {
+            System.Console.WriteLine("Program terminating due to null value for \"aTinFile\".");
+         }
+         double? aSlope; Azimuth anAzimuth; double? anElevation;
+         try { 
+         anElevation = aTinFile.getElevation(new ptsPoint(529399.6100, 1408669.1900, 0.0)); }
+         catch { Console.ReadKey(); return; }
          aSlope = aTinFile.getSlope(new ptsPoint(529399.6100, 1408669.1900, 0.0));
          anAzimuth = aTinFile.getSlopeAzimuth(new ptsPoint(529399.6100, 1408669.1900, 0.0));
          printResult(2, anElevation, aSlope, anAzimuth);

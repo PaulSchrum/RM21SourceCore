@@ -9,6 +9,7 @@ namespace ptsDigitalTerrainModel
    [Serializable]
    public struct ptsDTMpoint //: ptsCogo.ptsPoint
    {
+      public ulong myIndex { get; internal set; }
       public Double x { get; set; }
       public Double y { get; set; }
       public Double z { get; set; }
@@ -19,13 +20,19 @@ namespace ptsDigitalTerrainModel
       public ptsDTMpoint(double newX, double newY, double newZ) : this()
       { x = newX; y = newY; z = newZ; } //myIndex = 0L; }
 
+      public ptsDTMpoint(ulong ndex, double newX, double newY, double newZ) : 
+         this(newX, newY, newZ)
+      {
+         myIndex = ndex;
+      }
+
       public ptsDTMpoint(String ptAsString, UInt64 myIndx) : this()
       {
          parsedStrings = ptAsString.Split(' ');
          this.x = Double.Parse(parsedStrings[0]);
          this.y = Double.Parse(parsedStrings[1]);
          this.z = Double.Parse(parsedStrings[2]);
-         //myIndex = myIndx;
+         myIndex = myIndx;
       }
 
       public ptsDTMpoint(String x, String y, String z) : this()

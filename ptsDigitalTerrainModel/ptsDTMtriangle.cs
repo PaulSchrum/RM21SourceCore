@@ -12,18 +12,27 @@ namespace ptsDigitalTerrainModel
    {
       // temporary scratch pad members -- do not serialize
       [NonSerialized]
-      private String[] indexStrings;
+      private Dictionary<UInt64, ptsDTMpoint> allPoints;
       [NonSerialized]
-      private UInt64[] indices;
+      private UInt64[] indices = new UInt64[3];
 
-      // substantitve fields - Do Serialize
-      public ptsDTMpoint point1 { get; set; }
-      public ptsDTMpoint point2 { get; set; }
-      public ptsDTMpoint point3 { get; set; }
+      // substantitve fields - Do Serialize these
+      public ulong index1 { get; set; }
+      public ulong index2 { get; set; }
+      public ulong index3 { get; set; }
 
-      [NonSerialized]
-      private ptsVector normalVec_;
-      public ptsVector normalVec { get { return normalVec_; } }
+
+      [NonSerialized] private ptsDTMpoint p1;
+      public ptsDTMpoint point1 { get { return allPoints[indices[0]]; } }
+      [NonSerialized] private ptsDTMpoint p2;
+      public ptsDTMpoint point2 { get { return allPoints[indices[1]]; } }
+      [NonSerialized] private ptsDTMpoint p3;
+      public ptsDTMpoint point3 { get { return allPoints[indices[2]]; } }
+
+      public ptsVector normalVec 
+      {
+         get { return (point2 - point1).crossProduct(point3 - point1); } 
+      }
 
       // non-substantive fields
       [NonSerialized]
@@ -31,29 +40,26 @@ namespace ptsDigitalTerrainModel
 
       public ptsDTMtriangle(Dictionary<UInt64, ptsDTMpoint> pointList, string pointRefs)
       {
-         indices = new UInt64[3];
+         this.allPoints = pointList;
+
+         String[] indexStrings;
          indexStrings = pointRefs.Split(' ');
          UInt64.TryParse(indexStrings[0], out indices[0]);
          UInt64.TryParse(indexStrings[1], out indices[1]);
          UInt64.TryParse(indexStrings[2], out indices[2]);
 
-         point1 = pointList[indices[0]];
-         point2 = pointList[indices[1]];
-         point3 = pointList[indices[2]];
-
          computeBoundingBox();
-         normalVec_ = null;
       }
 
       public ptsDTMtriangle(Dictionary<UInt64, ptsDTMpoint> pointList, UInt64 ptIndex1,
          UInt64 ptIndex2, UInt64 ptIndex3)
       {
-         point1 = pointList[ptIndex1];
-         point2 = pointList[ptIndex2];
-         point3 = pointList[ptIndex3];
+         this.allPoints = pointList;
+         this.index1 = ptIndex1;
+         this.index2 = ptIndex2;
+         this.index3 = ptIndex3;
 
          computeBoundingBox();
-         normalVec_ = null;
       }
 
       public void computeBoundingBox()
@@ -104,8 +110,6 @@ namespace ptsDigitalTerrainModel
 
       public double givenXYgetZ(ptsDTMpoint aPoint)
       {
-         setupNormalVec();
-
          // Use equation         ax + bx
          //                 z = ----------     taken from Wolfram Alpha
          //                        -c
@@ -132,13 +136,12 @@ namespace ptsDigitalTerrainModel
 
       public double? givenXYgetSlopePercent(ptsDTMpoint aPoint)
       {
-         setupNormalVec();
-
-         if (0.0 == normalVec_.z) return null;
+         var normalVector = this.normalVec;
+         if (0.0 == normalVector.z) return null;
 
          return Math.Abs (100.0 *
-            Math.Sqrt(normalVec_.x * normalVec_.x + normalVec_.y * normalVec_.y) /
-                        normalVec_.z);
+            Math.Sqrt(normalVector.x * normalVector.x + normalVector.y * normalVector.y) /
+                        normalVector.z);
       }
 
       public Azimuth givenXYgetSlopeAzimuth(ptsPoint aPoint)
@@ -148,21 +151,11 @@ namespace ptsDigitalTerrainModel
 
       public Azimuth givenXYgetSlopeAzimuth(ptsDTMpoint aPoint)
       {
-         setupNormalVec();
-
          Azimuth slopeAz = new Azimuth();
-         slopeAz.setFromXY(normalVec_.y, normalVec.x);
+         slopeAz.setFromXY(this.normalVec.y, this.normalVec.x);
 
          return slopeAz; 
          
-      }
-
-      private void setupNormalVec()
-      {
-         if (normalVec_ == null)
-         {
-            normalVec_ = (point2 - point1).crossProduct(point3 - point1);
-         }
       }
 
    }
