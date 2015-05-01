@@ -22,12 +22,8 @@ namespace ptsDigitalTerrainModel
       public ulong index2 { get; set; }
       public ulong index3 { get; set; }
 
-
-      [NonSerialized] private ptsDTMpoint p1;
       public ptsDTMpoint point1 { get { return allPoints[indices[0]]; } }
-      [NonSerialized] private ptsDTMpoint p2;
       public ptsDTMpoint point2 { get { return allPoints[indices[1]]; } }
-      [NonSerialized] private ptsDTMpoint p3;
       public ptsDTMpoint point3 { get { return allPoints[indices[2]]; } }
 
       public ptsVector normalVec 
@@ -163,10 +159,17 @@ namespace ptsDigitalTerrainModel
       {
          StringBuilder SQLstring = new StringBuilder();
          SQLstring.Append("INSERT INTO triangles (indexPt1, indexPt2, indexPt3) ");
-         SQLstring.AppendFormat("VALUES ('{0}', '{1}', '{2}')", this.index1, index2, index3);
+         SQLstring.AppendFormat("VALUES ('{0}', '{1}', '{2}')", this.indices[0], indices[1], indices[2]);
          var cmd = new SQLiteCommand(conn);
          cmd.CommandText = SQLstring.ToString();
          cmd.ExecuteNonQuery();
+      }
+
+      internal void WriteToFile(System.IO.StreamWriter outStream)
+      {
+         outStream.WriteLine(String.Format("{0} {1} {2}",
+            this.indices[0], indices[1], indices[2]
+            ));
       }
    }
 }

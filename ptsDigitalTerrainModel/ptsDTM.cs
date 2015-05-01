@@ -364,9 +364,47 @@ namespace ptsDigitalTerrainModel
       }
 #endif
 
+      public void saveAsBinaryAlt2(string filenameToSaveTo, bool overwrite)
+      {
+         if (!Path.GetExtension(filenameToSaveTo).
+            Equals(StandardExtension, StringComparison.OrdinalIgnoreCase))
+         {
+            throw new ArgumentException(
+             String.Format("Filename does not have extension: {0}.", StandardExtension));
+         }
+
+         if(File.Exists(filenameToSaveTo) == true)
+         {
+            if(false == overwrite)
+            {
+               throw new IOException("File already exists and overwrite is disallowed.");
+            }
+            else
+            {
+               File.Delete(filenameToSaveTo);
+            }
+         }
+         (File.Create(filenameToSaveTo, 1024,
+            FileOptions.WriteThrough | FileOptions.SequentialScan)).Close();
+         using(var outStream = new StreamWriter(filenameToSaveTo))
+         {
+            foreach(var pt in this.allPoints.Select(p => p.Value))
+            {
+               pt.WriteToFile(outStream);
+               Trace.WriteLine(pt.myIndex.ToString());
+            }
+            outStream.WriteLine(" ");
+            foreach (var tr in this.allTriangles)
+            {
+               tr.WriteToFile(outStream);
+            }
+         }
+
+      }
+
+
       public void saveAsBinary(string filenameToSaveTo, bool overwrite)
       {
-         throw new NotImplementedException();
          if(!Path.GetExtension(filenameToSaveTo).
             Equals(StandardExtension, StringComparison.OrdinalIgnoreCase))
          { throw new ArgumentException(
@@ -375,7 +413,7 @@ namespace ptsDigitalTerrainModel
 
          SQLiteConnection conn = null;
          StringBuilder ConnString = new StringBuilder();
-         ConnString.AppendFormat("Data Source={0};Version=4;", filenameToSaveTo);
+         ConnString.AppendFormat("Data Source={0};Version=3;", filenameToSaveTo);
 
          try
          {
@@ -397,22 +435,44 @@ namespace ptsDigitalTerrainModel
             else
             {
                SQLiteConnection.CreateFile(filenameToSaveTo);
-               conn = new SQLiteConnection(ConnString.ToString());
+               try { conn = new SQLiteConnection(ConnString.ToString()); }
+               catch { File.Delete(filenameToSaveTo); throw; }
                conn.Open();
             }
             string sql = "create table points (pointID int, x double, y double, z double)";
             SQLiteCommand command = new SQLiteCommand(sql, conn);
             command.ExecuteNonQuery();
-            sql = "create table triangles (pointID int, x double, y double, z double)";
+            sql = "create table triangles (indexPt1 int, indexPt2 int, indexPt3 int)";
             command = new SQLiteCommand(sql, conn);
             command.ExecuteNonQuery();
-            foreach(var pt in this.allPoints.Select(p => p.Value))
+
+            LoadTimeStopwatch.Reset();
+            LoadTimeStopwatch.Start();
+            using (var traction = conn.BeginTransaction())
             {
-               pt.SaveToSQLiteDB(conn);
+               foreach (var pt in this.allPoints.Select(p => p.Value))
+               {
+                  pt.SaveToSQLiteDB(conn);
+               }
+               LoadTimeStopwatch.Stop();
+               LoadTimeStopwatch.Reset();
+               LoadTimeStopwatch.Start();
+               traction.Commit();
+               LoadTimeStopwatch.Stop();
             }
-            foreach(var tr in this.allTriangles)
+            using (var traction = conn.BeginTransaction())
             {
-               tr.SaveToSQLiteDB(conn);
+               LoadTimeStopwatch.Reset();
+               LoadTimeStopwatch.Start();
+               foreach (var tr in this.allTriangles)
+               {
+                  tr.SaveToSQLiteDB(conn);
+               }
+               LoadTimeStopwatch.Stop();
+               LoadTimeStopwatch.Reset();
+               LoadTimeStopwatch.Start();
+               traction.Commit();
+               LoadTimeStopwatch.Stop();
             }
          }
          catch (IOException) { throw; }
@@ -427,11 +487,13 @@ namespace ptsDigitalTerrainModel
       static public ptsDTM loadTinFromBinary(string filenameToLoad)
       {
          throw new NotImplementedException();
+#if DoNotCompile
          LoadTimeStopwatch = new Stopwatch();
          LoadTimeStopwatch.Start();
          LoadTimeStopwatch.Stop();
 
          return null;
+#endif
       }
 
       private void setupStopWatches()
@@ -597,7 +659,6 @@ namespace ptsDigitalTerrainModel
          //ptsBoundingBox2d fileBB = new ptsBoundingBox2d()
          using (var inputFile = new StreamReader(fileToOpen))
          {
-            Double x, y, z;
             String line;
             String[] values;
             while ((line = inputFile.ReadLine()) != null)
@@ -607,7 +668,6 @@ namespace ptsDigitalTerrainModel
                var newPt = new ptsDTMpoint(values[0], values[1], values[2]);
                GridDTMhelper.addPoint(newPt);
             }
-            int i = 0;
          }
       }
 
@@ -651,7 +711,6 @@ namespace ptsDigitalTerrainModel
             var ptList = new List<ptsDTMpoint>();
             ptList.Add(pt);
             grid.Add(tupl, ptList);
-            long lng = (long)(int.MaxValue) + 1L;
          }
          else
          {
