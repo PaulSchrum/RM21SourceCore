@@ -20,7 +20,8 @@ namespace ptsDigitalTerrainModel
    {
       // Substantive members - Do serialize
       private Dictionary<UInt64, ptsDTMpoint> allPoints;
-      private List<ptsDTMtriangle> allTriangles;
+      //private List<ptsDTMtriangle> allTriangles;
+      private ptsDTMtriangle[] allTriangles;
       private ptsBoundingBox2d myBoundingBox;
 
       // temp scratch pad members -- do not serialize
@@ -114,7 +115,7 @@ namespace ptsDigitalTerrainModel
                }
             }
 
-            allTriangles = new List<ptsDTMtriangle>();
+            var allTriangles_ = new List<ptsDTMtriangle>();
             while ((line = file.ReadLine()) != null)
             {
                lineCount++;
@@ -122,10 +123,11 @@ namespace ptsDigitalTerrainModel
                if (line.Equals("]"))
                   break;
                scratchTriangle = convertLineOfDataToTriangle(line);
-               allTriangles.Add(scratchTriangle);
+               allTriangles_.Add(scratchTriangle);
             }
 
-            allTriangles.Sort();
+            allTriangles_.Sort();
+            allTriangles = allTriangles_.ToArray();
          }
          finally
          {
@@ -302,14 +304,14 @@ namespace ptsDigitalTerrainModel
                allTrianglesBag.Add(new ptsDTMtriangle(allPoints, refString));
             }
             );
-         allTriangles = allTrianglesBag.OrderBy(triangle => triangle.point1.x).ToList();
+         allTriangles = allTrianglesBag.OrderBy(triangle => triangle.point1.x).ToArray();
          trianglesAsStrings = null; allTrianglesBag = null;
          GC.Collect(); GC.WaitForPendingFinalizers();
          memoryUsed = GC.GetTotalMemory(true) - memoryUsed;
          LoadTimeStopwatch.Stop();
 
          stopwatch.Stop();
-         System.Console.WriteLine(allTriangles.Count.ToString() + " Total Triangles.");
+         System.Console.WriteLine(allTriangles.Count().ToString() + " Total Triangles.");
          consoleOutStopwatch(stopwatch);
          
          //
@@ -681,12 +683,12 @@ namespace ptsDigitalTerrainModel
          StringBuilder returnString = new StringBuilder();
          returnString.AppendLine(String.Format(
             "Points: {0:n0} ", allPoints.Count));
-         returnString.AppendLine(String.Format("Triangles: {0:n0}", this.allTriangles.Count));
+         returnString.AppendLine(String.Format("Triangles: {0:n0}", this.allTriangles.Count()));
          returnString.AppendLine(String.Format("Total Memory Used: Approx. {0:n0} MBytes",
             memoryUsed / (1028 * 1028)));
          returnString.AppendLine(String.Format(
             "{0:f4} Average Points per Triangle.",
-            (Double)((Double)allPoints.Count / (Double)allTriangles.Count)));
+            (Double)((Double)allPoints.Count / (Double)allTriangles.Count())));
          returnString.AppendLine(String.Format("Total Load Time: {0:f4} seconds",
             (Double) LoadTimeStopwatch.ElapsedMilliseconds / 1000.0));
          return returnString.ToString();
