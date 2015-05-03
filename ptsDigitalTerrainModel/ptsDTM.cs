@@ -12,41 +12,32 @@ using ptsCogo;
 using ptsCogo.Angle;
 using System.Threading.Tasks;
 using System.Data.SQLite;
+using System.IO.Compression;
 
 namespace ptsDigitalTerrainModel
 {
-   [Serializable]
    public class ptsDTM
    {
-      // Substantive members - Do serialize
       private Dictionary<UInt64, ptsDTMpoint> allPoints;
-      //private List<ptsDTMtriangle> allTriangles;
-      private ptsDTMtriangle[] allTriangles;
+      private List<ptsDTMtriangle> allTriangles;
+      //private ptsDTMtriangle[] allTriangles;
       private ptsBoundingBox2d myBoundingBox;
 
+      private static readonly string TEMP_POINTS_FILENAME = "⊙Temp.ptsTin";
+      private static readonly string TEMP_TRIANGLES_FILENAME = "ΔTemp.ptsTin";
+
       // temp scratch pad members -- do not serialize
-      [NonSerialized]
       private ConcurrentBag<ptsDTMtriangle> allTrianglesBag;
-      [NonSerialized]
       private ptsDTMpoint scratchPoint;
-      [NonSerialized]
       private ptsDTMtriangle scratchTriangle;
-      [NonSerialized]
       private UInt64pair scratchUIntPair;
-      [NonSerialized]
       private ptsDTMtriangleLine scratchTriangleLine;
-      [NonSerialized]
       private Dictionary<UInt64pair, ptsDTMtriangleLine> triangleLines;
-      [NonSerialized]
       private long memoryUsed = 0;
 
-      [NonSerialized]
       private Dictionary<string, Stopwatch> stpWatches;
-      [NonSerialized]
       private Stopwatch aStopwatch;
-      [NonSerialized]
       static Stopwatch LoadTimeStopwatch = new Stopwatch();
-      [NonSerialized]
       public static readonly String StandardExtension = ".ptsTin";
 
       private void LoadTINfromVRML(string fileName)
@@ -127,7 +118,7 @@ namespace ptsDigitalTerrainModel
             }
 
             allTriangles_.Sort();
-            allTriangles = allTriangles_.ToArray();
+            allTriangles = allTriangles_.ToList();
          }
          finally
          {
@@ -137,12 +128,12 @@ namespace ptsDigitalTerrainModel
 
       private ptsDTMtriangle convertLineOfDataToTriangle(string line)
       {
-         UInt64 ptIndex1, ptIndex2, ptIndex3;
+         UInt32 ptIndex1, ptIndex2, ptIndex3;
          string[] parsed = line.Split(',');
          int correction = parsed.Length - 4;
-         ptIndex1 = Convert.ToUInt64(parsed[0 + correction]);
-         ptIndex2 = Convert.ToUInt64(parsed[1 + correction]);
-         ptIndex3 = Convert.ToUInt64(parsed[2 + correction]);
+         ptIndex1 = Convert.ToUInt32(parsed[0 + correction]);
+         ptIndex2 = Convert.ToUInt32(parsed[1 + correction]);
+         ptIndex3 = Convert.ToUInt32(parsed[2 + correction]);
          ptsDTMtriangle triangle = new ptsDTMtriangle(allPoints, ptIndex1, ptIndex2, ptIndex3);
          return triangle;
       }
@@ -304,7 +295,7 @@ namespace ptsDigitalTerrainModel
                allTrianglesBag.Add(new ptsDTMtriangle(allPoints, refString));
             }
             );
-         allTriangles = allTrianglesBag.OrderBy(triangle => triangle.point1.x).ToArray();
+         allTriangles = allTrianglesBag.OrderBy(triangle => triangle.point1.x).ToList();
          trianglesAsStrings = null; allTrianglesBag = null;
          GC.Collect(); GC.WaitForPendingFinalizers();
          memoryUsed = GC.GetTotalMemory(true) - memoryUsed;
@@ -386,22 +377,119 @@ namespace ptsDigitalTerrainModel
                File.Delete(filenameToSaveTo);
             }
          }
-         (File.Create(filenameToSaveTo, 1024,
-            FileOptions.WriteThrough | FileOptions.SequentialScan)).Close();
-         using(var outStream = new StreamWriter(filenameToSaveTo))
+
+         LoadTimeStopwatch.Reset();
+         LoadTimeStopwatch.Start();
+         GC.Collect();
+
+         try
          {
-            foreach(var pt in this.allPoints.Select(p => p.Value))
-            {
-               pt.WriteToFile(outStream);
-               Trace.WriteLine(pt.myIndex.ToString());
-            }
-            outStream.WriteLine(" ");
-            foreach (var tr in this.allTriangles)
-            {
-               tr.WriteToFile(outStream);
-            }
+            Task.WaitAll(
+               Task.Run(() => savePoints(TEMP_POINTS_FILENAME)),
+               Task.Run(() => saveTriangles(TEMP_TRIANGLES_FILENAME))
+               );
+            putTempFilesInZip(filenameToSaveTo);
+         }
+         catch (Exception e) { }
+         finally
+         {
+            TryDeleteTempFiles();
          }
 
+         GC.Collect();
+         LoadTimeStopwatch.Stop();
+      }
+
+      private void putTempFilesInZip(String fileToSave)
+      {
+         using (var zipFile = ZipFile.Open(fileToSave, ZipArchiveMode.Create))
+         {
+            zipFile.CreateEntryFromFile(TEMP_POINTS_FILENAME, TEMP_POINTS_FILENAME);
+            zipFile.CreateEntryFromFile(TEMP_TRIANGLES_FILENAME, TEMP_TRIANGLES_FILENAME);
+         }
+      }
+
+      private void TryDeleteTempFiles()
+      {
+         try
+         {
+            File.Delete(TEMP_POINTS_FILENAME);
+         }
+         catch { }
+         try
+         {
+            File.Delete(TEMP_TRIANGLES_FILENAME);
+         }
+         catch { }
+      }
+
+      private void savePoints(String filenameToSaveTo)
+      {
+         Byte[] pointsByteArray = GetPointsAsByteArray();
+         File.WriteAllBytes(filenameToSaveTo, pointsByteArray);
+         pointsByteArray = null;
+      }
+
+      internal byte[] GetPointsAsByteArray()
+      {
+         int rowSize = sizeof(ulong) + (3 * sizeof(Double));
+         int arraySize = allPoints.Count * (rowSize);
+         Byte[] returnArray = new Byte[arraySize];
+         int i = 0;
+         int rowOffset = 0;
+         foreach(var p in this.allPoints)
+         {
+            rowOffset = 0;
+            Buffer.BlockCopy(
+               BitConverter.GetBytes(p.Value.myIndex),
+               0, returnArray, (i * rowSize) + rowOffset, sizeof(ulong));
+
+            rowOffset += sizeof(ulong);
+            Buffer.BlockCopy(
+               BitConverter.GetBytes(p.Value.x),
+               0, returnArray, (i * rowSize) + rowOffset, sizeof(Double));
+
+            rowOffset += sizeof(ulong);
+            Buffer.BlockCopy(
+               BitConverter.GetBytes(p.Value.y),
+               0, returnArray, (i * rowSize) + rowOffset, sizeof(Double));
+
+            rowOffset += sizeof(ulong);
+            Buffer.BlockCopy(
+               BitConverter.GetBytes(p.Value.z),
+               0, returnArray, (i * rowSize) + rowOffset, sizeof(Double));
+         }
+         return returnArray;
+      }
+
+      private void saveTriangles(String filenameToSaveTo)
+      {
+         Byte[] trianglesByteArray = GetTrianglesAsByteArray();
+         File.WriteAllBytes(filenameToSaveTo, trianglesByteArray);
+         trianglesByteArray = null;
+      }
+
+      private byte[] GetTrianglesAsByteArray()
+      {
+         int arraySize = allTriangles.Count * 3 * sizeof(UInt32);
+         Byte[] returnArray = new Byte[arraySize];
+         int i = 0;
+         foreach (var t in this.allTriangles)
+         {
+            Buffer.BlockCopy(
+               BitConverter.GetBytes(t.indices[0]),
+               0, returnArray, i * sizeof(UInt32), sizeof(UInt32));
+            i++;
+            Buffer.BlockCopy(
+               BitConverter.GetBytes(t.indices[1]),
+               0, returnArray, i * sizeof(UInt32), sizeof(UInt32));
+            i++;
+            Buffer.BlockCopy(
+               BitConverter.GetBytes(t.indices[2]),
+               0, returnArray, i * sizeof(UInt32), sizeof(UInt32));
+            i++;
+         }
+         return returnArray;
       }
 
 
