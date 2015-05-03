@@ -5,6 +5,7 @@ using System.Text;
 using ptsDigitalTerrainModel;
 using ptsCogo;
 using ptsCogo.Angle;
+using System.Diagnostics;
 
 namespace ptsDtmTest1
 {
@@ -22,6 +23,10 @@ namespace ptsDtmTest1
          Console.WriteLine();
 
          ptsDTM aTinFile = null;
+         Stopwatch sw = new Stopwatch(); sw.Start(); ;
+         aTinFile = ptsDTM.CreateFromExistingFile("TestSave.ptsTin");
+         sw.Stop();
+         Console.WriteLine("Load Time is {0}.", sw.Elapsed.ToString());
          try
          {
             //aTinFile = new ptsDTM(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\BigTest.xml");
@@ -29,8 +34,8 @@ namespace ptsDtmTest1
 
             // find desired values and comparissons at:
             //    "C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\Tin Test Points.xlsx"
-            aTinFile = ptsDTM.CreateFromExistingFile(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.xml");
-            DealWithSmallDTM(aTinFile);
+            //aTinFile = ptsDTM.CreateFromExistingFile(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.xml");
+            //DealWithSmallDTM(aTinFile);
             //////aTinFile.saveJustThePointsThenReadThemAgain();
             //aTinFile = ptsDTM.CreateFromExistingFile(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.xml");
          }
