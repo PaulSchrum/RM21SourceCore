@@ -22,6 +22,7 @@ namespace ptsDigitalTerrainModel
       private Dictionary<UInt64, ptsDTMpoint> allPoints;
       public List<ptsDTMtriangle> allTriangles;
 
+      private Task<ptsBoundingBox2d> myBBtask;
       private ptsBoundingBox2d myBoundingBox_ = null;
       private ptsBoundingBox2d myBoundingBox
       {
@@ -40,7 +41,6 @@ namespace ptsDigitalTerrainModel
             myBoundingBox_ = value;
          }
       }
-      private Task<ptsBoundingBox2d> myBBtask;
 
       private static readonly string TEMP_POINTS_FILENAME = "⊙Temp.ptsTin";
       private static readonly string TEMP_TRIANGLES_FILENAME = "ΔTemp.ptsTin";
@@ -180,6 +180,15 @@ namespace ptsDigitalTerrainModel
          if (!(words[1].Equals("V2.0", StringComparison.OrdinalIgnoreCase))) return false;
 
          return true;
+      }
+
+      public static void ConvertTextDTMtoBinary(
+         String sourceTextDTMpath, 
+         String destinationBinaryDTMpath,
+         bool overWriteDestination)
+      {
+         var tempTin = CreateFromExistingFile(sourceTextDTMpath);
+         tempTin.saveAsBinary(destinationBinaryDTMpath, overWriteDestination);
       }
 
       /// <summary>
