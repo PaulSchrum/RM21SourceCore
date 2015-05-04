@@ -8,36 +8,28 @@ using ptsCogo.Angle;
 
 namespace ptsDigitalTerrainModel
 {
-   [Serializable]
    public class ptsDTMtriangle : IComparable
    {
+      public ptsDTMpoint point1 { get { return allPoints_r[indices[0]]; } }
+      public ptsDTMpoint point2 { get { return allPoints_r[indices[1]]; } }
+      public ptsDTMpoint point3 { get { return allPoints_r[indices[2]]; } }
+
+      // reference-only field - this does not own it.
+      private Dictionary<UInt64, ptsDTMpoint> allPoints_r;
+
       // temporary scratch pad members -- do not serialize
-      [NonSerialized]
-      private Dictionary<UInt64, ptsDTMpoint> allPoints;
-      [NonSerialized]
       internal UInt32[] indices = new UInt32[3];
 
-      // substantitve fields - Do Serialize these
-      public UInt32 index1 { get; set; }
-      public UInt32 index2 { get; set; }
-      public UInt32 index3 { get; set; }
-
-      public ptsDTMpoint point1 { get { return allPoints[indices[0]]; } }
-      public ptsDTMpoint point2 { get { return allPoints[indices[1]]; } }
-      public ptsDTMpoint point3 { get { return allPoints[indices[2]]; } }
-
+      // computed fields
       public ptsVector normalVec 
       {
          get { return (point2 - point1).crossProduct(point3 - point1); } 
       }
-
-      // non-substantive fields
-      [NonSerialized]
       private ptsCogo.ptsBoundingBox2d myBoundingBox_;
 
       public ptsDTMtriangle(Dictionary<UInt64, ptsDTMpoint> pointList, string pointRefs)
       {
-         this.allPoints = pointList;
+         this.allPoints_r = pointList;
 
          String[] indexStrings;
          indexStrings = pointRefs.Split(' ');
@@ -51,7 +43,7 @@ namespace ptsDigitalTerrainModel
       public ptsDTMtriangle(Dictionary<UInt64, ptsDTMpoint> pointList, UInt32 ptIndex1,
          UInt32 ptIndex2, UInt32 ptIndex3)
       {
-         this.allPoints = pointList;
+         this.allPoints_r = pointList;
          this.indices[0] = ptIndex1;
          this.indices[1] = ptIndex2;
          this.indices[2] = ptIndex3;
