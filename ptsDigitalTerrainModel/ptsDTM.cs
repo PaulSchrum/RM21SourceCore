@@ -176,7 +176,10 @@ namespace ptsDigitalTerrainModel
          {
             String ext = Path.GetExtension(fileName);
             if (ext.Equals(StandardExtension, StringComparison.OrdinalIgnoreCase))
-               returnTin = loadAsBinary(fileName);
+            {
+               Task<ptsDTM> tsk = Task.Run(() => loadAsBinaryAsync(fileName));
+               returnTin = tsk.Result;
+            }
             else
                returnTin.LoadTextFile(fileName);
          }
@@ -313,7 +316,7 @@ namespace ptsDigitalTerrainModel
 
       }
 
-      private static ptsDTM loadAsBinary(string fileName)
+      private static async Task<ptsDTM> loadAsBinaryAsync(string fileName)
       {
          if (!File.Exists(fileName))
             throw new FileNotFoundException(fileName);
@@ -337,23 +340,20 @@ namespace ptsDigitalTerrainModel
          catch { }
          finally { returnDTM.TryDeleteTempFiles(); }
 
-         returnDTM.ComputeBB();
+         returnDTM.myBoundingBox = await Task.Run(() => returnDTM.ComputeBB());
 
          return returnDTM;
       }
 
-      private void ComputeBB()
+      private ptsBoundingBox2d ComputeBB()
       {
          var point1 = this.allPoints.FirstOrDefault().Value;
-         this.myBoundingBox = new ptsBoundingBox2d(
+         var returnBB = new ptsBoundingBox2d(
             point1.x, point1.y, point1.z, point1.x, point1.y, point1.z);
          Parallel.ForEach(this.allPoints,
-            p => this.myBoundingBox.expandByPoint(p.Value.x, p.Value.y, p.Value.z)
+            p => returnBB.expandByPoint(p.Value.x, p.Value.y, p.Value.z)
             );
-         //foreach(var p in this.allPoints)
-         //{
-         //   this.myBoundingBox.expandByPoint(p.Value.x, p.Value.y, p.Value.z);
-         //}
+         return returnBB;
       }
 
       private static void loadPointsFromBinary(Dictionary<ulong, ptsDTMpoint> allPointsDictionary)
