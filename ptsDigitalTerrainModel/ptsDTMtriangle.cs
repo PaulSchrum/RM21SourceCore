@@ -53,7 +53,9 @@ namespace ptsDigitalTerrainModel
 
       public void computeBoundingBox()
       {
-         myBoundingBox_ = new ptsBoundingBox2d(point1.x, point1.y, point1.x, point1.y);
+         myBoundingBox_ = new ptsBoundingBox2d
+            (point1.x, point1.y, point1.z, 
+            point1.x, point1.y, point1.z);
          myBoundingBox_.expandByPoint(point2.x, point2.y, point2.z);
          myBoundingBox_.expandByPoint(point3.x, point3.y, point3.z);
       }
