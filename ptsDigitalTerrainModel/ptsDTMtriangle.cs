@@ -15,7 +15,7 @@ namespace ptsDigitalTerrainModel
       public ptsDTMpoint point3 { get { return allPoints_r[indices[2]]; } }
 
       // reference-only field - this does not own it.
-      private Dictionary<UInt64, ptsDTMpoint> allPoints_r;
+      private IDictionary<UInt64, ptsDTMpoint> allPoints_r;
 
       // temporary scratch pad members -- do not serialize
       internal UInt32[] indices = new UInt32[3];
@@ -27,7 +27,7 @@ namespace ptsDigitalTerrainModel
       }
       private ptsCogo.ptsBoundingBox2d myBoundingBox_;
 
-      public ptsDTMtriangle(Dictionary<UInt64, ptsDTMpoint> pointList, string pointRefs)
+      public ptsDTMtriangle(IDictionary<UInt64, ptsDTMpoint> pointList, string pointRefs)
       {
          this.allPoints_r = pointList;
 
@@ -40,7 +40,7 @@ namespace ptsDigitalTerrainModel
          computeBoundingBox();
       }
 
-      public ptsDTMtriangle(Dictionary<UInt64, ptsDTMpoint> pointList, UInt32 ptIndex1,
+      public ptsDTMtriangle(IDictionary<UInt64, ptsDTMpoint> pointList, UInt32 ptIndex1,
          UInt32 ptIndex2, UInt32 ptIndex3)
       {
          this.allPoints_r = pointList;
@@ -167,7 +167,7 @@ namespace ptsDigitalTerrainModel
       internal static ptsDTMtriangle CreateFromBinary(
          Byte[] byteArray, 
          Int32 startIndex,
-         Dictionary<ulong, ptsDTMpoint> pointsDic)
+         IDictionary<ulong, ptsDTMpoint> pointsDic)
       {
          UInt32 ndx1, ndx2, ndx3;
 

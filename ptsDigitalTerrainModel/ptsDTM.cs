@@ -336,7 +336,24 @@ namespace ptsDigitalTerrainModel
          }
          catch { }
          finally { returnDTM.TryDeleteTempFiles(); }
+
+         returnDTM.ComputeBB();
+
          return returnDTM;
+      }
+
+      private void ComputeBB()
+      {
+         var point1 = this.allPoints.FirstOrDefault().Value;
+         this.myBoundingBox = new ptsBoundingBox2d(
+            point1.x, point1.y, point1.x, point1.y);
+         Parallel.ForEach(this.allPoints,
+            p => this.myBoundingBox.expandByPoint(p.Value.x, p.Value.y, p.Value.z)
+            );
+         //foreach(var p in this.allPoints)
+         //{
+         //   this.myBoundingBox.expandByPoint(p.Value.x, p.Value.y, p.Value.z);
+         //}
       }
 
       private static void loadPointsFromBinary(Dictionary<ulong, ptsDTMpoint> allPointsDictionary)
