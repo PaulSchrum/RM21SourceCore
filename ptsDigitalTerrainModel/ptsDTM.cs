@@ -346,7 +346,7 @@ namespace ptsDigitalTerrainModel
       {
          var point1 = this.allPoints.FirstOrDefault().Value;
          this.myBoundingBox = new ptsBoundingBox2d(
-            point1.x, point1.y, point1.x, point1.y);
+            point1.x, point1.y, point1.z, point1.x, point1.y, point1.z);
          Parallel.ForEach(this.allPoints,
             p => this.myBoundingBox.expandByPoint(p.Value.x, p.Value.y, p.Value.z)
             );
