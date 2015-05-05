@@ -104,5 +104,11 @@ namespace ptsCogo
 
          return true;
       }
+
+      public Double GetAreaXYplane()
+      {
+         return (this.upperRightPt.x - this.lowerLeftPt.x) *
+                (this.upperRightPt.y - this.lowerLeftPt.y);
+      }
    }
 }
