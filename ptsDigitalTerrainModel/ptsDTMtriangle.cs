@@ -149,23 +149,6 @@ namespace ptsDigitalTerrainModel
          
       }
 
-      internal void SaveToSQLiteDB(System.Data.SQLite.SQLiteConnection conn)
-      {
-         StringBuilder SQLstring = new StringBuilder();
-         SQLstring.Append("INSERT INTO triangles (indexPt1, indexPt2, indexPt3) ");
-         SQLstring.AppendFormat("VALUES ('{0}', '{1}', '{2}')", this.indices[0], indices[1], indices[2]);
-         var cmd = new SQLiteCommand(conn);
-         cmd.CommandText = SQLstring.ToString();
-         cmd.ExecuteNonQuery();
-      }
-
-      internal void WriteToFile(System.IO.StreamWriter outStream)
-      {
-         outStream.WriteLine(String.Format("{0} {1} {2}",
-            this.indices[0], indices[1], indices[2]
-            ));
-      }
-
       internal static ptsDTMtriangle CreateFromBinary(
          Byte[] byteArray, 
          Int32 startIndex,
