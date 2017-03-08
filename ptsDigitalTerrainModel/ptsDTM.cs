@@ -13,7 +13,6 @@ using ptsCogo.Angle;
 using System.Threading.Tasks;
 using System.Data.SQLite;
 using System.IO.Compression;
-using System.Threading;
 
 namespace ptsDigitalTerrainModel
 {
@@ -21,26 +20,8 @@ namespace ptsDigitalTerrainModel
    {
       private Dictionary<UInt64, ptsDTMpoint> allPoints;
       public List<ptsDTMtriangle> allTriangles;
-
-      private ptsBoundingBox2d myBoundingBox_ = null;
-      private ptsBoundingBox2d myBoundingBox
-      {
-         get
-         {
-            if (null == myBBtask)
-            {
-               return myBoundingBox_;
-            }
-            if (myBBtask.IsCompleted == false)
-               return null;
-            return myBBtask.Result;
-         }
-         set
-         {
-            myBoundingBox_ = value;
-         }
-      }
-      private Task<ptsBoundingBox2d> myBBtask;
+      //private ptsDTMtriangle[] allTriangles;
+      private ptsBoundingBox2d myBoundingBox;
 
       private static readonly string TEMP_POINTS_FILENAME = "⊙Temp.ptsTin";
       private static readonly string TEMP_TRIANGLES_FILENAME = "ΔTemp.ptsTin";
@@ -196,13 +177,13 @@ namespace ptsDigitalTerrainModel
             String ext = Path.GetExtension(fileName);
             if (ext.Equals(StandardExtension, StringComparison.OrdinalIgnoreCase))
             {
-               returnTin = loadAsBinaryAsync(fileName);
+               Task<ptsDTM> tsk = Task.Run(() => loadAsBinaryAsync(fileName));
+               returnTin = tsk.Result;
             }
             else
                returnTin.LoadTextFile(fileName);
          }
 
-         Debug.WriteLine("Returning from CreateFromExistingFile");
          return returnTin;
       }
 
@@ -272,7 +253,6 @@ namespace ptsDigitalTerrainModel
                      if (allPoints == null)
                      {
                         createAllpointsCollection();
-
                         myBoundingBox = new ptsBoundingBox2d(scratchPoint.x, scratchPoint.y, scratchPoint.x, scratchPoint.y);
                      }
                      allPoints.Add(id, scratchPoint);
@@ -336,7 +316,7 @@ namespace ptsDigitalTerrainModel
 
       }
 
-      private static ptsDTM loadAsBinaryAsync(string fileName)
+      private static async Task<ptsDTM> loadAsBinaryAsync(string fileName)
       {
          if (!File.Exists(fileName))
             throw new FileNotFoundException(fileName);
@@ -350,30 +330,29 @@ namespace ptsDigitalTerrainModel
             GetTempFilesOutOfZip(fileName);
             loadPointsFromBinary(returnDTM.allPoints);
             loadTrianglesFromBinary(returnDTM.allTriangles, returnDTM.allPoints);
+            //Task.WaitAll(
+            //   Task.Run(() => loadPointsFromBinary(returnDTM.allPoints)),
+            //   Task.Run(() =>
+            //      loadTrianglesFromBinary(returnDTM.allTriangles, returnDTM.allPoints))
+            //   );
 
          }
          catch { }
          finally { returnDTM.TryDeleteTempFiles(); }
 
-         Debug.WriteLine(String.Empty); Debug.WriteLine("=============");
-         Debug.WriteLine("About to call ComputeBB from thread {0}", Thread.CurrentThread.ManagedThreadId);
-         returnDTM.myBBtask = Task.Run(() => returnDTM.ComputeBB());
-         Debug.WriteLine("Just called await ComputBB.");
+         returnDTM.myBoundingBox = await Task.Run(() => returnDTM.ComputeBB());
+
          return returnDTM;
       }
 
       private ptsBoundingBox2d ComputeBB()
       {
-         Debug.WriteLine("Starting ComputeBB on {0}.", Thread.CurrentThread.ManagedThreadId);
-         Stopwatch sw = new Stopwatch(); sw.Start();
          var point1 = this.allPoints.FirstOrDefault().Value;
          var returnBB = new ptsBoundingBox2d(
             point1.x, point1.y, point1.z, point1.x, point1.y, point1.z);
          Parallel.ForEach(this.allPoints,
             p => returnBB.expandByPoint(p.Value.x, p.Value.y, p.Value.z)
             );
-         sw.Stop();
-         Debug.WriteLine(String.Format("Compute BB took {0}", sw.Elapsed));
          return returnBB;
       }
 
@@ -675,26 +654,12 @@ namespace ptsDigitalTerrainModel
       }
       public double? getElevation(ptsDTMpoint aPoint)
       {
-         spinWaitForBoundingBox(2000);
-         if (null == this.myBoundingBox) return null;
          ptsDTMtriangle aTriangle = getTriangleContaining(aPoint);
          if (null == aTriangle)
             return null;
 
          return aTriangle.givenXYgetZ(aPoint);
 
-      }
-
-      private void spinWaitForBoundingBox(int timeoutMilliseconds)
-      {
-         int c = 0;
-         Stopwatch watch = new Stopwatch(); watch.Start();
-         while(this.myBoundingBox == null)
-         {
-            if (timeoutMilliseconds < watch.ElapsedMilliseconds)
-               return;
-         }
-         return;
       }
 
       public double? getSlope(ptsPoint aPoint)
