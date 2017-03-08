@@ -91,7 +91,7 @@ namespace ptsDigitalTerrainModel
                // Read until the close brace,  [
                if(line.Equals("]"))
                   break;
-               scratchPoint = convertLineOfDataToPoint(line, ptIndex);
+               scratchPoint = convertLineOfDataToPoint(line);
                if (allPoints == null)
                {
                   createAllpointsCollection();
@@ -144,14 +144,13 @@ namespace ptsDigitalTerrainModel
          return triangle;
       }
 
-      private ptsDTMpoint convertLineOfDataToPoint(string line, ulong pointIndex)
+      private ptsDTMpoint convertLineOfDataToPoint(string line)
       {
          ptsDTMpoint newPt;
          string[] preParsedLine = line.Split(',');
          string[] parsedLine = preParsedLine[preParsedLine.Length-1].Split(' ');
 
          newPt = new ptsDTMpoint(
-            pointIndex,
             Convert.ToDouble(parsedLine[0]),
             Convert.ToDouble(parsedLine[1]),
             Convert.ToDouble(parsedLine[2]));
@@ -207,7 +206,6 @@ namespace ptsDigitalTerrainModel
             LoadTINfromVRML(fileName);
          else
             throw new Exception("Filename must have xml or wrl extension.");
-         
       }
 
       private void LoadTINfromLandXML(string fileName)
@@ -319,12 +317,8 @@ namespace ptsDigitalTerrainModel
 
       }
 
-#if !DoNotCompileThis
       public void saveJustThePointsThenReadThemAgain()
       {
-
-      }
-#else
          String filenameToSaveTo = @"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\allPoints.binary";
 
          BinaryFormatter binFrmtr = new BinaryFormatter();
@@ -361,7 +355,6 @@ namespace ptsDigitalTerrainModel
          }
 
       }
-#endif
 
       public void saveAsBinary(string filenameToSaveTo)
       {
