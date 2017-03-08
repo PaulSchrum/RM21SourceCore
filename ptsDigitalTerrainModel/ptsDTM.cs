@@ -11,7 +11,6 @@ using System.Collections.Concurrent;
 using ptsCogo;
 using ptsCogo.Angle;
 using System.Threading.Tasks;
-using System.Data.SQLite;
 
 namespace ptsDigitalTerrainModel
 {
@@ -364,74 +363,49 @@ namespace ptsDigitalTerrainModel
       }
 #endif
 
-      public void saveAsBinary(string filenameToSaveTo, bool overwrite)
+      public void saveAsBinary(string filenameToSaveTo)
       {
-         throw new NotImplementedException();
          if(!Path.GetExtension(filenameToSaveTo).
             Equals(StandardExtension, StringComparison.OrdinalIgnoreCase))
          { throw new ArgumentException(
             String.Format("Filename does not have extension: {0}.", StandardExtension));
          }
 
-         SQLiteConnection conn = null;
-         StringBuilder ConnString = new StringBuilder();
-         ConnString.AppendFormat("Data Source={0};Version=4;", filenameToSaveTo);
-
-         try
+         BinaryFormatter binFrmtr = new BinaryFormatter();
+         using
+         (Stream fstream = 
+            new FileStream(filenameToSaveTo, FileMode.Create, FileAccess.Write, FileShare.None))
          {
-            if(File.Exists(filenameToSaveTo) == true)
-            {
-               if(false == overwrite)
-               {
-                  throw new IOException("File already exists and overwrite is disallowed.");
-               }
-               else
-               {
-                  conn = new SQLiteConnection(ConnString.ToString());
-                  conn.Open();
-                  (new SQLiteCommand("DROP TABLE points;", conn)).ExecuteNonQuery();
-                  (new SQLiteCommand("DROP TABLE triangles;", conn)).ExecuteNonQuery();
-                  (new SQLiteCommand("VACUUM;", conn)).ExecuteNonQuery();
-               }
-            }
-            else
-            {
-               SQLiteConnection.CreateFile(filenameToSaveTo);
-               conn = new SQLiteConnection(ConnString.ToString());
-               conn.Open();
-            }
-            string sql = "create table points (pointID int, x double, y double, z double)";
-            SQLiteCommand command = new SQLiteCommand(sql, conn);
-            command.ExecuteNonQuery();
-            sql = "create table triangles (pointID int, x double, y double, z double)";
-            command = new SQLiteCommand(sql, conn);
-            command.ExecuteNonQuery();
-            foreach(var pt in this.allPoints.Select(p => p.Value))
-            {
-               pt.SaveToSQLiteDB(conn);
-            }
-            foreach(var tr in this.allTriangles)
-            {
-               tr.SaveToSQLiteDB(conn);
-            }
+            binFrmtr.Serialize(fstream, this);
          }
-         catch (IOException) { throw; }
-         finally
-         {
-            if (null != conn)
-               conn.Close();
-         }
-
       }
 
       static public ptsDTM loadTinFromBinary(string filenameToLoad)
       {
-         throw new NotImplementedException();
-         LoadTimeStopwatch = new Stopwatch();
-         LoadTimeStopwatch.Start();
-         LoadTimeStopwatch.Stop();
+         BinaryFormatter binFrmtr = new BinaryFormatter();
+         using
+         (Stream fstream = File.OpenRead(filenameToLoad))
+         {
+            ptsDTM aDTM = new ptsDTM();
+            LoadTimeStopwatch = new Stopwatch();
+            LoadTimeStopwatch.Start();
+            try { aDTM = (ptsDTM)binFrmtr.Deserialize(fstream);
+            LoadTimeStopwatch.Stop();
+               int i = 0 + 1; }
+                                                   #pragma warning disable 0168
+            catch (InvalidCastException e)
+                                                   #pragma warning restore 0168
+            {
+               LoadTimeStopwatch.Stop();
+               return null;  }
+            LoadTimeStopwatch.Stop();
 
-         return null;
+            Parallel.ForEach(aDTM.allTriangles
+               , new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }
+               , tri => tri.computeBoundingBox());
+            return aDTM;
+         }
+         //return null;
       }
 
       private void setupStopWatches()

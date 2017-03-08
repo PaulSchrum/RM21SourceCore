@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using ptsCogo;
@@ -14,13 +13,6 @@ namespace ptsDigitalTerrainModel
       public Double x { get; set; }
       public Double y { get; set; }
       public Double z { get; set; }
-
-      //private int zAsInt;
-      //public Double z 
-      //{
-      //   get { return ((Double)zAsInt) / 1000; }
-      //   set { zAsInt = (int)(value * 1000); }
-      //}
 
       [NonSerialized]
       private static String[] parsedStrings;
@@ -48,16 +40,6 @@ namespace ptsDigitalTerrainModel
          this.x = Double.Parse(x);
          this.y = Double.Parse(y);
          this.z = Double.Parse(z);
-      }
-
-      internal void SaveToSQLiteDB(SQLiteConnection conn)
-      {
-         StringBuilder SQLstring = new StringBuilder();
-         SQLstring.Append("INSERT INTO points (pointID, x, y, z) ");
-         SQLstring.AppendFormat("VALUES ('{0}', '{1}', '{2}', '{3}')", this.myIndex, x, y, z);
-         var cmd = new SQLiteCommand(conn);
-         cmd.CommandText = SQLstring.ToString();
-         cmd.ExecuteNonQuery();
       }
 
       static public ptsDTMpoint getAveragePoint(ptsDTMpoint pt1, ptsDTMpoint pt2, ptsDTMpoint pt3)
