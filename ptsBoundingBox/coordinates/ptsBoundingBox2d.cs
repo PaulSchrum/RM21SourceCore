@@ -19,12 +19,6 @@ namespace ptsCogo
          upperRightPt = new ptsPoint(URx, URy);
       }
 
-      public ptsBoundingBox2d(Double LLx, Double LLy, Double LLz, Double URx, Double URy, Double URz)
-      {
-         lowerLeftPt = new ptsPoint(LLx, LLy, LLz);
-         upperRightPt = new ptsPoint(URx, URy, URz);
-      }
-
       public ptsBoundingBox2d(ptsPoint aPoint)
       {
          lowerLeftPt = new ptsPoint(aPoint);
