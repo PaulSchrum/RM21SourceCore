@@ -30,7 +30,7 @@ namespace ptsDtmTest1
             // find desired values and comparissons at:
             //    "C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\Tin Test Points.xlsx"
             aTinFile = ptsDTM.CreateFromExistingFile(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.xml");
-            DealWithSmallDTM(aTinFile);
+            //DealWithSmallDTM(aTinFile);
             //////aTinFile.saveJustThePointsThenReadThemAgain();
             //aTinFile = ptsDTM.CreateFromExistingFile(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.xml");
          }

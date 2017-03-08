@@ -15,12 +15,12 @@ namespace ptsDigitalTerrainModel
       [NonSerialized]
       private Dictionary<UInt64, ptsDTMpoint> allPoints;
       [NonSerialized]
-      internal UInt32[] indices = new UInt32[3];
+      private UInt64[] indices = new UInt64[3];
 
       // substantitve fields - Do Serialize these
-      public UInt32 index1 { get; set; }
-      public UInt32 index2 { get; set; }
-      public UInt32 index3 { get; set; }
+      public ulong index1 { get; set; }
+      public ulong index2 { get; set; }
+      public ulong index3 { get; set; }
 
       public ptsDTMpoint point1 { get { return allPoints[indices[0]]; } }
       public ptsDTMpoint point2 { get { return allPoints[indices[1]]; } }
@@ -41,15 +41,15 @@ namespace ptsDigitalTerrainModel
 
          String[] indexStrings;
          indexStrings = pointRefs.Split(' ');
-         UInt32.TryParse(indexStrings[0], out indices[0]);
-         UInt32.TryParse(indexStrings[1], out indices[1]);
-         UInt32.TryParse(indexStrings[2], out indices[2]);
+         UInt64.TryParse(indexStrings[0], out indices[0]);
+         UInt64.TryParse(indexStrings[1], out indices[1]);
+         UInt64.TryParse(indexStrings[2], out indices[2]);
 
          computeBoundingBox();
       }
 
-      public ptsDTMtriangle(Dictionary<UInt64, ptsDTMpoint> pointList, UInt32 ptIndex1,
-         UInt32 ptIndex2, UInt32 ptIndex3)
+      public ptsDTMtriangle(Dictionary<UInt64, ptsDTMpoint> pointList, UInt64 ptIndex1,
+         UInt64 ptIndex2, UInt64 ptIndex3)
       {
          this.allPoints = pointList;
          this.index1 = ptIndex1;
