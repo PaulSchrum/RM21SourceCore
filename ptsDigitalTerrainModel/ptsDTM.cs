@@ -736,12 +736,6 @@ namespace ptsDigitalTerrainModel
 
       }
 
-      public Double getArea()
-      {
-         return (from triangle in this.allTriangles.AsParallel()
-                 select triangle.GetArea()).Sum();
-      }
-
       public void loadFromXYZtextFile(string fileToOpen)
       {
          //ptsBoundingBox2d fileBB = new ptsBoundingBox2d()

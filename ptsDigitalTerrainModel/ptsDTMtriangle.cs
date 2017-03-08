@@ -149,11 +149,6 @@ namespace ptsDigitalTerrainModel
          
       }
 
-      public Double GetArea()
-      {
-         return this.myBoundingBox_.GetAreaXYplane() / 2.0;
-      }
-
       internal static ptsDTMtriangle CreateFromBinary(
          Byte[] byteArray, 
          Int32 startIndex,
