@@ -9,7 +9,7 @@ using ptsCogo.Angle;
 namespace ptsDigitalTerrainModel
 {
    [Serializable]
-   public class ptsDTMtriangle : IComparable
+   internal class ptsDTMtriangle : IComparable
    {
       // temporary scratch pad members -- do not serialize
       [NonSerialized]
@@ -52,9 +52,9 @@ namespace ptsDigitalTerrainModel
          UInt32 ptIndex2, UInt32 ptIndex3)
       {
          this.allPoints = pointList;
-         this.indices[0] = ptIndex1;
-         this.indices[1] = ptIndex2;
-         this.indices[2] = ptIndex3;
+         this.index1 = ptIndex1;
+         this.index2 = ptIndex2;
+         this.index3 = ptIndex3;
 
          computeBoundingBox();
       }
@@ -170,27 +170,6 @@ namespace ptsDigitalTerrainModel
          outStream.WriteLine(String.Format("{0} {1} {2}",
             this.indices[0], indices[1], indices[2]
             ));
-      }
-
-      internal static ptsDTMtriangle CreateFromBinary(
-         Byte[] byteArray, 
-         Int32 startIndex,
-         Dictionary<ulong, ptsDTMpoint> pointsDic)
-      {
-         UInt32 ndx1, ndx2, ndx3;
-
-         ndx1 = BitConverter.ToUInt32(byteArray, startIndex);
-         int nextIndex = startIndex + sizeof(UInt32);
-         ndx2 = BitConverter.ToUInt32(byteArray, nextIndex);
-         nextIndex += sizeof(UInt32);
-         ndx3 = BitConverter.ToUInt32(byteArray, nextIndex);
-
-         return new ptsDTMtriangle(pointsDic, ndx1, ndx2, ndx3);
-      }
-
-      internal static int getBinarySize()
-      {
-         return 3 * sizeof(UInt32);
       }
    }
 }

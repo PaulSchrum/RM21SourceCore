@@ -19,7 +19,7 @@ namespace ptsDigitalTerrainModel
    public class ptsDTM
    {
       private Dictionary<UInt64, ptsDTMpoint> allPoints;
-      public List<ptsDTMtriangle> allTriangles;
+      private List<ptsDTMtriangle> allTriangles;
       //private ptsDTMtriangle[] allTriangles;
       private ptsBoundingBox2d myBoundingBox;
 
@@ -315,66 +315,7 @@ namespace ptsDigitalTerrainModel
 
       private static ptsDTM loadAsBinary(string fileName)
       {
-         if (!File.Exists(fileName))
-            throw new FileNotFoundException(fileName);
-
-         ptsDTM returnDTM = new ptsDTM();
-         returnDTM.allPoints = new Dictionary<ulong, ptsDTMpoint>();
-         returnDTM.allTriangles = new List<ptsDTMtriangle>();
-         try
-         {
-            returnDTM.TryDeleteTempFiles();
-            GetTempFilesOutOfZip(fileName);
-            loadPointsFromBinary(returnDTM.allPoints);
-            loadTrianglesFromBinary(returnDTM.allTriangles, returnDTM.allPoints);
-            //Task.WaitAll(
-            //   Task.Run(() => loadPointsFromBinary(returnDTM.allPoints)),
-            //   Task.Run(() =>
-            //      loadTrianglesFromBinary(returnDTM.allTriangles, returnDTM.allPoints))
-            //   );
-
-         }
-         catch { }
-         finally { returnDTM.TryDeleteTempFiles(); }
-         return returnDTM;
-      }
-
-      private static void loadPointsFromBinary(Dictionary<ulong, ptsDTMpoint> allPointsDictionary)
-      {
-         Byte[] pointsBytes = File.ReadAllBytes(TEMP_POINTS_FILENAME);
-         var arraySize = pointsBytes.Length;
-         for(int arrayIndex=0; arrayIndex < arraySize; arrayIndex += ptsDTMpoint.getBinarySizeOf())
-         {
-            var newPoint = ptsDTMpoint.CreateFromBinary(pointsBytes, arrayIndex);
-            ulong pointsIndex = newPoint.myIndex;
-            allPointsDictionary.Add(pointsIndex, newPoint);
-         }
-      }
-
-      private static void loadTrianglesFromBinary(
-         List<ptsDTMtriangle> allTrianglesList,
-         Dictionary<ulong, ptsDTMpoint> allPointsDictionary)
-      {
-         Byte[] trianglesBytes = File.ReadAllBytes(TEMP_TRIANGLES_FILENAME);
-         var arraySize = trianglesBytes.Length;
-         for(int arrayIndex=0; arrayIndex < arraySize; arrayIndex += ptsDTMtriangle.getBinarySize())
-         {
-            try
-            {
-               allTrianglesList.Add(
-                  ptsDTMtriangle.CreateFromBinary(trianglesBytes, arrayIndex, allPointsDictionary));
-            }
-            catch { }
-         }
-      }
-
-      private static void GetTempFilesOutOfZip(String fileToOpen)
-      {
-         using (var zipFile = ZipFile.Open(fileToOpen, ZipArchiveMode.Read))
-         {
-            zipFile.GetEntry(TEMP_POINTS_FILENAME).ExtractToFile(TEMP_POINTS_FILENAME);
-            zipFile.GetEntry(TEMP_TRIANGLES_FILENAME).ExtractToFile(TEMP_TRIANGLES_FILENAME);
-         }
+         throw new NotImplementedException();
       }
 
       public void saveAsBinary(string filenameToSaveTo, bool overwrite)
@@ -401,7 +342,6 @@ namespace ptsDigitalTerrainModel
          GC.Collect();
          try
          {
-            TryDeleteTempFiles();
             Task.WaitAll(
                Task.Run(() => savePoints(TEMP_POINTS_FILENAME)),
                Task.Run(() => saveTriangles(TEMP_TRIANGLES_FILENAME))
@@ -444,6 +384,7 @@ namespace ptsDigitalTerrainModel
       {
          Byte[] pointsByteArray = GetPointsAsByteArray();
          File.WriteAllBytes(filenameToSaveTo, pointsByteArray);
+         pointsByteArray = null;
       }
 
       internal byte[] GetPointsAsByteArray()
@@ -474,7 +415,6 @@ namespace ptsDigitalTerrainModel
             Buffer.BlockCopy(
                BitConverter.GetBytes(p.Value.z),
                0, returnArray, (i * rowSize) + rowOffset, sizeof(Double));
-            i++;
          }
          return returnArray;
       }
@@ -483,6 +423,7 @@ namespace ptsDigitalTerrainModel
       {
          Byte[] trianglesByteArray = GetTrianglesAsByteArray();
          File.WriteAllBytes(filenameToSaveTo, trianglesByteArray);
+         trianglesByteArray = null;
       }
 
       private byte[] GetTrianglesAsByteArray()
@@ -490,29 +431,20 @@ namespace ptsDigitalTerrainModel
          int arraySize = allTriangles.Count * 3 * sizeof(UInt32);
          Byte[] returnArray = new Byte[arraySize];
          int i = 0;
-         int actualOffset;
          foreach (var t in this.allTriangles)
          {
-            try
-            {
-            actualOffset = i * sizeof(UInt32);
             Buffer.BlockCopy(
                BitConverter.GetBytes(t.indices[0]),
-               0, returnArray, actualOffset, sizeof(UInt32));
+               0, returnArray, i * sizeof(UInt32), sizeof(UInt32));
             i++;
-            actualOffset = i * sizeof(UInt32);
             Buffer.BlockCopy(
                BitConverter.GetBytes(t.indices[1]),
-               0, returnArray, actualOffset, sizeof(UInt32));
+               0, returnArray, i * sizeof(UInt32), sizeof(UInt32));
             i++;
-            actualOffset = i * sizeof(UInt32);
             Buffer.BlockCopy(
                BitConverter.GetBytes(t.indices[2]),
-               0, returnArray, actualOffset, sizeof(UInt32));
+               0, returnArray, i * sizeof(UInt32), sizeof(UInt32));
             i++;
-
-            }
-            catch { }
          }
          return returnArray;
       }

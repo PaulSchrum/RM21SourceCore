@@ -85,25 +85,5 @@ namespace ptsDigitalTerrainModel
             this.myIndex.ToString(), this.x.ToString(), this.y.ToString(), this.z.ToString()
             ));
       }
-
-      internal static ptsDTMpoint CreateFromBinary(Byte[] byteArray, Int32 startIndex)
-      {
-         ulong hisIndex = (ulong)BitConverter.ToInt64(byteArray, startIndex);
-         Double newX, newY, newZ;
-
-         int nextIndex = startIndex + sizeof(ulong);
-         newX = BitConverter.ToDouble(byteArray, nextIndex);
-         nextIndex += sizeof(Double);
-         newY = BitConverter.ToDouble(byteArray, nextIndex);
-         nextIndex += sizeof(Double);
-         newZ = BitConverter.ToDouble(byteArray, nextIndex);
-
-         return new ptsDTMpoint(hisIndex, newX, newY, newZ);
-      }
-
-      internal static int getBinarySizeOf()
-      {
-         return sizeof(ulong) + 3 * sizeof(Double);
-      }
    }
 }
