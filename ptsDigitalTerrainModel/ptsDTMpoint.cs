@@ -7,6 +7,7 @@ using ptsCogo;
 
 namespace ptsDigitalTerrainModel
 {
+   [Serializable]
    public struct ptsDTMpoint //: ptsCogo.ptsPoint
    {
       public ulong myIndex { get; internal set; }
@@ -14,6 +15,14 @@ namespace ptsDigitalTerrainModel
       public Double y { get; set; }
       public Double z { get; set; }
 
+      //private int zAsInt;
+      //public Double z 
+      //{
+      //   get { return ((Double)zAsInt) / 1000; }
+      //   set { zAsInt = (int)(value * 1000); }
+      //}
+
+      [NonSerialized]
       private static String[] parsedStrings;
 
       public ptsDTMpoint(double newX, double newY, double newZ) : this()
@@ -41,7 +50,6 @@ namespace ptsDigitalTerrainModel
          this.z = Double.Parse(z);
       }
 
-#if DoNotCompile
       internal void SaveToSQLiteDB(SQLiteConnection conn)
       {
          StringBuilder SQLstring = new StringBuilder();
@@ -51,7 +59,6 @@ namespace ptsDigitalTerrainModel
          cmd.CommandText = SQLstring.ToString();
          cmd.ExecuteNonQuery();
       }
-#endif
 
       static public ptsDTMpoint getAveragePoint(ptsDTMpoint pt1, ptsDTMpoint pt2, ptsDTMpoint pt3)
       {
@@ -72,14 +79,12 @@ namespace ptsDigitalTerrainModel
          return new ptsDTMpoint(aPt.x, aPt.y, aPt.z);
       }
 
-#if DoNotCompile
       internal void WriteToFile(System.IO.StreamWriter outStream)
       {
          outStream.WriteLine(String.Format("{0} {1} {2} {3}",
             this.myIndex.ToString(), this.x.ToString(), this.y.ToString(), this.z.ToString()
             ));
       }
-#endif
 
       internal static ptsDTMpoint CreateFromBinary(Byte[] byteArray, Int32 startIndex)
       {
