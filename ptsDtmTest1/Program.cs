@@ -25,12 +25,12 @@ namespace ptsDtmTest1
          try
          {
             //aTinFile = new ptsDTM(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\BigTest.xml");
-            //aTinFile = ptsDTM.CreateFromExistingFile(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\SmallExample.xml");
-
+            //aTinFile = new ptsDTM(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\SmallExample.xml");
+            //aTinFile = new ptsDTM();
+            //aTinFile.LoadTextFile(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.xml");
             // find desired values and comparissons at:
             //    "C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\Tin Test Points.xlsx"
             aTinFile = ptsDTM.CreateFromExistingFile(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.xml");
-            DealWithSmallDTM(aTinFile);
             //////aTinFile.saveJustThePointsThenReadThemAgain();
             //aTinFile = ptsDTM.CreateFromExistingFile(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.xml");
          }
@@ -72,8 +72,8 @@ namespace ptsDtmTest1
             System.Console.WriteLine("Thrown by {0}", e.Data.GetType().ToString());
             //throw;
          }
-         finally { Console.WriteLine("Finished. Press any key."); Console.ReadKey(); }
-         return;
+         //finally {Console.ReadKey();}
+         //return;
          //if (aTinFile != null)
             //aTinFile.saveAsBinary(@"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\GPEtin.ptsTin");
 
@@ -154,11 +154,6 @@ namespace ptsDtmTest1
 
          System.Console.WriteLine("Memory Released");
          System.Console.ReadKey();
-      }
-
-      private static void DealWithSmallDTM(ptsDTM aTinFile)
-      {
-         aTinFile.saveAsBinaryAlt2("TestSave.ptsTin", true);
       }
 
       private static void printResult(int count, double? EL, double? slope, Azimuth AZ)

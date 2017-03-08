@@ -78,12 +78,5 @@ namespace ptsDigitalTerrainModel
       {
          return new ptsDTMpoint(aPt.x, aPt.y, aPt.z);
       }
-
-      internal void WriteToFile(System.IO.StreamWriter outStream)
-      {
-         outStream.WriteLine(String.Format("{0} {1} {2} {3}",
-            this.myIndex.ToString(), this.x.ToString(), this.y.ToString(), this.z.ToString()
-            ));
-      }
    }
 }
