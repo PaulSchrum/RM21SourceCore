@@ -158,7 +158,7 @@ namespace ptsDtmTest1
 
       private static void DealWithSmallDTM(ptsDTM aTinFile)
       {
-         aTinFile.saveAsBinary("TestSave.ptsTin", true);
+         aTinFile.saveAsBinaryAlt2("TestSave.ptsTin", true);
       }
 
       private static void printResult(int count, double? EL, double? slope, Azimuth AZ)

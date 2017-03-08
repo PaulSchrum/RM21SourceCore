@@ -176,7 +176,7 @@ namespace ptsDigitalTerrainModel
          {
             String ext = Path.GetExtension(fileName);
             if (ext.Equals(StandardExtension, StringComparison.OrdinalIgnoreCase))
-               returnTin = loadAsBinary(fileName);
+               returnTin = loadTinFromBinary(fileName);
             else
                returnTin.LoadTextFile(fileName);
          }
@@ -313,12 +313,51 @@ namespace ptsDigitalTerrainModel
 
       }
 
-      private static ptsDTM loadAsBinary(string fileName)
+#if !DoNotCompileThis
+      public void saveJustThePointsThenReadThemAgain()
       {
-         throw new NotImplementedException();
-      }
 
-      public void saveAsBinary(string filenameToSaveTo, bool overwrite)
+      }
+#else
+         String filenameToSaveTo = @"C:\Users\Paul\Documents\Visual Studio 2010\Projects\XML Files\Garden Parkway\allPoints.binary";
+
+         BinaryFormatter binFrmtr = new BinaryFormatter();
+         using
+         (Stream fstream =
+            new FileStream(filenameToSaveTo, FileMode.Create, FileAccess.Write, FileShare.None))
+         {
+            binFrmtr.Serialize(fstream, this.allPoints);
+         }
+
+         this.allPoints.Clear();
+         this.allTriangles.Clear();
+         GC.Collect();
+         Console.WriteLine("Pausing . . .");
+         Task.Delay(500);
+
+         BinaryFormatter binFrmtr2 = new BinaryFormatter();
+         using
+         (Stream fstream = File.OpenRead(filenameToSaveTo))
+         {
+            Dictionary<UInt64, ptsDTMpoint> testPts = new Dictionary<ulong,ptsDTMpoint>();
+            LoadTimeStopwatch = new Stopwatch();
+            LoadTimeStopwatch.Start();
+            try 
+            { 
+               testPts = (Dictionary<UInt64, ptsDTMpoint>)binFrmtr.UnsafeDeserialize(fstream,null);
+            }
+                                                   #pragma warning disable 0168
+            catch (InvalidCastException e)
+                                                   #pragma warning restore 0168
+            { return;  }
+            finally { LoadTimeStopwatch.Stop(); }
+            
+         }
+
+      }
+#endif
+
+      public void saveAsBinaryAlt2(string filenameToSaveTo, bool overwrite)
       {
          if (!Path.GetExtension(filenameToSaveTo).
             Equals(StandardExtension, StringComparison.OrdinalIgnoreCase))
@@ -339,7 +378,10 @@ namespace ptsDigitalTerrainModel
             }
          }
 
+         LoadTimeStopwatch.Reset();
+         LoadTimeStopwatch.Start();
          GC.Collect();
+
          try
          {
             Task.WaitAll(
@@ -355,6 +397,7 @@ namespace ptsDigitalTerrainModel
          }
 
          GC.Collect();
+         LoadTimeStopwatch.Stop();
       }
 
       private void putTempFilesInZip(String fileToSave)
@@ -447,6 +490,100 @@ namespace ptsDigitalTerrainModel
             i++;
          }
          return returnArray;
+      }
+
+
+      public void saveAsBinary(string filenameToSaveTo, bool overwrite)
+      {
+         if(!Path.GetExtension(filenameToSaveTo).
+            Equals(StandardExtension, StringComparison.OrdinalIgnoreCase))
+         { throw new ArgumentException(
+            String.Format("Filename does not have extension: {0}.", StandardExtension));
+         }
+
+         SQLiteConnection conn = null;
+         StringBuilder ConnString = new StringBuilder();
+         ConnString.AppendFormat("Data Source={0};Version=3;", filenameToSaveTo);
+
+         try
+         {
+            if(File.Exists(filenameToSaveTo) == true)
+            {
+               if(false == overwrite)
+               {
+                  throw new IOException("File already exists and overwrite is disallowed.");
+               }
+               else
+               {
+                  conn = new SQLiteConnection(ConnString.ToString());
+                  conn.Open();
+                  (new SQLiteCommand("DROP TABLE points;", conn)).ExecuteNonQuery();
+                  (new SQLiteCommand("DROP TABLE triangles;", conn)).ExecuteNonQuery();
+                  (new SQLiteCommand("VACUUM;", conn)).ExecuteNonQuery();
+               }
+            }
+            else
+            {
+               SQLiteConnection.CreateFile(filenameToSaveTo);
+               try { conn = new SQLiteConnection(ConnString.ToString()); }
+               catch { File.Delete(filenameToSaveTo); throw; }
+               conn.Open();
+            }
+            string sql = "create table points (pointID int, x double, y double, z double)";
+            SQLiteCommand command = new SQLiteCommand(sql, conn);
+            command.ExecuteNonQuery();
+            sql = "create table triangles (indexPt1 int, indexPt2 int, indexPt3 int)";
+            command = new SQLiteCommand(sql, conn);
+            command.ExecuteNonQuery();
+
+            LoadTimeStopwatch.Reset();
+            LoadTimeStopwatch.Start();
+            using (var traction = conn.BeginTransaction())
+            {
+               foreach (var pt in this.allPoints.Select(p => p.Value))
+               {
+                  pt.SaveToSQLiteDB(conn);
+               }
+               LoadTimeStopwatch.Stop();
+               LoadTimeStopwatch.Reset();
+               LoadTimeStopwatch.Start();
+               traction.Commit();
+               LoadTimeStopwatch.Stop();
+            }
+            using (var traction = conn.BeginTransaction())
+            {
+               LoadTimeStopwatch.Reset();
+               LoadTimeStopwatch.Start();
+               foreach (var tr in this.allTriangles)
+               {
+                  tr.SaveToSQLiteDB(conn);
+               }
+               LoadTimeStopwatch.Stop();
+               LoadTimeStopwatch.Reset();
+               LoadTimeStopwatch.Start();
+               traction.Commit();
+               LoadTimeStopwatch.Stop();
+            }
+         }
+         catch (IOException) { throw; }
+         finally
+         {
+            if (null != conn)
+               conn.Close();
+         }
+
+      }
+
+      static public ptsDTM loadTinFromBinary(string filenameToLoad)
+      {
+         throw new NotImplementedException();
+#if DoNotCompile
+         LoadTimeStopwatch = new Stopwatch();
+         LoadTimeStopwatch.Start();
+         LoadTimeStopwatch.Stop();
+
+         return null;
+#endif
       }
 
       private void setupStopWatches()
