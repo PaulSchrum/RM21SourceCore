@@ -127,11 +127,11 @@ namespace ptsCogo
                ptsPoint leftEndPt = null;
                ptsPoint rightEndPt = null;
                double distancetoLeftPoint = -200.0;
-               if (Alignment.GetType is ptsCogo.Horizontal.rm21HorizontalAlignment)
-               {
-                  ((ptsCogo.Horizontal.rm21HorizontalAlignment)Alignment).getCrossSectionEndPoints(station,
-                     out leftEndPt, distancetoLeftPoint, out rightEndPt, Math.Abs(distancetoLeftPoint));
-               }
+               //if (Alignment.GetType() is rm21HorizontalAlignment)
+               //{
+               //   ((ptsCogo.Horizontal.rm21HorizontalAlignment)Alignment).getCrossSectionEndPoints(station,
+               //      out leftEndPt, distancetoLeftPoint, out rightEndPt, Math.Abs(distancetoLeftPoint));
+               //}
                existingGroundProfile = existingGroundSurface.getSectionProfile(leftEndPt, distancetoLeftPoint, rightEndPt);
             }
 
