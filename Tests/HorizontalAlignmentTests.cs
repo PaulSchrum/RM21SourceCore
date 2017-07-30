@@ -7,7 +7,7 @@ using ptsCogo;
 using ptsCogo.Horizontal;
 using ptsCogo.coordinates.CurvilinearCoordinates;
 using ptsCogo.Angle;
-
+using System.IO;
 
 namespace Tests
 {
@@ -882,6 +882,85 @@ namespace Tests
             Double actualOffset = soe[0].offset;
             Assert.AreEqual(expected: expectedOffset, actual: actualOffset, delta: 0.0025);
         }
+
+        [TestMethod]
+        public void HorizontalAlignment_instantiates_fromCSV_noSpirals()
+        {
+            var directory = new DirectoryManager();
+            directory.CdUp(2).CdDown("CogoTests").CdDown("R2547");
+            string testFile = directory.GetPathAndAppendFilename("ACC_REV.csv");
+
+            rm21HorizontalAlignment AccRev = new rm21HorizontalAlignment(testFile);
+            Assert.IsNotNull(AccRev);
+
+            //int actualItemCount = AccRev.
+            //Assert.AreEqual(expected: 17, actual: actualItemCount);
+        }
+
+    }
+
+    public class DirectoryManager
+    {  // From GiHubGist: https://gist.github.com/PaulSchrum/4fb6015d46d79c06b08acb7f1bb00c53
+        // If I add other things (like createDir or move, etc. The version here should be updated.
+        public string GetPathAndAppendFilename(string filename = null)
+        {
+            if(filename == null || filename.Length == 0)
+                return this.path;
+            return this.path + "\\" + filename;
+        }
+
+        public string path { get; protected set; }
+        public List<string> pathAsList
+        {
+            get
+            {
+                return this.path.Split('\\').ToList();
+            }
+        }
+
+        protected void setPathFromList(List<string> aList)
+        {
+            this.path = string.Join("\\", aList);
+        }
+
+        public DirectoryManager()
+        {
+            this.path = System.IO.Directory.GetCurrentDirectory();
+        }
+
+        public int depth
+        {
+            get
+            {
+                return pathAsList.Count - 1;
+            }
+        }
+
+        public DirectoryManager CdUp(int upSteps)
+        {
+            if(upSteps > this.depth) throw new IOException("Can't cd up that high.");
+            var wd = this.pathAsList.Take(depth - upSteps).ToList();
+            this.setPathFromList(wd);
+            return this;
+        }
+
+        public DirectoryManager CdDown(string directoryName)
+        {
+            if(!this.SubDirectories.Contains(directoryName))
+                throw new DirectoryNotFoundException();
+            var tempList = this.pathAsList;
+            tempList.Add(directoryName);
+            this.setPathFromList(tempList);
+            return this;
+        }
+
+        public List<string> SubDirectories
+        { get {
+                var v = Directory.GetDirectories(this.path)
+                    .Select(s => s.Split('\\').Last())
+                    .ToList();
+                return v;
+            } }
 
     }
 
