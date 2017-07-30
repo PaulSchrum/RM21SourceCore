@@ -32,7 +32,7 @@ namespace TinTests
       }
    }
 
-   [TestClass]
+   //[TestClass]
    public class DTMfromZYZdata : TimeableTest
    {
       private String pathRM21SourceCode;
@@ -66,7 +66,7 @@ namespace TinTests
       }
    }
 
-   [TestClass]
+   //[TestClass]
    public class GardenParkwayDTMtests : TimeableTest
    {
       private String pathRM21SourceCode;
@@ -74,7 +74,7 @@ namespace TinTests
       private ptsDTM GardenParkwayDTM;
       private TimeSpan timeToLoadGardenParkwayTinFromXML;
 
-      [TestInitialize]
+      //[TestInitialize]
       public void setup()
       {
          var a = AppDomain.CurrentDomain.BaseDirectory;
@@ -95,7 +95,7 @@ namespace TinTests
          System.Console.WriteLine("time to create Garden Parkway: " + timeToLoadGardenParkwayTinFromXML.ToString());
       }
 
-      [TestMethod]
+      //[TestMethod]
       public void TIN_GardenParkwayTests_GetElevationSpeedTests()
       {
          this.timerStart();
