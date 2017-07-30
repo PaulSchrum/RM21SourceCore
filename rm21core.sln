@@ -30,8 +30,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinTests", "ptsDigitalTerra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{5B5A15B0-3D11-46C2-B0DB-2EEC8FEF8722}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTestingLibrary", "NUnitTestingLibrary\NUnitTestingLibrary.csproj", "{3FFF5916-9AB7-45BA-82D3-4C3D7A0D3EAB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -124,18 +122,6 @@ Global
 		{5B5A15B0-3D11-46C2-B0DB-2EEC8FEF8722}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5B5A15B0-3D11-46C2-B0DB-2EEC8FEF8722}.Release|x86.ActiveCfg = Release|Any CPU
 		{5B5A15B0-3D11-46C2-B0DB-2EEC8FEF8722}.Release|x86.Build.0 = Release|Any CPU
-		{3FFF5916-9AB7-45BA-82D3-4C3D7A0D3EAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3FFF5916-9AB7-45BA-82D3-4C3D7A0D3EAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3FFF5916-9AB7-45BA-82D3-4C3D7A0D3EAB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{3FFF5916-9AB7-45BA-82D3-4C3D7A0D3EAB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{3FFF5916-9AB7-45BA-82D3-4C3D7A0D3EAB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{3FFF5916-9AB7-45BA-82D3-4C3D7A0D3EAB}.Debug|x86.Build.0 = Debug|Any CPU
-		{3FFF5916-9AB7-45BA-82D3-4C3D7A0D3EAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3FFF5916-9AB7-45BA-82D3-4C3D7A0D3EAB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3FFF5916-9AB7-45BA-82D3-4C3D7A0D3EAB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{3FFF5916-9AB7-45BA-82D3-4C3D7A0D3EAB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{3FFF5916-9AB7-45BA-82D3-4C3D7A0D3EAB}.Release|x86.ActiveCfg = Release|Any CPU
-		{3FFF5916-9AB7-45BA-82D3-4C3D7A0D3EAB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
