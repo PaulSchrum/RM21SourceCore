@@ -38,7 +38,12 @@ namespace ptsCogo.Horizontal
          restationAlignment();
       }
 
-      private void createAllSegments(List<IRM21fundamentalGeometry> fundamentalGeometryList)
+        public rm21HorizontalAlignment(string inputFileName)
+        {
+
+        }
+
+        private void createAllSegments(List<IRM21fundamentalGeometry> fundamentalGeometryList)
       {
          foreach (var fgElement in fundamentalGeometryList)
          {
