@@ -7,83 +7,88 @@ using System.Text;
 
 namespace ptsCogo.Horizontal
 {
-   public  class HorizontalAlignmentBase : GenericAlignment
-   {
-      public HorizontalAlignmentBase() : base() { }
+    public class HorizontalAlignmentBase : GenericAlignment
+    {
+        public HorizontalAlignmentBase() : base() { }
 
-      public HorizontalAlignmentBase(ptsPoint begPt, ptsPoint endPt)
-         : base()
-      {
-         BeginPoint = begPt;
-         EndPoint = endPt;
+        public HorizontalAlignmentBase(ptsPoint begPt, ptsPoint endPt)
+           : base()
+        {
+            BeginPoint = begPt;
+            EndPoint = endPt;
 
-      }
+        }
 
-      public HorizontalAlignmentBase(List<Double> stationEquationingList) : base(stationEquationingList)
-      {
+        public HorizontalAlignmentBase(List<Double> stationEquationingList) : base(stationEquationingList)
+        {
 
-      }
+        }
 
-      public virtual ptsPoint BeginPoint { get; protected set; }
-      public virtual ptsPoint EndPoint { get; protected set; }
+        public virtual ptsPoint BeginPoint { get; protected set; }
+        public virtual ptsPoint EndPoint { get; protected set; }
 
-      public virtual Azimuth BeginAzimuth { get; protected set; }
-      public virtual Azimuth EndAzimuth { get; protected set; }
+        public virtual Azimuth BeginAzimuth { get; protected set; }
+        public virtual Azimuth EndAzimuth { get; protected set; }
 
-      public virtual ptsAngle BeginDegreeOfCurve { get; protected set; }
-      public virtual ptsAngle EndDegreeOfCurve { get; protected set; }
+        public virtual ptsAngle BeginDegreeOfCurve { get; protected set; }
+        public virtual ptsAngle EndDegreeOfCurve { get; protected set; }
 
-      public virtual Deflection Deflection { get; protected set; }
-      public virtual Double Length { get; protected set; }
-      public virtual Double Radius { get; protected set; }
+        public virtual Deflection Deflection { get; protected set; }
+        public virtual Double Length { get; protected set; }
+        public virtual Double Radius { get; protected set; }
 
-      protected List<HorizontalAlignmentBase> incomingElements { get; set; }
-      protected List<HorizontalAlignmentBase> outgoingElements { get; set; }
-      
-      public virtual ptsVector LongChordVector
-      { get { return (new ptsVector(this.BeginPoint, this.EndPoint)).flattenZnew(); } }
+        protected List<HorizontalAlignmentBase> incomingElements { get; set; }
+        protected List<HorizontalAlignmentBase> outgoingElements { get; set; }
 
-      static HorizontalAlignmentBase(){degreeOfCurveLength = 100;}
-      static public Double degreeOfCurveLength { get; set; }
-      static public ptsAngle computeDegreeOfCurve(Double radius)
-      {
-         return new ptsAngle(radius, degreeOfCurveLength);
-      }
+        public virtual ptsVector LongChordVector
+        { get { return (new ptsVector(this.BeginPoint, this.EndPoint)).flattenZnew(); } }
 
-      public virtual StringBuilder createTestSetupOfFundamentalGeometry() { return null; }
+        static HorizontalAlignmentBase() { degreeOfCurveLength = 100; }
+        static public Double degreeOfCurveLength { get; set; }
+        static public ptsAngle computeDegreeOfCurve(Double radius)
+        {
+            return new ptsAngle(radius, degreeOfCurveLength);
+        }
 
-      public virtual List<ptsPoint> getPoints(coordinates.CurvilinearCoordinates.StationOffsetElevation anSOE)
-      {
-         throw new NotImplementedException();
-      }
+        public virtual StringBuilder createTestSetupOfFundamentalGeometry() { return null; }
 
-      public virtual ptsPoint getXYZcoordinates(StationOffsetElevation anSOE)
-      {
-         return null;
-      }
+        public virtual List<ptsPoint> getPoints(coordinates.CurvilinearCoordinates.StationOffsetElevation anSOE)
+        {
+            throw new NotImplementedException();
+        }
 
-      public virtual List<StationOffsetElevation> getStationOffsetElevation(ptsPoint aPoint)
-      {
-         throw new NotImplementedException();
-      }
+        public virtual ptsPoint getXYZcoordinates(StationOffsetElevation anSOE)
+        {
+            return null;
+        }
 
-      /* * /
-      public bool isUnitUSsurveyFoot { get { return thisUnit == Unit.SurveyFoot; } set { thisUnit = Unit.SurveyFoot; } }
-      public bool isUnitFoot { get; set; }
-      public bool isUnitMeter { get; set; }
+        public virtual List<StationOffsetElevation> getStationOffsetElevation(ptsPoint aPoint)
+        {
+            throw new NotImplementedException();
+        }
 
-      private enum Unit{Meter, Foot, SurveyFoot}
-      private HorizontalAlignmentBase.Unit thisUnit { get; set; }  /*  */
+        /* * /
+        public bool isUnitUSsurveyFoot { get { return thisUnit == Unit.SurveyFoot; } set { thisUnit = Unit.SurveyFoot; } }
+        public bool isUnitFoot { get; set; }
+        public bool isUnitMeter { get; set; }
 
-      public virtual void drawHorizontalByOffset
-         (IPersistantDrawer_Cogo drawer, StationOffsetElevation soe1, StationOffsetElevation soe2)
-      {
-         
-      }
+        private enum Unit{Meter, Foot, SurveyFoot}
+        private HorizontalAlignmentBase.Unit thisUnit { get; set; }  /*  */
 
-      public virtual void draw(ILinearElementDrawer drawer)
-      {
+        public virtual void drawHorizontalByOffset
+           (IPersistantDrawer_Cogo drawer, StationOffsetElevation soe1, StationOffsetElevation soe2)
+        {
 
-      }
-   }
+        }
+
+        public virtual void draw(ILinearElementDrawer drawer)
+        {
+
+        }
+
+        internal void MoveStartPtTo(ptsPoint endPoint)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
