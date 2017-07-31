@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using ptsCogo.Angle;
 using ptsCogo.coordinates;
+using ptsCogo.Utils;
 using System.ComponentModel;
 using System.IO;
 
@@ -86,7 +87,15 @@ namespace ptsCogo.Horizontal
         private static HorizontalAlignmentBase newSegment(ptsRay inRay, double degreeIn, double length,
             double degreeOut)
         {
-            //utilFunctions.tolerantCompare(1.2, 2.3, 0.0005);
+            Double tolerance = 0.00005;
+            int areEqual = cogoUtils.tolerantCompare(degreeIn, degreeOut, tolerance);
+            if(areEqual == 0)
+            {
+                int isZero = cogoUtils.tolerantCompare(degreeIn, 0.0, tolerance);
+
+            }
+            // else it is an Euler Spiral
+
             return null;
         }
 
