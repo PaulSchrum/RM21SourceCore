@@ -17,6 +17,11 @@ namespace ptsCogo.Angle
             setFromXY(1.0, slopeASaDouble);
         }
 
+        public Slope(string slope) : this(Convert.ToDouble(slope))
+        {
+            
+        }
+
         /* */
         public Slope FlipDirection()
         {

@@ -24,6 +24,15 @@ namespace ptsCogo.Angle
             this.angle__ = Math.Atan2(endPt.y - beginPt.y, endPt.x - beginPt.x);
         }
 
+        public Azimuth(string azStr, bool IsDegree=true)
+        {
+            double az = Convert.ToDouble(azStr);
+            if(IsDegree)
+                this.setFromDegreesDouble(az);
+            else
+                angle_ = az;
+        }
+
         public new double angle_ { get { return getAsAzimuth(); } set { base.normalize(value); } }
 
         public Azimuth reverse()

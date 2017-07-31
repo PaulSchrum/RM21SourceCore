@@ -6,6 +6,7 @@ using System.Text;
 using ptsCogo.Angle;
 using ptsCogo.coordinates;
 using System.ComponentModel;
+using System.IO;
 
 namespace ptsCogo.Horizontal
 {
@@ -38,9 +39,45 @@ namespace ptsCogo.Horizontal
             restationAlignment();
         }
 
-        public rm21HorizontalAlignment(string inputFileName)
+        public static rm21HorizontalAlignment createFromCsvFile(string csvFileName)
         {
+            List<string> allLines = File.ReadAllLines(csvFileName).ToList();
+            var tableStartLines = new Dictionary<string, int>();
+            int rowCount = 0;
+            foreach(var row in allLines)
+            {
+                var splitByColon = row.Split(':');
+                if(splitByColon.Count() > 1)
+                    tableStartLines[splitByColon[0]] = rowCount;
+                rowCount++;
+            }
 
+            // process start point, direction, and station
+            var startRayRow = allLines[tableStartLines["StartHA"] + 2].Split(',');
+            var startRay = new ptsRay(x: startRayRow[0],
+                y: startRayRow[1], z: null, azimuth: startRayRow[4]);
+
+            double startStation = Convert.ToDouble(startRayRow[2]);
+            int startRegion = Convert.ToInt32(startRayRow[3]);
+            // end "process start point, direction, and station"
+
+            // Read in all elements
+            for(int i=tableStartLines["Elements"]+2; i<tableStartLines["Regions"]; i++)
+            {
+                var elementRow = allLines[i].Split(',').ToList();
+                double degreeIn = Convert.ToDouble(elementRow[0]);
+                double length = Convert.ToDouble(elementRow[1]);
+                double degreeOut = Convert.ToDouble(elementRow[2]);
+            }
+            // end "Read in all elements"
+
+            // set up stations and regions
+            // "set up stations and regions"
+
+            // validate the alignment ends on the last point
+            // end "validate the alignment ends on the last point"
+
+            return null;
         }
 
         private void createAllSegments(List<IRM21fundamentalGeometry> fundamentalGeometryList)

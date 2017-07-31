@@ -8,6 +8,16 @@ namespace ptsCogo.coordinates
 {
     public class ptsRay
     {
+        public ptsRay() { }
+
+        public ptsRay(string x, string y, string z=null, string azimuth=null, string slope=null)
+        {
+            this.StartPoint = new ptsPoint(x, y, z);
+            this.advanceDirection = 1;
+            this.HorizontalDirection = new Azimuth(azimuth);
+            this.Slope = new Slope(slope);
+        }
+
         public ptsPoint StartPoint { get; set; }
         public Slope Slope { get; set; }
         private int advanceDirection_ = 1;

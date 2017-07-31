@@ -33,11 +33,11 @@ namespace ptsCogo
             x = X; y = Y; z = Z;
         }
 
-        public ptsPoint(String X, String Y, String Z)
+        public ptsPoint(String X, String Y, String Z=null)
         {
             x = Double.Parse(X);
             y = Double.Parse(Y);
-            z = Double.Parse(Z);
+            z = (Z == null) ? 0.0 : Double.Parse(Z);
             isEmpty_ = false;
         }
 

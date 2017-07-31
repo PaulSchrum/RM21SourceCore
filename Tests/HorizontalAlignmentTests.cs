@@ -890,8 +890,8 @@ namespace Tests
             directory.CdUp(2).CdDown("CogoTests").CdDown("R2547");
             string testFile = directory.GetPathAndAppendFilename("ACC_REV.csv");
 
-            rm21HorizontalAlignment AccRev = new rm21HorizontalAlignment(testFile);
-            Assert.IsNotNull(AccRev);
+            rm21HorizontalAlignment AccRev = rm21HorizontalAlignment.createFromCsvFile(testFile);
+            //Assert.IsNotNull(AccRev);
 
             //int actualItemCount = AccRev.
             //Assert.AreEqual(expected: 17, actual: actualItemCount);
