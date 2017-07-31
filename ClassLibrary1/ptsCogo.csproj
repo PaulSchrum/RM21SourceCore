@@ -59,8 +59,10 @@
     <Compile Include="CogoStationUnbound.cs" />
     <Compile Include="GenericAlignment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\cogoUtilFunctions.cs" />
     <Compile Include="rm21Side.cs" />
     <Compile Include="tupleNullableDoubles.cs" />
+    <Compile Include="Utils\cogoUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ptsBoundingBox\ptsCadFoundations.csproj">

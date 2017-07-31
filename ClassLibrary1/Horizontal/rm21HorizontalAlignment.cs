@@ -41,6 +41,7 @@ namespace ptsCogo.Horizontal
 
         public static rm21HorizontalAlignment createFromCsvFile(string csvFileName)
         {
+            rm21HorizontalAlignment retAlign = new rm21HorizontalAlignment();
             List<string> allLines = File.ReadAllLines(csvFileName).ToList();
             var tableStartLines = new Dictionary<string, int>();
             int rowCount = 0;
@@ -62,12 +63,14 @@ namespace ptsCogo.Horizontal
             // end "process start point, direction, and station"
 
             // Read in all elements
+            var endingRay = startRay;
             for(int i=tableStartLines["Elements"]+2; i<tableStartLines["Regions"]; i++)
             {
                 var elementRow = allLines[i].Split(',').ToList();
                 double degreeIn = Convert.ToDouble(elementRow[0]);
                 double length = Convert.ToDouble(elementRow[1]);
                 double degreeOut = Convert.ToDouble(elementRow[2]);
+                retAlign.allChildSegments.Add(newSegment(endingRay, degreeIn, length, degreeOut));
             }
             // end "Read in all elements"
 
@@ -77,6 +80,13 @@ namespace ptsCogo.Horizontal
             // validate the alignment ends on the last point
             // end "validate the alignment ends on the last point"
 
+            return retAlign;
+        }
+
+        private static HorizontalAlignmentBase newSegment(ptsRay inRay, double degreeIn, double length,
+            double degreeOut)
+        {
+            //utilFunctions.tolerantCompare(1.2, 2.3, 0.0005);
             return null;
         }
 
