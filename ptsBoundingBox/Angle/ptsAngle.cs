@@ -169,6 +169,16 @@ namespace ptsCogo
             return retVal;
         }
 
+        public static ptsAngle operator *(ptsAngle angl, double multiplier)
+        {
+            return new ptsAngle(angl.angle__ * multiplier);
+        }
+
+        public static ptsAngle operator /(ptsAngle angle, double divisor)
+        {
+            return angle * 1 / divisor;
+        }
+
         public ptsAngle multiply(Double multiplier)
         {
             return new ptsAngle(this.angle__ * multiplier);
