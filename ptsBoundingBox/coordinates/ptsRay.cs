@@ -10,6 +10,14 @@ namespace ptsCogo.coordinates
     {
         public ptsRay() { }
 
+        ptsRay(ptsPoint startPt, Azimuth directionAZ, Slope slope=null)
+        {
+            this.StartPoint = startPt;
+            this.HorizontalDirection = directionAZ;
+            this.advanceDirection = 1;
+            this.Slope = slope;
+        }
+
         public ptsRay(string x, string y, string z=null, string azimuth=null, string slope=null)
         {
             this.StartPoint = new ptsPoint(x, y, z);
