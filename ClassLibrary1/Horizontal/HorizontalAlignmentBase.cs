@@ -86,9 +86,17 @@ namespace ptsCogo.Horizontal
 
         }
 
-        internal void MoveStartPtTo(ptsPoint endPoint)
+        public virtual ptsVector MoveStartPtTo(ptsPoint newBeginPoint)
         {
-            throw new NotImplementedException();
+            var moveDistance = newBeginPoint - this.BeginPoint;
+            this.MoveBy(moveDistance);
+            return moveDistance;
+        }
+
+        public virtual void MoveBy(ptsVector moveDistance)
+        {
+            this.BeginPoint = this.BeginPoint + moveDistance;
+            this.EndPoint = this.EndPoint + moveDistance;
         }
     }
 }

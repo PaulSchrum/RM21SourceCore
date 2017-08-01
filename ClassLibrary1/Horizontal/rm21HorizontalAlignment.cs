@@ -71,7 +71,10 @@ namespace ptsCogo.Horizontal
                 double degreeIn = Convert.ToDouble(elementRow[0]);
                 double length = Convert.ToDouble(elementRow[1]);
                 double degreeOut = Convert.ToDouble(elementRow[2]);
-                retAlign.allChildSegments.Add(newSegment(endingRay, degreeIn, length, degreeOut));
+                var aNewSegment = newSegment(endingRay, degreeIn, length, degreeOut);
+                aNewSegment.MoveStartPtTo(retAlign.EndPoint);
+                retAlign.allChildSegments.Add(aNewSegment);
+                endingRay = new ptsRay(retAlign.EndPoint, retAlign.EndAzimuth);
             }
             // end "Read in all elements"
 
@@ -92,7 +95,14 @@ namespace ptsCogo.Horizontal
             if(areEqual == 0)
             {
                 int isZero = cogoUtils.tolerantCompare(degreeIn, 0.0, tolerance);
-
+                if(isZero == 0)
+                {
+                    return new rm21HorLineSegment(inRay, length);
+                }
+                else
+                {
+                    return new rm21HorArc(inRay, length, degreeIn);
+                }
             }
             // else it is an Euler Spiral
 

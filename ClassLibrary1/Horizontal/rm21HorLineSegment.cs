@@ -10,7 +10,6 @@ namespace ptsCogo.Horizontal
 {
     public class rm21HorLineSegment : HorizontalAlignmentBase
     {
-        private ptsRay inRay;
 
         public rm21HorLineSegment(ptsPoint begPt, ptsPoint endPt)
          : base(begPt, endPt)
@@ -24,11 +23,11 @@ namespace ptsCogo.Horizontal
             this.BeginAzimuth = this.EndAzimuth = (endPt - begPt).Azimuth;
         }
 
-        public rm21HorLineSegment(ptsRay inRay, double length)
-        {
-            this.inRay = inRay;
-            Length = length;
-        }
+        public rm21HorLineSegment(ptsRay inRay, double length) :
+            base(inRay.StartPoint, 
+                inRay.StartPoint + new ptsVector(inRay.HorizontalDirection, length)
+                )
+        { }
 
         public override Azimuth BeginAzimuth
         {
