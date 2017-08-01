@@ -123,6 +123,15 @@ namespace ptsCogo.Angle
             return 180.0 * this.getAsRadians() / Math.PI;
         }
 
+        public Deflection piCompliment
+        {
+            get
+            {
+                double angl = Math.PI - this.angle_;
+                return new Deflection(angl * this.deflectionDirection);
+            }
+        }
+
         public static implicit operator Deflection(double radianDbl)
         {
             return new Deflection(radianDbl);
@@ -131,6 +140,12 @@ namespace ptsCogo.Angle
         public static implicit operator Deflection(ptsDegree degrees)
         {
             return new Deflection(degrees.getAsRadians());
+        }
+
+        public static Deflection operator /(Deflection theDef, double divisor)
+        {
+            double angl = theDef.deflectionDirection_ * theDef.angle__ / divisor;
+            return new Deflection(angl);
         }
 
         public override string ToString()
