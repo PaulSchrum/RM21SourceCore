@@ -884,7 +884,8 @@ namespace ptsCogo
             this.IsaProfileGap = otherVC.IsaProfileGap;
          }
 
-         public verticalCurve(CogoStation beginStation, double begEL, double beginSlope, double length, double KValue)
+         public verticalCurve(CogoStation beginStation, 
+             double begEL, double beginSlope, double length, double KValue)
          {
             this.BeginStation = beginStation;
             this.endStation_ = beginStation + length;
@@ -1121,7 +1122,8 @@ namespace ptsCogo
             {
                sign = -1;
                newVC = new verticalCurve((CogoStation)intersectionX, getElevation(this, (CogoStation)intersectionX),
-                  sign * aRay.Slope, Math.Abs(intersectionX - aRay.StartPoint.x), Double.PositiveInfinity);
+                  sign * (double) aRay.Slope, 
+                  Math.Abs(intersectionX - aRay.StartPoint.x), Double.PositiveInfinity);
             }
             var returnList = new List<verticalCurve>();
             returnList.Add(newVC);
@@ -1204,7 +1206,7 @@ namespace ptsCogo
                {
                   sign = -1;
                   newVC = new verticalCurve((CogoStation) xIntercept1, getElevation(this, (CogoStation)xIntercept1),
-                     sign * aRay.Slope, Math.Abs(xIntercept1 - aRay.StartPoint.x), Double.PositiveInfinity);
+                     sign * (double) aRay.Slope, Math.Abs(xIntercept1 - aRay.StartPoint.x), Double.PositiveInfinity);
                }
                if (null == returnListOfLists)
                   returnListOfLists = new List<List<verticalCurve>>();
@@ -1229,7 +1231,7 @@ namespace ptsCogo
                   {
                      sign = -1;
                      newVC = new verticalCurve((CogoStation)xIntercept2, getElevation(this, (CogoStation)xIntercept2),
-                        sign * aRay.Slope, Math.Abs(xIntercept2 - aRay.StartPoint.x), Double.PositiveInfinity);
+                        sign * (double) aRay.Slope, Math.Abs(xIntercept2 - aRay.StartPoint.x), Double.PositiveInfinity);
                   }
                   if (null == returnListOfLists)
                      returnListOfLists = new List<List<verticalCurve>>();

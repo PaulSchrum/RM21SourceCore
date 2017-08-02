@@ -883,7 +883,7 @@ namespace Tests
             Assert.AreEqual(expected: expectedOffset, actual: actualOffset, delta: 0.0025);
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void HorizontalAlignment_instantiates_fromCSV_noSpirals()
         {
             var directory = new DirectoryManager();
