@@ -8,6 +8,7 @@ using ptsCogo.Horizontal;
 using ptsCogo.coordinates.CurvilinearCoordinates;
 using ptsCogo.Angle;
 using System.IO;
+using ptsCogo.coordinates;
 
 namespace Tests
 {
@@ -883,6 +884,28 @@ namespace Tests
             Assert.AreEqual(expected: expectedOffset, actual: actualOffset, delta: 0.0025);
         }
 
+        // WIP: Get this test working [TestMethod]
+        public void HorizontalAlignment_instantiateTangent_RayForm_isCorrect()
+        {
+            var startAz = new Azimuth(102.2943);
+            var startRay = new ptsRay(
+                new ptsPoint(2139755.822, 735223.453),
+                startAz
+                );
+            double tangentLength = 229.166;
+            var newTangent = rm21HorizontalAlignment.newSegment(startRay, 0.0, tangentLength, 0.0);
+
+            var expectedEndRay = new ptsRay(
+                new ptsPoint(2139970.486,735143.227),
+                new Azimuth(102.2943)
+                );
+
+            var expectedRayPair = new PairOfRays(startRay, expectedEndRay);
+            var actualRayPair = new PairOfRays(newTangent);
+
+            Assert.AreEqual(expected: expectedRayPair, actual: actualRayPair);
+        }
+
         //[TestMethod]
         public void HorizontalAlignment_instantiates_fromCSV_noSpirals()
         {
@@ -969,4 +992,46 @@ namespace Tests
         public ptsPoint point { get; set; }
         public Double radius { get; set; }
     }
+
+    internal class PairOfRays
+    {
+        private ptsRay startRay;
+        private ptsRay expectedEndRay;
+        private HorizontalAlignmentBase newTangent;
+
+        ptsRay ray1 { get; set; }
+        ptsRay ray2 { get; set; }
+
+        PairOfRays(double x1, double y1, double az1, double x2, double y2, double az2)
+        {
+            this.ray1 = new ptsRay(new ptsPoint(x1, y1), new Azimuth(az1));
+            this.ray2 = new ptsRay(new ptsPoint(x2, y2), new Azimuth(az2));
+        }
+
+        public PairOfRays(ptsRay r1, ptsRay r2)
+        {
+            this.ray1 = r1;
+            this.ray2 = r2;
+        }
+
+        public PairOfRays(HorizontalAlignmentBase HorizElement) : 
+            this(HorizElement.BeginRay, HorizElement.EndRay)
+        { }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as PairOfRays;
+
+            if(null == other) return false;
+
+            return
+                this.ray1.StartPoint.Equals(this.ray2.StartPoint) &&
+                this.ray1.HorizontalDirection.Equals(this.ray2.HorizontalDirection);
+
+        }
+
+    }
+
+
+
 }
