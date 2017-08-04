@@ -101,5 +101,20 @@ namespace ptsCogo
                z.ToString(NumberFormatInfo.InvariantInfo);
         }
 
+        public static double verticalEqualsTolerance { get; set; } = 0.0025;
+        public static double horizontalEqualsTolerance { get; set; } = 0.0025;
+        public override bool Equals(object obj)
+        {
+            var other = obj as ptsPoint;
+
+            if(utilFunctions.tolerantCompare(this.z, other.z, verticalEqualsTolerance) != 0)
+                return false;
+
+            return 
+                utilFunctions.tolerantCompare(
+                    this.GetHorizontalDistanceTo(other), 0.0, horizontalEqualsTolerance) 
+                == 0;
+
+        }
     }
 }
