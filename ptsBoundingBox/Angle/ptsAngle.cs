@@ -199,5 +199,11 @@ namespace ptsCogo
             return anAngle;
         }
 
+        public override bool Equals(object obj)
+        {
+            var other = obj as ptsAngle;
+            bool areEqual = utilFunctions.tolerantCompare(this.angle_, other.angle_, 0.00001) == 0;
+            return areEqual;
+        }
     }
 }

@@ -888,19 +888,22 @@ namespace Tests
         public void HorizontalAlignment_instantiateTangent_RayForm_isCorrect()
         {
             Azimuth startAz = 102.2943;
-            var startRay = new ptsRay(
+            var beginRay = new ptsRay(
                 new ptsPoint(2139755.822, 735223.453),
                 startAz
                 );
-            double tangentLength = 229.166;
-            var newTangent = rm21HorizontalAlignment.newSegment(startRay, 0.0, tangentLength, 0.0);
-
             var expectedEndRay = new ptsRay(
-                new ptsPoint(2139970.486,735143.227),
-                new Azimuth(102.2943)
+                new ptsPoint(2139970.486, 735143.227),
+                Azimuth.fromDegreesDouble(102.2943)
                 );
 
-            var expectedRayPair = new PairOfRays(startRay, expectedEndRay);
+            double tangentLength = 229.166;
+            var newTangent = rm21HorizontalAlignment.newSegment(beginRay, 0.0, tangentLength, 0.0);
+
+            var actualStartRay = newTangent.BeginRay;
+            var actualEndRay = newTangent.EndRay;
+
+            var expectedRayPair = new PairOfRays(beginRay, expectedEndRay);
             var actualRayPair = new PairOfRays(newTangent);
 
             Assert.AreEqual(expected: expectedRayPair, actual: actualRayPair);
@@ -1024,9 +1027,14 @@ namespace Tests
 
             if(null == other) return false;
 
+            double dist = this.ray1.StartPoint.GetHorizontalDistanceTo(
+                other.ray1.StartPoint);
+            bool pointsEqual = this.ray1.StartPoint.Equals(other.ray1.StartPoint);
+            bool azEqual = this.ray1.HorizontalDirection.Equals(other.ray2.HorizontalDirection);
+
             return
-                this.ray1.StartPoint.Equals(this.ray2.StartPoint) &&
-                this.ray1.HorizontalDirection.Equals(this.ray2.HorizontalDirection);
+                this.ray1.StartPoint.Equals(other.ray1.StartPoint) &&
+                this.ray1.HorizontalDirection.Equals(other.ray2.HorizontalDirection);
 
         }
 

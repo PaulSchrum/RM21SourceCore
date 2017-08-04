@@ -9,6 +9,10 @@ namespace ptsCogo.Angle
     {
         public Azimuth() { }
 
+        /// <summary>
+        /// Ctor interprets double value as radians.
+        /// </summary>
+        /// <param name="anAngleDbl">Initialization value in radians.</param>
         public Azimuth(double anAngleDbl)
         {
             angle_ = anAngleDbl;
@@ -73,6 +77,13 @@ namespace ptsCogo.Angle
             double radians = degrees * Math.PI / 180.0;
             angle_ = Math.Atan2(Math.Cos(radians), Math.Sin(radians));  // This is flipped intentionally
 
+        }
+
+        public static Azimuth fromDegreesDouble(double degrees)
+        {
+            Azimuth retAz = new Azimuth();
+            retAz.setFromDegreesDouble(degrees);
+            return retAz;
         }
 
         public override void setFromDegreesMinutesSeconds(int degrees, int minutes, double seconds)
