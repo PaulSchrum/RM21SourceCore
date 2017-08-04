@@ -884,10 +884,10 @@ namespace Tests
             Assert.AreEqual(expected: expectedOffset, actual: actualOffset, delta: 0.0025);
         }
 
-        // WIP: Get this test working [TestMethod]
+        [TestMethod]
         public void HorizontalAlignment_instantiateTangent_RayForm_isCorrect()
         {
-            var startAz = new Azimuth(102.2943);
+            Azimuth startAz = 102.2943;
             var startRay = new ptsRay(
                 new ptsPoint(2139755.822, 735223.453),
                 startAz

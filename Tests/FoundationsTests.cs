@@ -135,6 +135,25 @@ namespace Tests
             Assert.AreEqual(expected: expected, actual: actual, delta: delta);
         }
 
+        [TestMethod]
+        public void Azimuth_createFromDouble_byAssignmentEquals()
+        {
+            double expected = 123.456;
+            Azimuth anAz = expected;
+            double actual = anAz.getAsDegreesDouble();
+            Assert.AreEqual(expected: expected, actual: actual, delta: 0.0001);
+
+            expected = 123.456;
+            anAz = expected;
+            actual = anAz.getAsDegreesDouble();
+            Assert.AreEqual(expected: expected, actual: actual, delta: 0.0001);
+
+            expected = 123.456;
+            anAz = expected;
+            actual = anAz.getAsDegreesDouble();
+            Assert.AreEqual(expected: expected, actual: actual, delta: 0.0001);
+        }
+
         [DataTestMethod]
         [DataRow(10, 2, 78.690067526)]
         [DataRow(10, -2, 101.309932474)]

@@ -105,7 +105,7 @@ namespace ptsCogo.Angle
         public static implicit operator Azimuth(double angleAs_double)
         {
             Azimuth anAzimuth = new Azimuth();
-            anAzimuth.angle_ = angleAs_double;
+            anAzimuth.setFromDegreesDouble(angleAs_double);
             return anAzimuth;
         }
 
