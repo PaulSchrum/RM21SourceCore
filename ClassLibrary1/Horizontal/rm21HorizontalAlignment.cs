@@ -8,6 +8,9 @@ using ptsCogo.coordinates;
 using ptsCogo.Utils;
 using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleToAttribute("Tests")]
 
 namespace ptsCogo.Horizontal
 {
@@ -87,7 +90,7 @@ namespace ptsCogo.Horizontal
             return retAlign;
         }
 
-        private static HorizontalAlignmentBase newSegment(ptsRay inRay, double degreeIn, double length,
+        internal static HorizontalAlignmentBase newSegment(ptsRay inRay, double degreeIn, double length,
             double degreeOut)
         {
             Double tolerance = 0.00005;
@@ -485,6 +488,7 @@ namespace ptsCogo.Horizontal
             }
             return String.Empty;
         }
+
     }
 
     public sealed class alignmentDataPacket
