@@ -1,4 +1,5 @@
 ﻿using ptsCogo.Angle;
+using ptsCogo.coordinates;
 using ptsCogo.coordinates.CurvilinearCoordinates;
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,15 @@ namespace ptsCogo.Horizontal
 
         protected List<HorizontalAlignmentBase> incomingElements { get; set; }
         protected List<HorizontalAlignmentBase> outgoingElements { get; set; }
+
+        public ptsRay BeginRay
+        {
+            get { return new ptsRay(this.BeginPoint, this.BeginAzimuth); }
+        }
+        public ptsRay EndRay
+        {
+            get { return new ptsRay(this.EndPoint, this.EndAzimuth); }
+        }
 
         public virtual ptsVector LongChordVector
         { get { return (new ptsVector(this.BeginPoint, this.EndPoint)).flattenZnew(); } }
