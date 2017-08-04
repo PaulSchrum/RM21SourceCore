@@ -900,9 +900,6 @@ namespace Tests
             double tangentLength = 229.166;
             var newTangent = rm21HorizontalAlignment.newSegment(beginRay, 0.0, tangentLength, 0.0);
 
-            var actualStartRay = newTangent.BeginRay;
-            var actualEndRay = newTangent.EndRay;
-
             var expectedRayPair = new PairOfRays(beginRay, expectedEndRay);
             var actualRayPair = new PairOfRays(newTangent);
 
