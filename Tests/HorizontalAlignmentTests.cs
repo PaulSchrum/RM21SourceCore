@@ -885,6 +885,29 @@ namespace Tests
         }
 
         [TestMethod]
+        public void HorizontalAlignment_instantiateArcSegment_RayForm_isCorrect()
+        {
+            Azimuth startAz = 120.1017;
+            var beginRay = new ptsRay(
+                new ptsPoint(2141136.576,734462.477),
+                startAz
+                );
+            var expectedEndRay = new ptsRay(
+                new ptsPoint(2141689.136, 734264.925),
+                Azimuth.fromDegreesDouble(82.849)
+                );
+
+            double arcLength = 597.278;
+            double Dc = -6.2370696;
+            var newTangent = rm21HorizontalAlignment.newSegment(beginRay, Dc, arcLength, Dc);
+
+            var expectedRayPair = new PairOfRays(beginRay, expectedEndRay);
+            var actualRayPair = new PairOfRays(newTangent);
+
+            //Assert.AreEqual(expected: expectedRayPair, actual: actualRayPair);
+        }
+
+        [TestMethod]
         public void HorizontalAlignment_instantiateTangent_RayForm_isCorrect()
         {
             Azimuth startAz = 102.2943;
