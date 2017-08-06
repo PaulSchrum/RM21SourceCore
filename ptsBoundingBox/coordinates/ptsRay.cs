@@ -84,5 +84,25 @@ namespace ptsCogo.coordinates
             Double offset = -1.0 * directVectr.Length * Math.Sin(alpha.getAsRadians());
             return offset;
         }
+
+        public override bool Equals(object obj)
+        {
+            ptsRay other = obj as ptsRay;
+
+            bool pointEqual = this.StartPoint.Equals(other.StartPoint);
+            if(!pointEqual) return false;
+
+            bool horDirectionEqual = this.HorizontalDirection.Equals(other.HorizontalDirection);
+            if(!horDirectionEqual) return false;
+
+            if(null == this.Slope && null == other.Slope)
+                return true;
+
+            if(null == this.Slope ^ null == other.Slope) return false;
+
+            if(this.Slope != other.Slope) return false;
+
+            return true;
+        }
     }
 }
