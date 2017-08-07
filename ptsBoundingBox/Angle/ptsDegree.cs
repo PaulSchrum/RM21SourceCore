@@ -36,7 +36,16 @@ namespace ptsCogo.Angle
                            );
         }
 
+        public static double dblFromRadius(double radius)
+        {
+            return radius * Math.PI / 18000.0;
+        }
 
+        /// <summary>
+        /// Arc sine.  (Also known as inverse sine.)
+        /// </summary>
+        /// <param name="val">Value in distance units.</param>
+        /// <returns>An angle in radians.</returns>
         public static ptsDegree Asin(Double val)
         {
             return newFromRadians(Math.Asin(val));
@@ -128,6 +137,11 @@ namespace ptsCogo.Angle
         public static ptsDegree AsPtsDegree(this Double val)
         {
             return new ptsDegree(val);
+        }
+
+        public static double AsPtsDegreeDouble(this Double val)
+        {
+            return AsPtsDegree(val).getAsDouble();
         }
     }
 

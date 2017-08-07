@@ -23,6 +23,15 @@ namespace Tests
         }
 
         [TestMethod]
+        public void ptsDegree_fromRadius5730_isOneDegree()
+        {
+            var radius = 5729.5779513;
+            double expect = 1.0;
+            double actual = ptsDegree.dblFromRadius(radius);
+            Assert.AreEqual(expected: expect, actual: actual, delta: 0.01);
+        }
+
+        [TestMethod]
         public void ptsDegree_Atan2Of10And0_returns90degrees()
         {
             ptsDegree deg = ptsDegree.Atan2(10.0, 0.0);
