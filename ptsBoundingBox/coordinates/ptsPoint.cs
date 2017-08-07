@@ -33,7 +33,7 @@ namespace ptsCogo
             x = X; y = Y; z = Z;
         }
 
-        public ptsPoint(String X, String Y, String Z=null)
+        public ptsPoint(String X, String Y, String Z = null)
         {
             x = Double.Parse(X);
             y = Double.Parse(Y);
@@ -101,18 +101,29 @@ namespace ptsCogo
                z.ToString(NumberFormatInfo.InvariantInfo);
         }
 
-        public static double verticalEqualsTolerance { get; set; } = 0.0025;
-        public static double horizontalEqualsTolerance { get; set; } = 0.0025;
+        public static double VerticalEqualsTolerance { get; set; } = 0.0025;
+
+        /// <summary>
+        /// Unless you overide the value, horizontalTolerance is 0.0025. Override it
+        /// by calling ptsPoint.HorizontalEqualsTolerance.Push(myTolerance);
+        /// then after you are done, restore it to its original value by calling
+        /// ptsPoint.HorizontalEqualsTolerance.Pop();
+        /// If you are okay with the default value, there is no need to call Push
+        /// or Pop.
+        /// </summary>
+        public static Stack<double> HorizontalEqualsTolerance { get; set; } =
+            new Stack<double>(new double[] { 0.0025 });
         public override bool Equals(object obj)
         {
             var other = obj as ptsPoint;
 
-            if(utilFunctions.tolerantCompare(this.z, other.z, verticalEqualsTolerance) != 0)
+            if(utilFunctions.tolerantCompare(this.z, other.z, VerticalEqualsTolerance) != 0)
                 return false;
 
             return 
                 utilFunctions.tolerantCompare(
-                    this.GetHorizontalDistanceTo(other), 0.0, horizontalEqualsTolerance) 
+                    this.GetHorizontalDistanceTo(other), 0.0, 
+                    HorizontalEqualsTolerance.Peek()) 
                 == 0;
 
         }
