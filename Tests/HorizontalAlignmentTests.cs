@@ -906,20 +906,21 @@ namespace Tests
         [TestMethod]
         public void HorizontalAlignment_instantiateTangent_RayForm_isCorrect()
         {
-            Azimuth startAz = 102.2943;
+            Azimuth startAz = 110.4920;
             var beginRay = new ptsRay(
-                new ptsPoint(2139755.822, 735223.453),
+                new ptsPoint(2139755.8215, 735223.4531),
                 startAz
                 );
             var expectedEndRay = new ptsRay(
-                new ptsPoint(2139970.486, 735143.227),
-                Azimuth.fromDegreesDouble(102.2943)
+                new ptsPoint(2139970.4859, 735143.2274),
+                Azimuth.fromDegreesDouble(110.4920)
                 );
 
-            double tangentLength = 229.166;
+            double tangentLength = 229.1658;
             var newTangent = rm21HorizontalAlignment.newSegment(beginRay, 0.0, tangentLength, 0.0);
 
             Assert.AreEqual(expected: beginRay, actual: newTangent.BeginRay);
+            Assert.AreEqual(expected: expectedEndRay, actual: newTangent.EndRay);
 
         }
 
