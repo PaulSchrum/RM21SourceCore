@@ -36,9 +36,9 @@ namespace ptsCogo.Angle
                            );
         }
 
-        public static double dblFromRadius(double radius)
+        public static double AsDblFromRadius(double radius)
         {
-            return radius * Math.PI / 18000.0;
+            return 18000.0 / (Math.PI * radius);
         }
 
         /// <summary>
@@ -142,6 +142,11 @@ namespace ptsCogo.Angle
         public static double AsPtsDegreeDouble(this Double val)
         {
             return AsPtsDegree(val).getAsDouble();
+        }
+
+        public static double dblDegreeFromRadius(this Double val)
+        {
+            return ptsDegree.AsDblFromRadius(val);
         }
     }
 

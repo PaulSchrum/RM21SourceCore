@@ -27,7 +27,7 @@ namespace Tests
         {
             var radius = 5729.5779513;
             double expect = 1.0;
-            double actual = ptsDegree.dblFromRadius(radius);
+            double actual = ptsDegree.AsDblFromRadius(radius);
             Assert.AreEqual(expected: expect, actual: actual, delta: 0.00001);
         }
 
