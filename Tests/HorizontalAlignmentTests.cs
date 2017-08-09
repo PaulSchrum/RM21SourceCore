@@ -547,6 +547,24 @@ namespace Tests
 
         }
 
+        [TestMethod]
+        public void ArcSegment_ctor1_correct()
+        {
+            var begPt = new ptsPoint(2152973.8702, 735330.7239);
+            var endPt = new ptsPoint(2153151.3148, 735350.0147);
+            var inAz = Azimuth.fromDegreesDouble(77.5488);
+            var radius = 820.2083;
+
+            //var anArc = new rm21HorArc(begPt, endPt, inAz, radius);
+            var anArc = rm21HorArc.Create(begPt, endPt, inAz, radius);
+
+            var actualDeflection = anArc.Deflection.getAsDegreesDouble();
+            Assert.AreEqual(expected: 12.4932, actual: actualDeflection, delta: 0.00015);
+
+            var actualLength = anArc.Length;
+            Assert.AreEqual(expected: 178.8443, actual: actualLength, delta: 0.00015);
+        }
+
         //[TestMethod]
         public void HorizontalAlignment_givenXYvalues_getStationOffsetValues()
         {
@@ -884,22 +902,23 @@ namespace Tests
             Assert.AreEqual(expected: expectedOffset, actual: actualOffset, delta: 0.0025);
         }
 
-        //[TestMethod]
+        [TestMethod]
         public void HorizontalAlignment_instantiateArcSegment_RayForm_isCorrect()
         {
-            Azimuth startAz = 120.1017;
+            Azimuth startAz = 128.2994;
             var beginRay = new ptsRay(
-                new ptsPoint(2141136.576,734462.477),
+                new ptsPoint(2141136.5757,734462.4776),
                 startAz
                 );
             var expectedEndRay = new ptsRay(
-                new ptsPoint(2141689.136, 734264.925),
-                Azimuth.fromDegreesDouble(82.849)
+                new ptsPoint(2141689.1356, 734264.9252),
+                Azimuth.fromDegreesDouble(91.0468)
                 );
 
             double arcLength = 597.278;
-            double Dc = -6.2370696;
-            var newTangent = rm21HorizontalAlignment.newSegment(beginRay, Dc, arcLength, Dc);
+            double radius = 918.6333;
+            double Dc = -1 * radius.dblDegreeFromRadius();
+            var newArc = rm21HorizontalAlignment.newSegment(beginRay, Dc, arcLength, Dc);
 
         }
 
