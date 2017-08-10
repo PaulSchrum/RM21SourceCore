@@ -37,7 +37,7 @@ namespace ptsCogo.Horizontal
                 throw new ArcExceptionZeroDeflectionNotDefined();
 
             this.BeginStation = 0.0;
-            this.Radius = radius;
+            this.Radius = Math.Abs(radius);
             this.BeginAzimuth = incomingAzimuth;
 
             deflDirection = Math.Sign(tanOffsetToEndPt);
@@ -110,14 +110,14 @@ namespace ptsCogo.Horizontal
 
         public static rm21HorArc Create(ptsRay inRay, double length, double degree)
         {
-            double radius = degree.RadiusFromDegreesDbl();
+            double radius = Math.Abs(degree.RadiusFromDegreesDbl());
             ptsDegree deg = ptsDegree.newFromDegrees(degree);
 
             // Equations from Hickerson, pp 64 - 66
             // Traverse from start to PI, turn by Defl, then traverse to endPt
             Deflection Defl = length * deg.getAsRadians() / degreeOfCurveLength;
 
-            double Tlength = radius * Math.Tan(Defl.getAsRadians() / 2.0);
+            double Tlength = radius * Math.Tan(Math.Abs(Defl.getAsRadians()) / 2.0);
             ptsVector tan1 = new ptsVector(inRay.HorizontalDirection, Tlength);
             ptsPoint PointIntersection = inRay.StartPoint + tan1;
             ptsVector tan2 = new ptsVector(inRay.HorizontalDirection + Defl, Tlength);

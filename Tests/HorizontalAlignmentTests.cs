@@ -917,21 +917,41 @@ namespace Tests
             double arcLength = 178.8443;
             double radius = 820.2083;
             double Dc = radius.dblDegreeFromRadius();
-            rm21HorArc newArc1 = (rm21HorArc) rm21HorizontalAlignment.newSegment(beginRay, Dc, arcLength, Dc);
+            rm21HorArc newArcRight = (rm21HorArc) rm21HorizontalAlignment.newSegment(beginRay, Dc, arcLength, Dc);
 
             var expCenterPt = new ptsPoint(2153150.7135, 734529.8066);
-            Assert.AreEqual(expected: expCenterPt, actual: newArc1.ArcCenterPt);
+            Assert.AreEqual(expected: expCenterPt, actual: newArcRight.ArcCenterPt);
 
             Azimuth expAheadAz = 90.0421;
-            Assert.AreEqual(expected: expAheadAz, actual: newArc1.EndAzimuth);
+            Assert.AreEqual(expected: expAheadAz, actual: newArcRight.EndAzimuth);
 
             double expLongChordLength = 178.4902;
-            Assert.AreEqual(expected: expLongChordLength, actual: newArc1.LongChordVector.Length, delta: 0.0005);
+            Assert.AreEqual(expected: expLongChordLength, actual: newArcRight.LongChordVector.Length, delta: 0.0005);
 
-            Assert.AreEqual(expected: arcLength, actual: newArc1.Length, delta: 0.0005);
+            Assert.AreEqual(expected: arcLength, actual: newArcRight.Length, delta: 0.0005);
 
             int expectedDeflSign = 1;
-            int actualDeflSign = newArc1.Deflection.deflectionDirection;
+            int actualDeflSign = newArcRight.Deflection.deflectionDirection;
+            Assert.AreEqual(expected: expectedDeflSign, actual: actualDeflSign);
+
+            // now flip it to be curving left and recheck.
+            Deflection arcDef = newArcRight.Deflection * -1.0;
+            Dc *= -1.0;
+            rm21HorArc newArcLeft = (rm21HorArc)rm21HorizontalAlignment.newSegment(beginRay, Dc, arcLength, Dc);
+
+            expCenterPt = new ptsPoint(2152797.0270, 736131.6405);
+            //Assert.AreEqual(expected: expCenterPt, actual: newArcLeft.ArcCenterPt);
+
+            expAheadAz = 65.0556;
+            Assert.AreEqual(expected: expAheadAz, actual: newArcLeft.EndAzimuth);
+
+            expLongChordLength = 178.4902;
+            Assert.AreEqual(expected: expLongChordLength, actual: newArcLeft.LongChordVector.Length, delta: 0.0005);
+
+            Assert.AreEqual(expected: arcLength, actual: newArcLeft.Length, delta: 0.0005);
+
+            expectedDeflSign = -1;
+            actualDeflSign = newArcLeft.Deflection.deflectionDirection;
             Assert.AreEqual(expected: expectedDeflSign, actual: actualDeflSign);
         }
 

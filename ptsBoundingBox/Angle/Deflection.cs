@@ -142,6 +142,12 @@ namespace ptsCogo.Angle
             return new Deflection(degrees.getAsRadians());
         }
 
+        public static Deflection operator *(Deflection theDef, double multiplier)
+        {
+            double angl = theDef.deflectionDirection_ * theDef.angle__ * multiplier;
+            return new Deflection(angl);
+        }
+
         public static Deflection operator /(Deflection theDef, double divisor)
         {
             double angl = theDef.deflectionDirection_ * theDef.angle__ / divisor;
