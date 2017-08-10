@@ -104,7 +104,7 @@ namespace ptsCogo.Horizontal
                 }
                 else
                 {
-                    return new rm21HorArc(inRay, length, degreeIn);
+                    return rm21HorArc.Create(inRay, length, degreeIn);
                 }
             }
             // else it is an Euler Spiral

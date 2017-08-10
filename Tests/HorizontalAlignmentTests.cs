@@ -905,21 +905,34 @@ namespace Tests
         [TestMethod]
         public void HorizontalAlignment_instantiateArcSegment_RayForm_isCorrect()
         {
-            Azimuth startAz = 128.2994;
+            Azimuth startAz = 77.5488;
             var beginRay = new ptsRay(
-                new ptsPoint(2141136.5757,734462.4776),
+                new ptsPoint(2152973.8702, 735330.7239),
                 startAz
                 );
             var expectedEndRay = new ptsRay(
-                new ptsPoint(2141689.1356, 734264.9252),
-                Azimuth.fromDegreesDouble(91.0468)
+                new ptsPoint(2153151.3148, 735350.0147),
+                Azimuth.fromDegreesDouble(90.0421)
                 );
+            double arcLength = 178.8443;
+            double radius = 820.2083;
+            double Dc = radius.dblDegreeFromRadius();
+            rm21HorArc newArc1 = (rm21HorArc) rm21HorizontalAlignment.newSegment(beginRay, Dc, arcLength, Dc);
 
-            double arcLength = 597.278;
-            double radius = 918.6333;
-            double Dc = -1 * radius.dblDegreeFromRadius();
-            var newArc = rm21HorizontalAlignment.newSegment(beginRay, Dc, arcLength, Dc);
+            var expCenterPt = new ptsPoint(2153150.7135, 734529.8066);
+            Assert.AreEqual(expected: expCenterPt, actual: newArc1.ArcCenterPt);
 
+            Azimuth expAheadAz = 90.0421;
+            Assert.AreEqual(expected: expAheadAz, actual: newArc1.EndAzimuth);
+
+            double expLongChordLength = 178.4902;
+            Assert.AreEqual(expected: expLongChordLength, actual: newArc1.LongChordVector.Length, delta: 0.0005);
+
+            Assert.AreEqual(expected: arcLength, actual: newArc1.Length, delta: 0.0005);
+
+            int expectedDeflSign = 1;
+            int actualDeflSign = newArc1.Deflection.deflectionDirection;
+            Assert.AreEqual(expected: expectedDeflSign, actual: actualDeflSign);
         }
 
         [TestMethod]

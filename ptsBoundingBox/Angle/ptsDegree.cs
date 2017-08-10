@@ -28,6 +28,11 @@ namespace ptsCogo.Angle
             return new ptsDegree(180.0 * rad / Math.PI);
         }
 
+        public static ptsDegree newFromDegrees(Double degreesDouble)
+        {
+            return new ptsDegree(degreesDouble);
+        }
+
         public static ptsDegree newFromDegreesMinutesSeconds(int degrees, int minutes, double seconds)
         {
             return new ptsDegree(
@@ -39,6 +44,11 @@ namespace ptsCogo.Angle
         public static double AsDblFromRadius(double radius)
         {
             return 18000.0 / (Math.PI * radius);
+        }
+
+        public static double asRadiusFromDegDouble(double degrees)
+        {
+            return 18000.0 / (Math.PI * degrees);
         }
 
         /// <summary>
@@ -126,6 +136,11 @@ namespace ptsCogo.Angle
             return left.degrees_ * right;
         }
 
+        public static ptsDegree operator /(ptsDegree left, Double right)
+        {
+            return left.degrees_ * (1.0 / right);
+        }
+
         public override string ToString()
         {
             return degrees_.ToString() + "°";
@@ -144,9 +159,14 @@ namespace ptsCogo.Angle
             return AsPtsDegree(val).getAsDouble();
         }
 
-        public static double dblDegreeFromRadius(this Double val)
+        public static double dblDegreeFromRadius(this Double inRadius)
         {
-            return ptsDegree.AsDblFromRadius(val);
+            return ptsDegree.AsDblFromRadius(inRadius);
+        }
+
+        public static double RadiusFromDegreesDbl(this Double inDegree)
+        {
+            return ptsDegree.asRadiusFromDegDouble(inDegree);
         }
     }
 

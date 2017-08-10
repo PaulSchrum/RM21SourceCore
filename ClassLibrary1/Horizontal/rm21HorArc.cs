@@ -108,29 +108,23 @@ namespace ptsCogo.Horizontal
             }
         }
 
-        public rm21HorArc(ptsRay inRay, double length, double degree)
+        public static rm21HorArc Create(ptsRay inRay, double length, double degree)
         {
-            this.BeginPoint = inRay.StartPoint;
-            this.BeginAzimuth = inRay.HorizontalDirection;
-            this.BeginDegreeOfCurve = this.EndDegreeOfCurve = Math.Abs(degree);
-            this.deflDirection = Math.Sign(degree);
-            this.Length = length;
-            this.Radius = degreeOfCurveLength / degree;
-            this.Deflection = length * degree / degreeOfCurveLength;
-            this.EndAzimuth = this.BeginAzimuth + this.Deflection;
+            double radius = degree.RadiusFromDegreesDbl();
+            ptsDegree deg = ptsDegree.newFromDegrees(degree);
 
-            // compute End Point
-            double longChordLength = 2.0 * this.Radius * Math.Sin(degree / 2.0); // check this
-            Deflection longChordDeflection = this.Deflection.piCompliment / 2.0;
-            Azimuth longChordAz = this.BeginAzimuth + longChordDeflection;
-            ptsVector longChord = new ptsVector(longChordAz, longChordLength);
-            this.EndPoint = this.BeginPoint + longChord;
+            // Equations from Hickerson, pp 64 - 66
+            // Traverse from start to PI, turn by Defl, then traverse to endPt
+            Deflection Defl = length * deg.getAsRadians() / degreeOfCurveLength;
 
-            this.BeginStation = 0.0;
-            this.EndStation = this.BeginStation + this.Length; /////
-            this.BeginRadiusVector = null; /////
-            this.ArcCenterPt = null; /////
-            this.EndRadiusVector = null; /////
+            double Tlength = radius * Math.Tan(Defl.getAsRadians() / 2.0);
+            ptsVector tan1 = new ptsVector(inRay.HorizontalDirection, Tlength);
+            ptsPoint PointIntersection = inRay.StartPoint + tan1;
+            ptsVector tan2 = new ptsVector(inRay.HorizontalDirection + Defl, Tlength);
+
+            ptsPoint endPt = PointIntersection + tan2;
+
+            return Create(inRay.StartPoint, endPt, inRay.HorizontalDirection, radius);
         }
 
         private void computeDeflectionForOutsideSolutionCurve()
