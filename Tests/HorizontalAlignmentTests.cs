@@ -976,7 +976,7 @@ namespace Tests
 
         }
 
-        //[TestMethod]
+        [TestMethod]
         public void HorizontalAlignment_instantiates_fromCSV_noSpirals()
         {
             var directory = new DirectoryManager();
@@ -984,7 +984,7 @@ namespace Tests
             string testFile = directory.GetPathAndAppendFilename("ACC_REV.csv");
 
             rm21HorizontalAlignment AccRev = rm21HorizontalAlignment.createFromCsvFile(testFile);
-            //Assert.IsNotNull(AccRev);
+            Assert.IsNotNull(AccRev);
 
             //int actualItemCount = AccRev.
             //Assert.AreEqual(expected: 17, actual: actualItemCount);
@@ -1055,6 +1055,10 @@ namespace Tests
                 return v;
             } }
 
+        public override string ToString()
+        {
+            return this.path;
+        }
     }
 
     internal class pointRadiusPair
