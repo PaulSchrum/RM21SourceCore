@@ -9,12 +9,14 @@ namespace ptsCogo
    /// GenericAlignment is the parent class for all subclasses which have stations:
    /// Horizontal Alignment (and its members) and Vertical Alignment.  
    /// So GenericAlignment exists basically for three purposes
-   /// 1.  As a way to provide station arithmatic for all kinds of alignments
+   /// 1.  As a way to provide station arithmetic for all kinds of alignments
    ///      (including arithmatic across equalities)
    /// 2.  As a way to keep track of when station arithmatic puts you past
    ///       the begining or end of an alignment.
    /// 3.  As a way to make it easy for a profile automatically to use the
-   ///       regions/equalities of a governing horizontal alignment
+   ///       regions/equalities of a governing horizontal alignment by holding
+   ///       a reference to that governing HA without reduplicating the
+   ///       stationing.
    /// </summary>
    [Serializable]
    public class GenericAlignment
