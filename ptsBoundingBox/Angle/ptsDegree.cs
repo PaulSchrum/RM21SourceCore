@@ -51,6 +51,13 @@ namespace ptsCogo.Angle
             return 18000.0 / (Math.PI * degrees);
         }
 
+        public static ptsDegree FromRadius(double radius)
+        {
+            double radians = 180.0 / radius;
+            var deg = newFromRadians(radians);
+            return deg;
+        }
+
         /// <summary>
         /// Arc sine.  (Also known as inverse sine.)
         /// </summary>

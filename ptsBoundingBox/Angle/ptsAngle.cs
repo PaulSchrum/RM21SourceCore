@@ -100,6 +100,13 @@ namespace ptsCogo
                 return 0.0;
         }
 
+        public static explicit operator ptsAngle(ptsDegree deg)
+        {
+            double rads = deg.getAsRadians();
+            var angl = new ptsAngle(rads);
+            return angl;
+        }
+
         protected void normalize(double anAngle)
         {
             //angleScratchPad = anAngle / Math.PI;

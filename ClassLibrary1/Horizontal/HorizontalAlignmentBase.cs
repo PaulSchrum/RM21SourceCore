@@ -17,7 +17,7 @@ namespace ptsCogo.Horizontal
         {
             BeginPoint = begPt;
             EndPoint = endPt;
-
+            BeginDegreeOfCurve = EndDegreeOfCurve = 0.0;
         }
 
         public HorizontalAlignmentBase(List<Double> stationEquationingList) : base(stationEquationingList)
@@ -96,12 +96,12 @@ namespace ptsCogo.Horizontal
 
         }
 
-        public virtual ptsVector MoveStartPtTo(ptsPoint newBeginPoint)
-        {
-            var moveDistance = newBeginPoint - this.BeginPoint;
-            this.MoveBy(moveDistance);
-            return moveDistance;
-        }
+        //public virtual ptsVector MoveStartPtTo(ptsPoint newBeginPoint)
+        //{
+        //    var moveDistance = newBeginPoint - this.BeginPoint;
+        //    this.MoveBy(moveDistance);
+        //    return moveDistance;
+        //}
 
         public virtual void MoveBy(ptsVector moveDistance)
         {

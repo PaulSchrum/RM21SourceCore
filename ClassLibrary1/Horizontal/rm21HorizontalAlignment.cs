@@ -16,7 +16,7 @@ namespace ptsCogo.Horizontal
 {
     public class rm21HorizontalAlignment : HorizontalAlignmentBase
     {
-        private List<HorizontalAlignmentBase> allChildSegments = null;
+        private List<HorizontalAlignmentBase> allChildSegments { get; set; } = new List<HorizontalAlignmentBase>();
         private List<alignmentDataPacket> alignmentData { get; set; }
 
         // used in constructing, never kept long term
@@ -71,18 +71,37 @@ namespace ptsCogo.Horizontal
             for(int i=tableStartLines["Elements"]+2; i<tableStartLines["Regions"]; i++)
             {
                 var elementRow = allLines[i].Split(',').ToList();
+                if(String.IsNullOrEmpty(elementRow[0]))
+                    break;
+
                 double degreeIn = Convert.ToDouble(elementRow[0]);
                 double length = Convert.ToDouble(elementRow[1]);
                 double degreeOut = Convert.ToDouble(elementRow[2]);
                 var aNewSegment = newSegment(endingRay, degreeIn, length, degreeOut);
-                aNewSegment.MoveStartPtTo(retAlign.EndPoint);
+                aNewSegment.Parent = retAlign;
+                endingRay = aNewSegment.EndRay;
                 retAlign.allChildSegments.Add(aNewSegment);
-                endingRay = new ptsRay(retAlign.EndPoint, retAlign.EndAzimuth);
             }
             // end "Read in all elements"
 
             // set up stations and regions
+            // Todo: Implement this.
             // "set up stations and regions"
+
+            // Fill in essential properties
+            retAlign.Parent = null;
+            retAlign.Radius = 0.0;
+
+            var firstItem = retAlign.allChildSegments.First();
+            retAlign.BeginAzimuth = firstItem.BeginAzimuth;
+            retAlign.BeginDegreeOfCurve = firstItem.BeginDegreeOfCurve;
+            retAlign.BeginPoint = firstItem.BeginPoint;
+            
+            var lastItem = retAlign.allChildSegments.Last();
+            retAlign.EndAzimuth = lastItem.EndAzimuth;
+            retAlign.EndDegreeOfCurve = lastItem.EndDegreeOfCurve;
+            retAlign.EndPoint = lastItem.EndPoint;
+            // end of "Fill in essential properties;
 
             // validate the alignment ends on the last point
             // end "validate the alignment ends on the last point"
