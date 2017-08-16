@@ -85,7 +85,12 @@ namespace ptsCogo.Horizontal
             // end "Read in all elements"
 
             // set up stations and regions
-            // Todo: Implement this.
+            // ToDo: Get this working correctly for alignments with regions
+            double begSta = Convert.ToDouble(
+                allLines[tableStartLines["Regions"] + 2].Split(',')[0]
+                );
+            retAlign.BeginStation = begSta;
+            retAlign.restationAlignment();
             // "set up stations and regions"
 
             // Fill in essential properties

@@ -996,13 +996,20 @@ namespace Tests
             Assert.AreEqual(expected: new ptsPoint(2142363.2412, 734302.9399),
                 actual: AccRev.EndPoint);
 
-            var actualBeginStation = AccRev.BeginStation;
-            double expectedBeginStation = 1000.0;
-            //Assert.AreEqual(expected: expectedBeginStation, actual: actualBeginStation, delta: stdDelta);
-                    
+            var actualStation = AccRev.BeginStation;
+            double expectedStation = 1000.0;
+            Assert.AreEqual(expected: expectedStation, 
+                actual: actualStation, delta: stdDelta);
+
+            expectedStation = 3895.032;
+            Assert.AreEqual(expected: expectedStation,
+                actual: AccRev.EndStation, delta: 0.00011);
         }
 
     }
+
+    // Todo: Add test for instantiate from csv file in which the stationing
+    // includes at least one equality
 
     public class DirectoryManager
     {  // From GitHubGist: https://gist.github.com/PaulSchrum/4fb6015d46d79c06b08acb7f1bb00c53
