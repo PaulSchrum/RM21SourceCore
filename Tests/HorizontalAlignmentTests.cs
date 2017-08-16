@@ -16,6 +16,7 @@ namespace Tests
     public class HorizontalAlignmentTests
     {
         public List<Double> testList { get; set; }
+        private double stdDelta { get; set; } = 0.00001;
 
         //[SetUp]
         public void HAtestSetup()
@@ -29,7 +30,7 @@ namespace Tests
             Double expectedValue = 45.0;
             Deflection defl = new Deflection(0.785398164, 1);
             Double actualValue = defl.getAsDegreesDouble();
-            Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: 0.00001);
+            Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: stdDelta);
         }
 
         [TestMethod]
@@ -38,7 +39,7 @@ namespace Tests
             Double expectedValue = 310.0;
             Deflection defl = new Deflection(5.41052068118, 1);
             Double actualValue = defl.getAsDegreesDouble();
-            Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: 0.00001);
+            Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: stdDelta);
         }
 
         [TestMethod]
@@ -47,7 +48,7 @@ namespace Tests
             Double expectedValue = -45.0;
             Deflection defl = new Deflection(0.785398164, -1);
             Double actualValue = defl.getAsDegreesDouble();
-            Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: 0.00001);
+            Assert.AreEqual(expected: expectedValue, actual: actualValue, delta: stdDelta);
         }
 
         [TestMethod]
@@ -986,14 +987,25 @@ namespace Tests
             rm21HorizontalAlignment AccRev = rm21HorizontalAlignment.createFromCsvFile(testFile);
             Assert.IsNotNull(AccRev);
 
-            //int actualItemCount = AccRev.
-            //Assert.AreEqual(expected: 17, actual: actualItemCount);
+            var actualItemCount = AccRev.childCount();
+            Assert.AreEqual(expected: 17, actual: actualItemCount);
+
+            Assert.AreEqual(expected: new ptsPoint(2139755.8215, 735223.4531),
+                actual: AccRev.BeginPoint);
+
+            Assert.AreEqual(expected: new ptsPoint(2142363.2412, 734302.9399),
+                actual: AccRev.EndPoint);
+
+            var actualBeginStation = AccRev.BeginStation;
+            double expectedBeginStation = 1000.0;
+            //Assert.AreEqual(expected: expectedBeginStation, actual: actualBeginStation, delta: stdDelta);
+                    
         }
 
     }
 
     public class DirectoryManager
-    {  // From GiHubGist: https://gist.github.com/PaulSchrum/4fb6015d46d79c06b08acb7f1bb00c53
+    {  // From GitHubGist: https://gist.github.com/PaulSchrum/4fb6015d46d79c06b08acb7f1bb00c53
         // If I add other things (like createDir or move, etc. The version here should be updated.
         public string GetPathAndAppendFilename(string filename = null)
         {
