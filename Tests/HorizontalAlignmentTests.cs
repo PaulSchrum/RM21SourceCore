@@ -16,7 +16,7 @@ namespace Tests
     public class HorizontalAlignmentTests
     {
         public List<Double> testList { get; set; }
-        private double stdDelta { get; set; } = 0.00001;
+        private double stdDelta { get; set; } = 0.0005;
 
         //[SetUp]
         public void HAtestSetup()
@@ -1006,10 +1006,39 @@ namespace Tests
                 actual: AccRev.EndStation, delta: 0.00011);
         }
 
+        // Todo: Add test for instantiate from csv file in which the stationing
+        // includes at least one equality
+
+        [TestMethod]
+        public void HorizontalAlignment_fromCSV_stationOffsets_mapCorrectly()
+        {
+            var directory = new DirectoryManager();
+            directory.CdUp(2).CdDown("CogoTests").CdDown("R2547");
+            string testFile = directory.GetPathAndAppendFilename("Y15A.csv");
+
+            rm21HorizontalAlignment Y15A = rm21HorizontalAlignment.createFromCsvFile(testFile);
+            Assert.IsNotNull(Y15A);
+
+            var soeList = Y15A.getStationOffsetElevation(
+                new ptsPoint(2152116.9776, 735271.4583));
+
+            Assert.IsNotNull(soeList);
+            Assert.AreEqual(expected: 1, actual: soeList.Count);
+            var actualSOE = soeList.FirstOrDefault();
+            StationOffsetElevation expectedSOE = new StationOffsetElevation(1393.70, 0.0, 0.0);
+            Assert.AreEqual(expected: expectedSOE.station, actual: actualSOE.station, delta: stdDelta);
+
+            soeList = Y15A.getStationOffsetElevation(
+                new ptsPoint(2151888.4311, 734915.6674));
+            Assert.AreEqual(expected: 2, actual: soeList.Count);
+
+            ptsPoint actualPoint = Y15A.getXYZcoordinates(1400.0, -5.0, 0.0);
+            ptsPoint expectedPoint = new ptsPoint(2152123.3437, 735276.3737);
+            Assert.AreEqual(expected: expectedPoint, actual: actualPoint);
+
+        }
     }
 
-    // Todo: Add test for instantiate from csv file in which the stationing
-    // includes at least one equality
 
     public class DirectoryManager
     {  // From GitHubGist: https://gist.github.com/PaulSchrum/4fb6015d46d79c06b08acb7f1bb00c53
