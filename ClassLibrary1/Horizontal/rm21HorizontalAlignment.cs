@@ -64,6 +64,7 @@ namespace ptsCogo.Horizontal
 
             double startStation = Convert.ToDouble(startRayRow[2]);
             int startRegion = Convert.ToInt32(startRayRow[3]);
+            retAlign.BeginStation = startStation;
             // end "process start point, direction, and station"
 
             // Read in all elements
@@ -86,10 +87,9 @@ namespace ptsCogo.Horizontal
 
             // set up stations and regions
             // ToDo: Get this working correctly for alignments with regions
-            double begSta = Convert.ToDouble(
-                allLines[tableStartLines["Regions"] + 2].Split(',')[0]
-                );
-            retAlign.BeginStation = begSta;
+            //string begSta_ = allLines[tableStartLines["Regions"] + 2].Split(',').FirstOrDefault();
+
+            //double begSta = String.IsNullOrEmpty(begSta_) ? 0.0 : Convert.ToDouble(begSta_);
             retAlign.restationAlignment();
             // "set up stations and regions"
 
