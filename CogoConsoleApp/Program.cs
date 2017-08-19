@@ -20,6 +20,7 @@ namespace CogoConsoleApp
             string testFile = projectDir.GetPathAndAppendFilename("Y15A.csv");
 
             rm21HorizontalAlignment Y15A = rm21HorizontalAlignment.createFromCsvFile(testFile);
+            var allPoints = Y15A.getXYZcoordinateList(20.0);
 
         }
     }
