@@ -1037,6 +1037,22 @@ namespace Tests
             Assert.AreEqual(expected: expectedPoint, actual: actualPoint);
 
         }
+
+        [TestMethod]
+        public void HorizontalAlignment_GetCoordinatesByStation_multiple()
+        {
+            var directory = new DirectoryManager();
+            directory.CdUp(2).CdDown("CogoTests").CdDown("R2547");
+            string testFile = directory.GetPathAndAppendFilename("Y15A.csv");
+
+            rm21HorizontalAlignment Y15A = rm21HorizontalAlignment.createFromCsvFile(testFile);
+
+            var allPoints = Y15A.getXYZcoordinateList(20.0);
+            int actualCountOfStations = allPoints.Count;
+            int expectedCount = 123;
+            Assert.AreEqual(expected: expectedCount,
+                actual: actualCountOfStations);
+        }
     }
 
 

@@ -319,6 +319,51 @@ namespace ptsCogo.Horizontal
             return returnList;
         }
 
+        public Dictionary<StationOffsetElevation, ptsPoint> getPoints(IEnumerable<StationOffsetElevation> SOEs)
+        {
+            Dictionary<StationOffsetElevation, ptsPoint> returnDict = 
+                new Dictionary<StationOffsetElevation, ptsPoint>();
+
+            foreach(var anSoe in SOEs.OrderBy(st => st.station))
+                returnDict[anSoe] = getXYZcoordinates(anSoe);
+
+            return returnDict;
+        }
+
+        public Dictionary<StationOffsetElevation, ptsPoint> getXYZcoordinateList(
+            double increment,
+            double offset = 0.0,
+            StationOffsetElevation beginStation = null,
+            StationOffsetElevation endStation = null)
+        {
+            if(increment <= 0.0)
+                throw new Exception("increment value must be greater than 0.");
+
+            StationOffsetElevation begSta = beginStation == null ?
+                this.BeginStation : beginStation;
+            StationOffsetElevation endSta = endStation == null ?
+                this.EndStation : endStation;
+
+            var stationList = new List<StationOffsetElevation>();
+            var aSta = begSta;
+            while(aSta <= endSta)
+            {
+                stationList.Add(aSta);
+                aSta = new StationOffsetElevation(
+                    aSta.station + increment, 
+                    aSta.offset, aSta.elevation);
+            }
+
+            var returnDict = new Dictionary<StationOffsetElevation, ptsPoint>();
+
+            foreach(var anSOE in stationList)
+            {
+                returnDict[anSOE] = this.getXYZcoordinates(anSOE);
+            }
+
+            return returnDict; 
+        }
+
         public override List<StationOffsetElevation> getStationOffsetElevation(ptsPoint aPoint)
         {
             var returnList = new List<StationOffsetElevation>();
