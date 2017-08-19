@@ -7,7 +7,7 @@ using ptsCogo;
 
 namespace ptsCogo.coordinates.CurvilinearCoordinates
 {
-    public class StationOffsetElevation
+    public class StationOffsetElevation: IComparable
     {
         //private StationOffsetElevation soePoint;
 
@@ -28,9 +28,47 @@ namespace ptsCogo.coordinates.CurvilinearCoordinates
         public Offset offset { get; set; }
         public Elevation elevation { get; set; }
 
+        /// <summary>
+        /// Has the effect of overriding assignment equals.
+        /// </summary>
+        /// <param name="sta"></param>
+        public static implicit operator StationOffsetElevation(double sta)
+        {
+            return new StationOffsetElevation(sta, 0.0, 0.0);
+        }
+
+        public static bool operator <=(StationOffsetElevation first, StationOffsetElevation second)
+        {
+            return first.station <= second.station;
+        }
+
+        public static bool operator >=(StationOffsetElevation first, StationOffsetElevation second)
+        {
+            return first.station >= second.station;
+        }
+
         public override string ToString()
         {
             return station.ToString() + " " + offset.ToString() + "  (EL: " + elevation.ToString() + ")";
+        }
+
+        public int CompareTo(object obj)
+        {
+            var other = obj as StationOffsetElevation;
+            return utilFunctions.tolerantCompare(this.station, other.station, tolerance: 0.00005);
+        }
+    }
+
+    public static class extendDoubleForSOE
+    {
+        /// <summary>
+        /// returns doubleValue <= station
+        /// </summary>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public static bool LTE(this Double val, StationOffsetElevation aStation)
+        {
+            return val <= aStation.station;
         }
     }
 }
