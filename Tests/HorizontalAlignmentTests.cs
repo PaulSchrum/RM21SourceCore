@@ -1020,20 +1020,20 @@ namespace Tests
             Assert.IsNotNull(Y15A);
 
             var soeList = Y15A.getStationOffsetElevation(
-                new ptsPoint(2152116.9776, 735271.4583));
+                new ptsPoint(655966.5667, 224111.1887));
 
             Assert.IsNotNull(soeList);
             Assert.AreEqual(expected: 1, actual: soeList.Count);
             var actualSOE = soeList.FirstOrDefault();
-            StationOffsetElevation expectedSOE = new StationOffsetElevation(1393.70, 0.0, 0.0);
+            StationOffsetElevation expectedSOE = new StationOffsetElevation(1120.0, 0.0, 0.0);
             Assert.AreEqual(expected: expectedSOE.station, actual: actualSOE.station, delta: stdDelta);
 
             soeList = Y15A.getStationOffsetElevation(
-                new ptsPoint(2151888.4311, 734915.6674));
+                new ptsPoint(655896.9056, 224002.7434));
             Assert.AreEqual(expected: 2, actual: soeList.Count);
 
-            ptsPoint actualPoint = Y15A.getXYZcoordinates(1400.0, -5.0, 0.0);
-            ptsPoint expectedPoint = new ptsPoint(2152123.3437, 735276.3737);
+            ptsPoint actualPoint = Y15A.getXYZcoordinates(1500.0, -2.0, 0.0);
+            ptsPoint expectedPoint = new ptsPoint(656344.166,224137.087);
             Assert.AreEqual(expected: expectedPoint, actual: actualPoint);
 
         }
@@ -1047,9 +1047,9 @@ namespace Tests
 
             rm21HorizontalAlignment Y15A = rm21HorizontalAlignment.createFromCsvFile(testFile);
 
-            var allPoints = Y15A.getXYZcoordinateList(20.0);
+            var allPoints = Y15A.getXYZcoordinateList(10.0);
             int actualCountOfStations = allPoints.Count;
-            int expectedCount = 123;
+            int expectedCount = 75;
             Assert.AreEqual(expected: expectedCount,
                 actual: actualCountOfStations);
         }
