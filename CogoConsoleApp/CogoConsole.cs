@@ -10,7 +10,7 @@ using System.IO;
 
 namespace CogoConsoleApp
 {
-    class Program
+    class CogoConsole
     {
         static DirectoryManager projectDir { get; set; } = null;
         static void Main(string[] args)
@@ -20,8 +20,28 @@ namespace CogoConsoleApp
             string testFile = projectDir.GetPathAndAppendFilename("Y15A.csv");
 
             rm21HorizontalAlignment Y15A = rm21HorizontalAlignment.createFromCsvFile(testFile);
-            var allPoints = Y15A.getXYZcoordinateList(20.0);
+            var allPoints = Y15A.getXYZcoordinateList(15.0);
 
+            var csv = new StringBuilder();
+            csv.AppendLine("Station,Offset,X,Y");
+            foreach(var pt in allPoints)
+            {
+                csv.AppendLine(
+                    String.Format("{0},{1},{2},{3}", pt.Key.station, pt.Key.offset, 
+                    pt.Value.x, pt.Value.y));
+            }
+
+            if(args.Length > 0)
+            {
+                var outputDir = new DirectoryManager();
+                outputDir.path = args[0];
+                String filename = args[0] + "//" + "Y15_15m.csv";
+                File.WriteAllText(filename, csv.ToString());
+                Console.WriteLine(String.Format("Wrote file: {0}", filename));
+            }
+
+            Console.WriteLine("Process complete. Hit any key to continue.");
+            Console.ReadKey();
         }
     }
 
@@ -35,7 +55,7 @@ namespace CogoConsoleApp
             return this.path + "\\" + filename;
         }
 
-        public string path { get; protected set; }
+        public string path { get; set; }
         public List<string> pathAsList
         {
             get

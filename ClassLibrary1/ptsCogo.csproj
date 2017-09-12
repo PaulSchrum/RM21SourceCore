@@ -63,12 +63,6 @@
     <Compile Include="tupleNullableDoubles.cs" />
     <Compile Include="Utils\cogoUtils.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ptsBoundingBox\ptsCadFoundations.csproj">
-      <Project>{6D55252E-1D19-472A-A712-F7D8DC6A68CD}</Project>
-      <Name>ptsCadFoundations</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
